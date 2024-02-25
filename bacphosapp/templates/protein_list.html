@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Protein List</title>
+</head>
+<body>
+    <h1>Protein List</h1>
+    <ul>
+    {% for protein in proteins %}
+        <li>{{ protein.protein_name }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
