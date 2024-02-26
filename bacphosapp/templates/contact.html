@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .form-control {
+        background-color: #edeff094; 
+    }
+</style>
+
+
+<div class="container-contact mt-4 mb-4">
+    <h3 class="card-title text-center mb-4">Contact Information</h3>
+    <p class="text-center">Feel free to reach out to me using the form above, or via email or phone:</p>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><i class="fas fa-envelope"></i> <strong>Email:</strong> torbalansky@gmail.com</li>
+                        <li class="mb-3"><i class="fas fa-phone"></i> <strong>Phone:</strong> +351 910-808-938</li>
+                        <li class="mb-3"><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> Musagenitsa 96, Sofia, Bulgaria</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-5">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-4 text-center">Contact Form</h4>
+                    <form method="post" action=".">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

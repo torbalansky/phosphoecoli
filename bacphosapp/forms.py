@@ -32,3 +32,8 @@ class SignUpForm(UserCreationForm):
 
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = ''
+
+class ContactForm(forms.Form):
+    name = forms.CharField(label="Name", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}))
+    email = forms.EmailField(label="Email", max_length=100, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your email'}))
+    content = forms.CharField(label="Message", widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your message'}))

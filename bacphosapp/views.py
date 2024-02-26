@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import PhosphoProtein
 from django.contrib import messages
-from .forms import SignUpForm
+from .forms import SignUpForm, ContactForm
 from .models import Profile
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 def home(request):
     return render(request, 'home.html', {})
@@ -47,6 +49,31 @@ def register_user(request):
         return render(request, "register.html", {'form': form})
     
     return render(request, "register.html", {'form': form})
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            content = form.cleaned_data['content']
+
+            html = render_to_string('contact_form.html', {
+                'name': name,
+                'email': email,
+                'content': content
+            })
+
+            send_mail('The contact form subject', 'This is the message', 'torbalansky@gmail.com', ['torbalansky@gmail.com'], html_message=html)
+            messages.success(request, "Message sent. I will get back to you as soon as possible.")
+            return redirect('contact')
+    else:
+        form = ContactForm()
+
+    return render(request, 'contact.html', {
+        'form': form
+    })
 
 def protein_list(request):
     proteins = PhosphoProtein.objects.all()

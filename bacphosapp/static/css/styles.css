@@ -64,9 +64,9 @@
   }
 
 .btn.btn-primary.register {
-    width: 200px;
+    width: 260px;
     margin-top: 20px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
   }
 
 .form-group {
@@ -75,11 +75,11 @@
     grid-gap: 20px;
     align-items: center;
     padding: 5px;
-}
+  }
 
 .form-group label {
     text-align: right;
-}
+  }
 
 .alert-container {
     position: fixed;
