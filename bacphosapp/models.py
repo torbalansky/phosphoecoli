@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class PhosphoProtein(models.Model):
     uniprot_code = models.CharField(max_length=255)
@@ -16,3 +17,10 @@ class PhosphoProtein(models.Model):
     def __str__(self):
         return self.protein_name
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    institution_name = models.CharField(max_length=100)
+    country = models.CharField(max_length=60)
+
+    def __str__(self):
+        return self.user.username

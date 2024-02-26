@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container text-center py-2" style="margin-top: 10vh;">
+    <div class="row justify-content-center">
+      <div class="col-12 custom-login-form">
+        <form method="POST" action="{% url 'login' %}">
+          {% csrf_token %}
+          <h3 style="color:rgb(2, 52, 70);">Login</h3>
+          <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="fa-regular fa-user"></i></span>
+            <input type="text" class="form-control" name="username" placeholder="Your email...">
+          </div>
+          <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" class="form-control" name="password" placeholder="Your password..">
+          </div>
+          <button type="submit" class="btn btn-primary custom-login-btn">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

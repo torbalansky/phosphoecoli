@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-register text-center py-2">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <h3 style="color:rgb(2, 52, 70);">Register</h3>
+            <form method="POST" action="">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    {{ form.username }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_first_name">First Name</label>
+                    {{ form.first_name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_email">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="error-message">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {% for error in form.email.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password1">Password</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <div class="error-message">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {% for error in form.password1.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <div class="error-message">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {% for error in form.password2.errors %}
+                                {% if error == "The two password fields didn’t match." %}
+                                    Passwords do not match.
+                                {% else %}
+                                    {{ error|escape }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_institution_name">Institution Name</label>
+                    {{ form.institution_name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_country">Country</label>
+                    {{ form.country }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary register">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

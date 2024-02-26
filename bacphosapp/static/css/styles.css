@@ -29,3 +29,69 @@
     padding: 5px;
     font-weight: 600;
 }
+
+.dropdown-menu {
+    border: 1px solid black;
+    background-color: #f5feff;
+}
+
+.dropdown-item:hover {
+    background-color: rgb(9, 43, 77);
+    color: white;
+    font-weight: bold;
+}
+
+.custom-login-form {
+    padding: 20px;
+    width: 350px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 0.5px solid black;
+  }
+
+.custom-login-btn {
+    width: 260px;
+  }
+
+
+.container-register {
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    border-radius: 5px;
+  }
+
+.btn.btn-primary.register {
+    width: 200px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+
+.form-group {
+    display: grid;
+    grid-template-columns: 150px auto;
+    grid-gap: 20px;
+    align-items: center;
+    padding: 5px;
+}
+
+.form-group label {
+    text-align: right;
+}
+
+.alert-container {
+    position: fixed;
+    top: 50px;
+    left: 10px;
+    z-index: 1000;
+    width: 600px;
+    font-weight: bold;
+  }
+
+.error-message {
+    background-color: #f5feff;
+    color:red;
+    padding: 5px;
+  }
