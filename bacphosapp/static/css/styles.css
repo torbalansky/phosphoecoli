@@ -30,6 +30,12 @@
     font-weight: 600;
 }
 
+@media (max-width: 992px) {
+    .footer {
+        display: none;
+    }
+}
+
 .dropdown-menu {
     border: 1px solid black;
     background-color: #f5feff;
@@ -46,8 +52,14 @@
     width: 350px;
     margin-top: 10px;
     border-radius: 5px;
-    border: 0.5px solid black;
+    border: 0.5px solid rgb(185, 184, 184);
   }
+
+.custom-registration-form {
+    padding: 20px;
+    border-radius: 5px;
+    border: 0.5px solid rgb(185, 184, 184);
+}
 
 .custom-login-btn {
     width: 260px;

@@ -14,7 +14,7 @@
   </head>
   <body>
     {% include 'navbar.html'  %}
-    <div class="container">
+    <div class="container" style="padding-bottom: 60px;">
         {% block content %}
         {% endblock %}
     </div>
@@ -22,7 +22,7 @@
     <div class="alert-container fixed-top">
       {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+        <div class="alert alert-light alert-dismissible fade show" role="alert">
           {{message}}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>

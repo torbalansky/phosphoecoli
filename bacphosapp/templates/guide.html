@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="mt-5 mb-4 text-center">Site Map</h3>
+            <div class="list-group mb-5">
+                <a href="{% url 'home' %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">Homepage</h5>
+                    <p class="mb-1">The Homepage serves as the gateway to the application, offering users a convenient search function to swiftly query Phospho-sites by protein name.</p>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">Search Page</h5>
+                    <p class="mb-1">The Search Page houses the main and advanced search functionalities, empowering users to search for phospho-sites by UniProt name, gene, or protein name. Additionally, users can retrieve supplementary information related to the protein and access features such as downloading PDFs.</p>
+                </a>
+                <a href="{% url 'login' %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">Contribute</h5>
+                    <p class="mb-1">The Contribute page enables users to submit new phosphosite data from their own studies or published research to our database. Access to the submission form requires registration. All submissions undergo thorough review before approval.</p>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">Resources</h5>
+                    <p class="mb-1">This page offers an array of valuable resources pertaining to protein phosphorylation.</p>
+                </a>
+                <a href="{% url 'contact' %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">Contact</h5>
+                    <p class="mb-1">Users can provide feedback or reach out to us with inquiries via this interface.</p>
+                </a>
+                <a href="{% url 'cite' %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">About/General Information/Citation</h5>
+                    <p class="mb-1">For users utilizing data from PhosEcoli, we kindly request citation of our article as acknowledgment.</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

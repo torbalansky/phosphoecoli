@@ -78,3 +78,15 @@ def contact(request):
 def protein_list(request):
     proteins = PhosphoProtein.objects.all()
     return render(request, 'protein_list.html', {'proteins': proteins})
+
+def overview(request):
+    return render(request, 'overview.html')
+
+def resources(request):
+    return render(request, 'resources.html')
+
+def cite(request):
+    return render(request, 'cite.html')
+
+def guide(request):
+    return render(request, 'guide.html')

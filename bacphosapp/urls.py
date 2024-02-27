@@ -11,6 +11,10 @@ urlpatterns = [
     path('logout', views.logout_user, name='logout'),
     path('register/', views.register_user, name='register'),
     path('contact/', views.contact, name='contact'),
+    path('overview/', views.overview, name='overview'),
+    path('resources/', views.resources, name='resources'),
+    path('cite/', views.cite, name='cite'),
+    path('guide/', views.guide, name='guide'),  
 ]
 
 if settings.DEBUG:
