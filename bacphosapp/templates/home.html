@@ -2,20 +2,48 @@
 {% load static %}
 {% block content %}
 
-<div class="media">
-    <img class="mr-3" src="..." alt="PhosEcoli-logo">
-    <div class="media-body">
-      <h5 class="mt-0">PhosEcoli</h5>
-      PhosEcoli serves as an exhaustive repository for protein phosphorylation data within 
-      E. coli, comprising a considerable collection of phospho-proteins totaling ***** and 
-      identifying **** phospho-sites. Acknowledged as a cornerstone in prokaryotic systems, 
-      protein phosphorylation represents an estimated ***% of the total phosphorylated amino 
-      acids in E. coli, emphasizing its critical role across diverse cellular processes. 
-      Boasting a rich array of annotated phospho-sites, this online database stands as an 
-      indispensable resource for researchers delving into protein phosphorylation within the 
-      microbial realm. Furthermore, access to the platform is unrestricted and freely available 
-      to all users, including commercial entities.
+<div class="card mt-4 border-0">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <div id="protein-viewer" style="width: 100%; height: 100%; position: relative; overflow: hidden;"></div>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title"><em>PhosEcoli</em></h5>
+        <p class="card-text">
+          <em>PhosEcoli</em> serves as an exhaustive repository for protein phosphorylation data within 
+          <em>E.coli</em>, comprising a considerable collection of phospho-proteins totaling ***** and 
+          identifying **** phospho-sites. Acknowledged as a cornerstone in prokaryotic systems, 
+          protein phosphorylation represents an estimated ***% of the total phosphorylated amino 
+          acids in <em>E.coli</em>, emphasizing its critical role across diverse cellular processes. 
+          Boasting a rich array of annotated phospho-sites, this online database stands as an 
+          indispensable resource for researchers delving into protein phosphorylation within the 
+          microbial realm. Furthermore, access to the platform is unrestricted and freely available 
+          to all users, including commercial entities.
+        </p>
+      </div>
     </div>
   </div>
+</div>
+
+<script src="https://unpkg.com/ngl@latest/dist/ngl.js"></script>
+<link href="https://unpkg.com/ngl@latest/dist/css/ngl.css" rel="stylesheet">
+
+<script>
+  var stage = new NGL.Stage("protein-viewer");
+  var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+  window.addEventListener("resize", function(event) {
+      stage.handleResize();
+  }, false);
+
+  if (isChrome) {
+    stage.loadFile("rcsb://4icd", { defaultRepresentation: true });
+    stage.setParameters({ backgroundColor: "white" });
+    stage.setSpin(true);
+  } else {
+    document.getElementById("protein-viewer").innerHTML = "<img src='{% static 'images/4icd.png' %}' alt='Protein Image'>";  
+  }
+</script>
 
 {% endblock %}

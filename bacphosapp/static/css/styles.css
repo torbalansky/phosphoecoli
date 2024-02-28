@@ -20,6 +20,7 @@
 }
 
 .footer {
+    font-family: 'Pixel Operator', '04b_03', 'Press Start 2P', 'Pixelade', 'VCR OSD Mono', monospace;
     position: fixed;
     left: 0;
     bottom: 0;
@@ -27,13 +28,7 @@
     background-color: rgb(9, 43, 77);
     color: #cdff79;
     padding: 5px;
-    font-weight: 600;
-}
-
-@media (max-width: 992px) {
-    .footer {
-        display: none;
-    }
+    font-weight: 100;
 }
 
 .dropdown-menu {

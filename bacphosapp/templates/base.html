@@ -32,11 +32,10 @@
     <footer class="footer">
       <div class="container">
           <div class="row">
-              <div class="col-md-6">
-                  <p>&copy; {% now "Y" %} Designed and Built by torbalansky</p>
-              </div>
-              <div class="col-md-6 text-md-end text-center">
-                  <p>Contact: torbalansky@gmail.com</p>
+              <div class="text-center">
+                  <p>&copy; {% now "Y" %} Designed and Built by 
+                    <a href="https://github.com/torbalansky" target="_blank" style="text-decoration: none; color:#cdff79;; font-weight: bold;">torbalansky</a>
+                  </p>
               </div>
           </div>
       </div>
@@ -54,7 +53,7 @@
             alert.addEventListener("transitionend", function() {
               removeAlert(alert);
             });
-          }, 2000);
+          }, 2500);
         });
       });
     </script>
