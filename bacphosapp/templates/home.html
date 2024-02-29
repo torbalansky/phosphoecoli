@@ -4,10 +4,10 @@
 
 <div class="card mt-4 border-0">
   <div class="row no-gutters">
-    <div class="col-md-4">
+    <div class="col-md-2">
       <div id="protein-viewer" style="width: 100%; height: 100%; position: relative; overflow: hidden;"></div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-10 p-5">
       <div class="card-body">
         <h5 class="card-title"><em>PhosEcoli</em></h5>
         <p class="card-text">
@@ -42,7 +42,9 @@
     stage.setParameters({ backgroundColor: "white" });
     stage.setSpin(true);
   } else {
-    document.getElementById("protein-viewer").innerHTML = "<img src='{% static 'images/4icd.png' %}' alt='Protein Image'>";  
+    var proteinViewer = document.getElementById("protein-viewer");
+    proteinViewer.innerHTML = "<img src='{% static 'images/4icd.pdb' %}' alt='Protein Image'>";
+    proteinViewer.style.display = "none";
   }
 </script>
 

@@ -1,14 +1,15 @@
 from django.urls import path
 from .import views
-from .views import protein_list
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import ProteinsListView, ProteinsDetailView
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('proteins/', protein_list, name='protein_list'),
+    path('protein_list/', ProteinsListView.as_view(), name='protein_list'),
+    path('proteins/<int:pk>/', ProteinsDetailView.as_view(), name='protein_details'),
     path('login/', views.login_user, name='login'),
-    path('logout', views.logout_user, name='logout'),
+    path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name='register'),
     path('contact/', views.contact, name='contact'),
     path('overview/', views.overview, name='overview'),

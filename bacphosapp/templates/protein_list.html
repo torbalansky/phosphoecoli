@@ -1,14 +1,163 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Protein List</title>
-</head>
-<body>
-    <h1>Protein List</h1>
-    <ul>
-    {% for protein in proteins %}
-        <li>{{ protein.protein_name }}</li>
-    {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .table {
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        border: 0.5px solid rgb(9, 43, 77);
+    }
+
+    th {
+        font-size: 18px;
+    }
+
+    td {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .btn.btn-light {
+        background-color: rgb(9, 43, 77);
+        color: #cdff79;
+    }
+
+    .button-container {
+        display: flex;
+        margin-bottom: 10px;
+        justify-content: end;
+    }
+    
+    .btn.btn-primary {
+        margin-right: 20px;
+        width: 100px;
+        border-radius: 0;
+    }
+
+    .btn.btn-danger {
+        width: 100px;
+        border-radius: 0;
+    }
+
+    @media (max-width: 576px) {
+        .hide-on-sm {
+            display: none;
+        }
+
+        th, td {
+            font-size: 10px;
+        }
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-form-container {
+        max-width: 600px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .search-form-container {
+            max-width: 80%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .button-container {
+        display: flex;
+        justify-content: center;
+    }
+    }
+</style>
+
+<h3 class="mt-5 mb-4 text-center"><em>E.coli</em> PhosphoProteome</h3>
+
+    <div class="search-container">
+        <div class="search-form-container">
+            <form method="get" action="{% url 'protein_list' %}">
+                <div class="form-group">
+                    <label for="id_uniprot_code">Uniprot ID:</label>
+                    {{ form.uniprot_code }}
+                </div>
+                <div class="form-group">
+                    <label for="id_gene_name">Gene Name:</label>
+                    {{ form.gene_name }}
+                </div>
+                <div class="form-group">
+                    <label for="id_protein_name">Protein Name:</label>
+                    {{ form.protein_name }}
+                </div>
+                <div class="form-group">
+                    <label for="id_modification_type">Modification Type:</label>
+                    {{ form.modification_type }}
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Uniprot</th>
+                        <th>Gene</th>
+                        <th class="hide-on-sm">Protein</th>
+                        <th>Type</th>
+                        <th>Position</th>
+                        <th class="hide-on-sm">Window -/+ 5aa</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for protein in proteins %}
+                    <tr class="{% cycle 'odd' 'even' %}">
+                        <td>{{ protein.uniprot_code }}</td>
+                        <td>{{ protein.gene_name }}</td>
+                        <td class="hide-on-sm">{{ protein.protein_name }}</td>
+                        <td>{{ protein.modification_type }}</td>
+                        <td>{{ protein.position }}</td>
+                        <td class="hide-on-sm">{{ protein.window_5_aa}}</td>
+                        <td><a href="{% url 'protein_details' pk=protein.pk %}" class="btn btn-light">View</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No phosphoproteins found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#clearButton").click(function () {
+            $("#id_uniprot_code").val("");
+            $("#id_gene_name").val("");
+            $("#id_protein_name").val("");
+            $("#id_modification_type").val("");
+        });
+    });
+
+    $("#clearButton").click(function () {
+        window.location.href = "{% url 'protein_list' %}";
+    });
+
+</script>
+{% endblock %}

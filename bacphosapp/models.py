@@ -15,7 +15,7 @@ class PhosphoProtein(models.Model):
     alphafold_link = models.URLField()
 
     def __str__(self):
-        return self.protein_name
+        return self.gene_name
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

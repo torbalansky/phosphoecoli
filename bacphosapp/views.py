@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import PhosphoProtein
 from django.contrib import messages
-from .forms import SignUpForm, ContactForm
+from .forms import SignUpForm, ContactForm, ProteinSearchForm
 from .models import Profile
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.views.generic import ListView, DetailView
+from django.db.models import Q
 
 def home(request):
     return render(request, 'home.html', {})
@@ -75,9 +77,45 @@ def contact(request):
         'form': form
     })
 
-def protein_list(request):
-    proteins = PhosphoProtein.objects.all()
-    return render(request, 'protein_list.html', {'proteins': proteins})
+class ProteinsListView(ListView):
+    model = PhosphoProtein
+    template_name = "protein_list.html"
+    context_object_name = "proteins"
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        uniprot_code = self.request.GET.get("uniprot_code")
+        gene_name = self.request.GET.get("gene_name")
+        protein_name = self.request.GET.get("protein_name")
+        modification_type = self.request.GET.get("modification_type")
+
+        combined_query = Q()
+
+        if uniprot_code:
+            combined_query |= Q(uniprot_code__icontains=uniprot_code)
+        if gene_name:
+            combined_query |= Q(gene_name__icontains=gene_name)
+        if protein_name:
+            combined_query |= Q(protein_name__icontains=protein_name)
+        if modification_type and modification_type != '': 
+            combined_query |= Q(modification_type__iexact=modification_type)
+
+        return queryset.filter(combined_query).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = ProteinSearchForm(self.request.GET)
+        if not context["proteins"]:
+            error_message = "There is no data available."
+            messages.error(self.request, error_message)
+            context["error_message"] = error_message
+
+        return context
+    
+class ProteinsDetailView(DetailView):
+    model = PhosphoProtein
+    template_name = "protein_details.html"
+    context_object_name = "proteins"
 
 def overview(request):
     return render(request, 'overview.html')
@@ -90,3 +128,28 @@ def cite(request):
 
 def guide(request):
     return render(request, 'guide.html')
+
+def search_phosphoprotein(request):
+    if request.method == 'GET':
+        uniprot_id = request.GET.get('Uniprot_Code')
+        gene_name = request.GET.get('Gene_Name')
+        protein_name = request.GET.get('Protein_Name')
+        queryset = PhosphoProtein.objects.all()
+
+        if uniprot_id:
+            queryset = queryset.filter(uniprot_code__icontains=uniprot_id)
+
+        if gene_name:
+            queryset = queryset.filter(gene_name__icontains=gene_name)
+
+        if protein_name:
+            queryset = queryset.filter(protein_name__icontains=protein_name)
+
+        phospho_proteins = queryset
+
+        if not phospho_proteins:
+            messages.error(request, "No data available.")
+
+        return render(request, 'protein_list.html', {'phospho_proteins': phospho_proteins})
+
+    return render(request, 'home.html')
