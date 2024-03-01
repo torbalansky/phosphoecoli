@@ -18,6 +18,20 @@
         font-weight: 600;
     }
 
+    .uniprot_link a {
+        text-decoration: none;
+        color: rgb(9, 43, 77);
+        background-color: #cdff79;
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+    .uniprot_link a:hover {
+        color: #cdff79;
+        background-color: rgb(9, 43, 77);
+        padding: 10x;
+    }
+
     .btn.btn-light {
         background-color: rgb(9, 43, 77);
         color: #cdff79;
@@ -77,6 +91,7 @@
         display: flex;
         justify-content: center;
     }
+
     }
 </style>
 
@@ -117,33 +132,43 @@
                         <th>Uniprot</th>
                         <th>Gene</th>
                         <th class="hide-on-sm">Protein</th>
-                        <th>Type</th>
                         <th>Position</th>
-                        <th class="hide-on-sm">Window -/+ 5aa</th>
                         <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for protein in proteins %}
-                    <tr class="{% cycle 'odd' 'even' %}">
-                        <td>{{ protein.uniprot_code }}</td>
-                        <td>{{ protein.gene_name }}</td>
-                        <td class="hide-on-sm">{{ protein.protein_name }}</td>
-                        <td>{{ protein.modification_type }}</td>
-                        <td>{{ protein.position }}</td>
-                        <td class="hide-on-sm">{{ protein.window_5_aa}}</td>
-                        <td><a href="{% url 'protein_details' pk=protein.pk %}" class="btn btn-light">View</a></td>
-                    </tr>
+                        <tr class="{% cycle 'odd' 'even' %}">
+                            <td class="uniprot_link">
+                                {% if protein.uniprot_url %}
+                                    <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
+                                {% else %}
+                                    {{ protein.uniprot_code }}
+                                {% endif %}
+                            </td>
+                            <td>{{ protein.gene_name }}</td>
+                            <td class="hide-on-sm">{{ protein.protein_name }}</td>
+                            <td>
+                                {% if protein.phosphosite_set.all %}
+                                {% for phosphosite in protein.phosphosite_set.all|dictsort:"modification_type" %}
+                                    {{ phosphosite.modification_type }}{{ phosphosite.position }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                                {% else %}
+                                    No phosphosites found
+                                {% endif %}
+                            </td>
+                            <td><a href="{% url 'protein_details' pk=protein.pk %}" class="btn btn-light">View</a></td>
+                        </tr>
                     {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center">No phosphoproteins found.</td>
-                    </tr>
+                        <tr>
+                            <td colspan="7" class="text-center">No proteins found.</td>
+                        </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                </tbody>                
+        </table>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {

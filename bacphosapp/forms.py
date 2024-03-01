@@ -42,10 +42,10 @@ class ProteinSearchForm(forms.Form):
     
     MODIFICATION_CHOICES = (
         ('', 'Any'),  
-        ('pTyr', 'pTyr'),
-        ('pHis', 'pHis'),
-        ('pSer', 'pSer'),
-        ('pThr', 'pThr'),
+        ('Y', 'Y'),
+        ('H', 'H'),
+        ('S', 'S'),
+        ('T', 'T'),
     )
 
     uniprot_code = forms.CharField(required=False, max_length=20, label="UniprotID", widget=forms.TextInput(attrs={"class": "form-item", "placeholder": "Enter Uniprot ID"}))

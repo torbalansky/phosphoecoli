@@ -1,11 +1,42 @@
-{% extends base.html %}
-
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
+<div class="container-fluid protein-details">
+    <div class="card">
+        <div class="download-overlay">
+            <a href="{% url 'export_protein_as_pdf' protein.pk %}" class="btn-fa" title="Download as PDF" style="color: blue;">
+                <i class="fas fa-download"></i>
+            </a>
+        </div>
+        <div class="card-body">
+            <h3 class="card-title">{{ protein.protein_name }}</h3>
+            <h4 class="mt-4">Uniprot ID:</h4>
+            <p>{% if protein.uniprot_url %}
+                <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
+                {% else %}
+                {{ protein.uniprot_code }}
+                {% endif %}
+            </p>
 
-  
-    <h1>Deatils</h1>
-  
+            <h4 class="mt-4">Gene Name:</h4>
+            <p>{{ protein.gene_name }}</p>
 
+            <h4 class="mt-4"> Modification type:</h4>
+            <p>{{ protein.modification_type }}</p>
+
+            <h4 class="mt-4">Position:</h4>
+            <p>{{ protein.position }}</p>
+
+            <h4 class="mt-4">Window -/+ 5aa:</h4>
+            <p>{{ protein.window_5_aa }}</p>
+
+            <h4 class="mt-4">Sequence:</h4>
+            <p>{{ protein.sequence }}</p>
+
+            <h4 class="mt-4">Reference:</h4>
+            <p>{{ protein.reference }}</p>     
+        </div>
+    </div>
+</div>
 {% endblock %}

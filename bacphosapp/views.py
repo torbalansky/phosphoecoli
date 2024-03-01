@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .models import PhosphoProtein
+from .models import PhosphoProtein, PhosphoSite
 from django.contrib import messages
 from .forms import SignUpForm, ContactForm, ProteinSearchForm
 from .models import Profile
@@ -8,6 +8,9 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
 def home(request):
     return render(request, 'home.html', {})
@@ -98,7 +101,7 @@ class ProteinsListView(ListView):
         if protein_name:
             combined_query |= Q(protein_name__icontains=protein_name)
         if modification_type and modification_type != '': 
-            combined_query |= Q(modification_type__iexact=modification_type)
+            combined_query |= Q(phosphosite__modification_type__iexact=modification_type)
 
         return queryset.filter(combined_query).distinct()
 
@@ -110,12 +113,23 @@ class ProteinsListView(ListView):
             messages.error(self.request, error_message)
             context["error_message"] = error_message
 
+        phosphosites_dict = {}
+        for protein in context["proteins"]:
+            phosphosites = list(PhosphoSite.objects.filter(protein=protein))
+            phosphosites.sort(key=lambda x: x.modification_type)
+            phosphosites_dict[protein.pk] = phosphosites 
+
+            context["phosphosites_dict"] = phosphosites_dict
+
         return context
     
-class ProteinsDetailView(DetailView):
+class ProteinDetailView(DetailView):
     model = PhosphoProtein
     template_name = "protein_details.html"
-    context_object_name = "proteins"
+    context_object_name = "protein"
+
+    def get_queryset(self):
+        return super().get_queryset().filter(id=self.kwargs['pk'])
 
 def overview(request):
     return render(request, 'overview.html')
@@ -153,3 +167,24 @@ def search_phosphoprotein(request):
         return render(request, 'protein_list.html', {'phospho_proteins': phospho_proteins})
 
     return render(request, 'home.html')
+
+def export_protein_as_pdf(request, pk):
+    protein = get_object_or_404(PhosphoProtein, id=pk)
+
+    template_path = 'pdf_template.html'
+
+    context = {
+        'protein': protein,
+    }
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{protein.protein_name}.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
+    return response
