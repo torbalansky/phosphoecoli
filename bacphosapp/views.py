@@ -128,8 +128,13 @@ class ProteinDetailView(DetailView):
     template_name = "protein_details.html"
     context_object_name = "protein"
 
-    def get_queryset(self):
-        return super().get_queryset().filter(id=self.kwargs['pk'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        protein = self.get_object() 
+       
+        context['pdb_code'] = protein.pdb_code if protein.pdb_code else None
+        
+        return context
 
 def overview(request):
     return render(request, 'overview.html')
