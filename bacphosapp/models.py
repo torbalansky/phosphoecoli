@@ -28,7 +28,7 @@ class PhosphoSite(models.Model):
     window_5_aa = models.TextField()
     modification_type = models.CharField(max_length=50)
     method = models.CharField(max_length=50, default='')
-    reference = models.CharField(max_length=100, default='')
+    reference = models.TextField(default='')
     submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
