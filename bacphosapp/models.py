@@ -16,6 +16,8 @@ class PhosphoProtein(models.Model):
     sequence = models.TextField(default='')
     alphafold_structure = models.URLField(null=True, blank=True)
     pdb_code = models.CharField(max_length=20, null=True, blank=True)
+    pdb_url = models.URLField(null=True, blank=True)
+    ecocyc_url = models.URLField(null=True, blank=True)
     submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -1,11 +1,90 @@
 <title>{{ protein.protein_name }}</title>
-
-    <p><strong>Uniprot:</strong>{{ protein.uniprot_code }}</p>
-    <p><strong>Gene Name:</strong>{{ protein.gene_name }}</p>
-    <p><strong>Modification Type:</strong> {{ protein.modification_type }}</p>
-    <p><strong>Position:</strong> {{ protein.position }}</p>
-    <p><strong>Window -/+ 5aa:</strong> {{ protein.window_5_aa }}</p>
-    <p><strong>Sequence:</strong> {{ protein.sequence }}</p>
-    <p><strong>Method At:</strong> {{ protein.method }}</p>
-    <p><strong>Reference</strong> {{ protein.reference }}</p>
-    <p><strong>Structure</strong> {{ protein.alphafold_link }}</p>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            width: 20%;
+        }
+    </style>
+</head>
+<body>
+    <h3>Phos<em>Ecoli</em></h3>
+    <table>
+        <tr>
+            <th>Protein Name</th>
+            <td>{{ protein.protein_name }}</td>
+        </tr>
+        <tr>
+            <th>UniProtKB</th>
+            <td>
+                {% if protein.uniprot_url %}
+                    <a href="{{ protein.uniprot_url }}" target="_blank" style="text-decoration: none;">{{ protein.uniprot_code }}</a>
+                {% else %}
+                    {{ protein.uniprot_code }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Synonyms</th>
+            <td>{{ protein.synonyms }}</td>
+        </tr>
+        <tr>
+            <th>Gene Name</th>
+            <td>{{ protein.gene_name }}</td>
+        </tr>
+        <tr>
+            <th>Protein Description</th>
+            <td>{{ protein.protein_description }}</td>
+        </tr>
+        <tr>
+            <th>Biological Process</th>
+            <td>{{ protein.biological_process }}</td>
+        </tr>
+        <tr>
+            <th>Molecular Function</th>
+            <td>{{ protein.molecular_function }}</td>
+        </tr>
+        <tr>
+            <th>Cellular Component</th>
+            <td>{{ protein.cellular_component }}</td>
+        </tr>
+        <tr>
+            <th>Molecular Weight (kDa)</th>
+            <td>{{ protein.molecular_weight }}</td>
+        </tr>
+        <tr>
+            <th>Phosphosites</th>
+            <td>
+                {% if protein.phosphosite_set.all %}
+                    {% for phosphosite in protein.phosphosite_set.all %}
+                        <span class="phosphosite" data-reference="{{ phosphosite.reference }}">{{ phosphosite.modification_type }}{{ phosphosite.position }}</span>
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    No phosphosites found
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>PDB</th>
+            <td>{{ protein.pdb_code }}</td>
+        </tr>
+        <tr>
+            <th>AlphaFold link</th>
+            <td>
+                {% if protein.alphafold_structure %}
+                    <a href="{{ protein.alphafold_url }}" target="_blank" style="text-decoration: none;">{{ protein.alphafold_structure }}</a>
+                {% else %}
+                    {{ protein.alphafold_structure }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>

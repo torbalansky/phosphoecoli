@@ -1,74 +1,154 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
+
 <div class="container-fluid protein-details mt-4">
     <div class="row">
-        <div class="col-lg-8">
-            <div class="card text-left">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5>{{ protein.protein_name }}</h5>
-                    <div class="download-overlay">
-                        <a href="{% url 'export_protein_as_pdf' protein.pk %}" class="btn-fa" title="Download as PDF" style="color: blue;">
-                            <i class="fas fa-download"></i>
-                        </a>
+        <div class="col-lg-12">
+                <div class="nav_protein_details mb-2">
+                    <ul class="nav nav-tabs" style="background-color: rgb(216, 249, 246);;">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details-section">Protein</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="chart-tab" data-toggle="tab" href="#chart-section">Phosphosites</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="more-tab" data-toggle="tab" href="#more-section">Links</a>
+                        </li>
+                    </ul>
+                </div>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="details-section">
+                    <div class="card text-left">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5>{{ protein.protein_name }}</h5>
+                            <div class="download-overlay">
+                                <a href="{% url 'export_protein_as_pdf' protein.pk %}" class="btn-fa" title="Download as PDF" style="color: blue;">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div><strong>Protein Description:</strong> {{ protein.protein_description }}</div>
+                                    <div><strong>Uniprot ID:</strong>
+                                        {% if protein.uniprot_url %}
+                                            <a href="{{ protein.uniprot_url }}" target="_blank" style="text-decoration: none;">{{ protein.uniprot_code }}</a>
+                                        {% else %}
+                                            {{ protein.uniprot_code }}
+                                        {% endif %}
+                                    </div>
+                                    <div><strong>Gene Name:</strong> {{ protein.gene_name }}</div>
+                                    <div><strong>Synonyms:</strong> {{ protein.synonyms }}</div>
+                                    <div><strong>Molecular Function:</strong> {{ protein.molecular_function }}</div>
+                                    <div><strong>Biological process:</strong> {{ protein.biological_process }}</div>
+                                    <div><strong>Cellular component:</strong> {{ protein.cellular_component}}</div>
+                                    <div><strong>Protein type:</strong> {{ protein.protein_type}}</div>
+                                    <div><strong>Molecular weight (kDa):</strong> {{ protein.molecular_weight}}</div>
+                                    <div><strong>Phosphosites:</strong>
+                                        {% if protein.phosphosite_set.all %}
+                                            {% for phosphosite in protein.phosphosite_set.all %}
+                                                <span class="phosphosite" data-reference="{{ phosphosite.reference }}">{{ phosphosite.modification_type }}{{ phosphosite.position }}</span>
+                                                {% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            No phosphosites found
+                                        {% endif %}
+                                    </div>
+                                    <div><strong>Sequence:</strong> {{ protein.sequence }}</div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card mt-4">
+                                        <div class="card-header">
+                                            <h5>Structure PDB:{{protein.pdb_code}}</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="protein-viewer" style="height: 300px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div><strong>Protein Description:</strong> {{ protein.protein_description }}</div>
-                            <div><strong>Uniprot ID:</strong>
-                                {% if protein.uniprot_url %}
-                                    <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
-                                {% else %}
-                                    {{ protein.uniprot_code }}
-                                {% endif %}
-                            </div>
-                            <div><strong>Gene Name:</strong> {{ protein.gene_name }}</div>
-                            <div><strong>Synonyms:</strong> {{ protein.synonyms }}</div>
-                            <div><strong>Molecular Function:</strong> {{ protein.molecular_function }}</div>
-                            <div><strong>Biological process:</strong> {{ protein.biological_process }}</div>
-                            <div><strong>Cellular component:</strong> {{ protein.cellular_component}}</div>
-                            <div><strong>Molecular weight (kDa):</strong> {{ protein.molecular_weight}}</div>
-                            <div><strong>Phosphosites:</strong>
-                                {% if protein.phosphosite_set.all %}
-                                    {% for phosphosite in protein.phosphosite_set.all %}
-                                        <span class="phosphosite" data-reference="{{ phosphosite.reference }}">{{ phosphosite.modification_type }}{{ phosphosite.position }}</span>
-                                        {% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    No phosphosites found
-                                {% endif %}
-                            </div>
-                            <div><strong>Sequence:</strong> {{ protein.sequence }}</div>
+                <div class="tab-pane fade" id="chart-section">
+                    <div class="card-body">
+                        {{ chart_image | safe }}
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="more-section">
+                    <div class="card-body mt-4">
+                        <div class="table-responsive">
+                            <table class="table" style="width: 600px;">
+                                <tbody>
+                                    <tr>
+                                        <th>UniProtKB:</th>
+                                        <td>
+                                            {% if protein.uniprot_url %}
+                                                <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_url }}</a>
+                                            {% else %}
+                                                Not available
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>PDB:</th>
+                                        <td>
+                                            {% if protein.pdb_url %}
+                                                <a href="{{ protein.pdb_url }}" target="_blank">{{ protein.pdb_url }}</a>
+                                            {% else %}
+                                                Not available
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>AlphaFold:</th>
+                                        <td>
+                                            {% if protein.alphafold_structure %}
+                                                <a href="{{ protein.alphafold_structure }}" target="_blank">{{ protein.alphafold_structure }}</a>
+                                            {% else %}
+                                                Not available
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>EcoCyc:</th>
+                                        <td>
+                                            {% if protein.ecocyc_url %}
+                                                <a href="{{ protein.ecocyc_url }}" target="_blank">{{ protein.ecocyc_url }}</a>
+                                            {% else %}
+                                                Not available
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5>Structure PDB:{{protein.pdb_code}}</h5>
-                </div>
-                <div class="card-body">
-                    <div id="protein-viewer" style="height: 300px;"></div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+
 <div class="container-fluid references" style="display: none;">
     <div class="row">
         <div class="col-lg-12">
             <div class="card mt-4">
                 <div class="card-body position-relative">
-                    <h5 class="card-title">Reference/s:</h5>
+                    <h5 class="card-title">References:</h5>
                     <button id="clearrefButton" class="btn btn-danger ref-button position-absolute top-0 end-0">
                         <i class="fas fa-times"></i> 
                     </button>
-                    <ul id="references-list"></ul>
+                    <ul id="references-list">
+                        {% for phosphosite in phosphosites %}
+                            {% for reference in phosphosite.references_list %}
+                                <li>{{ reference }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
@@ -79,6 +159,12 @@
 <link href="https://unpkg.com/ngl@latest/dist/css/ngl.css" rel="stylesheet">
 
 <script>
+    $(document).ready(function() {
+        $('.nav-tabs a').click(function() {
+            $(this).tab('show');
+        });
+    });
+
     var stage = new NGL.Stage("protein-viewer");
     var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 
@@ -129,5 +215,7 @@
         var referencesContainer = document.querySelector('.references');
         referencesContainer.style.display = 'none';
     });
+
 </script>
+
 {% endblock %}
