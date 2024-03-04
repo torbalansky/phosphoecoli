@@ -1,6 +1,109 @@
+.container.block {
+  padding-bottom: 100px;
+}
+
+.navbar {
+  background-color: #cdff79;
+}
+.navbar-brand {
+  margin-left: 20px;
+  margin-right: 50px;
+  font-weight: bold;
+  color: rgb(9, 43, 77);
+  font-style: italic;
+  font-family: 'Pixel Operator', '04b_03', 'Press Start 2P', 'Pixelade', 'VCR OSD Mono', monospace;
+}
+
+.navbar-nav .nav-link {
+    color: rgb(9, 43, 77);
+    margin-left: 15px;
+    font-family: 'Pixel Operator', '04b_03', 'Press Start 2P', 'Pixelade', 'VCR OSD Mono', monospace;
+}
+.navbar-nav .nav-link:hover {
+    background-color: rgb(9, 43, 77);
+    color: white;
+    font-weight: bold;
+}
+
+.navbar img {
+  width: 35px;
+}
+
+.custom-select {
+  background-color: white;
+  width: 100px;
+}
+
+.form-control-navbar {
+  width: 200px;
+  background-color: white;
+  border: 1px solid rgb(9, 43, 77);
+}
+
+.btn.btn-primary {
+  border-radius: 0;
+}
+
+.footer {
+  font-family: 'Pixel Operator', '04b_03', 'Press Start 2P', 'Pixelade', 'VCR OSD Mono', monospace;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(9, 43, 77);
+  color: #cdff79;
+  padding: 5px;
+  font-weight: 100;
+}
+
+.github-link {
+  text-decoration: none; 
+  color:#cdff79;
+  font-weight: bold;
+}
+
+.alert-custom {
+  position: relative;
+  padding: 15px;
+  margin-bottom: 1rem;
+  background-color: white;
+  border: 2px solid rgb(62, 1, 176);
+  border-radius: 0;
+  color: rgb(9, 43, 77);
+  text-align: center;
+}
+
+.alert-custom .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1rem 1.25rem;
+  color: inherit;
+}
+
+@media (max-width: 576px) {
+  .alert-custom {
+    position: absolute;
+    top: 0;
+    font-size: 16px;
+  } 
+
+  .alert-custom .btn-close {
+    display: none;
+  }
+}
+
+.home-protein-view {
+  width: 100%; 
+  height: 100%; 
+  position: relative; 
+  overflow: hidden;
+}
+
 .dropdown-menu {
     border: 1px solid black;
     background-color: #f5feff;
+    border-radius: 0;
 }
 
 .dropdown-item:hover {
@@ -12,9 +115,10 @@
 .custom-login-form {
     padding: 20px;
     width: 350px;
-    margin-top: 10px;
+    margin-top: 50px;
     border-radius: 5px;
     border: 0.5px solid rgb(185, 184, 184);
+    color: rgb(2, 52, 70);
   }
 
 .custom-registration-form {
@@ -34,6 +138,7 @@
     margin-top: 10px;
     margin-bottom: 50px;
     border-radius: 5px;
+    color: rgb(2, 52, 70);
   }
 
 .btn.btn-primary.register {
@@ -43,10 +148,14 @@
   }
 
 .form-group {
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: 150px 20px auto;
     grid-template-columns: 150px auto;
     grid-gap: 20px;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     padding: 5px;
   }
 
@@ -69,3 +178,176 @@
     padding: 5px;
   }
 
+.references-list {
+    list-style: none; 
+    padding-left: 0; 
+}
+
+.phosphosite-highlight {
+    background-color: yellow;
+    color: red;
+}
+
+.window-5aa {
+  font-family: 'Courier New';
+  font-weight: bold;
+}
+
+.protein-sequence {
+  font-family: 'Courier New';
+  margin: 20px;
+}
+
+.container-fluid.references {
+  display: none;
+}
+
+.show-ref-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.clearrefButton {
+  max-width: 100px;
+  padding: 0;
+  color: red;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.nav.nav-tabs {
+  background-color: rgb(234, 245, 244);
+}
+
+.download-overlay a {
+  color: blue;
+}
+
+a {
+  text-decoration: none;
+}
+
+.protein-viewer {
+  height: 300px;
+}
+
+.table.links {
+  width: 600px;
+}
+
+.btn-container {
+  position: relative;
+}
+
+.protein-list-container .table {
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+  border: 0.5px solid rgb(9, 43, 77);
+}
+
+.protein-list-container th {
+  font-size: 18px;
+}
+
+.protein-list-container td {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.protein-list-container .uniprot_link a {
+  text-decoration: none;
+  color: rgb(9, 43, 77);
+  background-color: #cdff79;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.protein-list-container .uniprot_link a:hover {
+  color: #cdff79;
+  background-color: rgb(9, 43, 77);
+  padding: 10px; 
+}
+
+.protein-list-container .btn.btn-light {
+  background-color: rgb(9, 43, 77);
+  color: #cdff79;
+}
+
+.protein-list-container .button-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 10px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+}
+
+.protein-list-container .btn.btn-primary {
+  margin-right: 20px;
+  width: 100px;
+  border-radius: 0;
+}
+
+.protein-list-container .btn.btn-danger {
+  width: 100px;
+  border-radius: 0;
+}
+
+@media (max-width: 576px) {
+  .protein-list-container .hide-on-sm {
+      display: none;
+  }
+
+  .protein-list-container th, .protein-list-container td {
+      font-size: 10px;
+  }
+}
+
+.protein-list-container .search-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.protein-list-container .search-form-container {
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+}
+
+.protein-list-container .form-group {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .protein-list-container .search-form-container {
+      max-width: 80%;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+  }
+
+  .protein-list-container .button-container {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+  }
+}
+
+.form-control {
+  background-color: #edeff094; 
+}

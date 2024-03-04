@@ -10,46 +10,32 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <script src="https://kit.fontawesome.com/373399040e.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <style>
-      .footer {
-    font-family: 'Pixel Operator', '04b_03', 'Press Start 2P', 'Pixelade', 'VCR OSD Mono', monospace;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: rgb(9, 43, 77);
-    color: #cdff79;
-    padding: 5px;
-    font-weight: 100;
-}
-    </style>
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>   
   </head>
   <body>
     {% include 'navbar.html'  %}
-    <div class="container" style="padding-bottom: 60px;">
+    <div class="container block">
         {% block content %}
         {% endblock %}
     </div>
     
-    <div class="alert-container fixed-top" style="width: fit-content;">
+    <div class="alert-container">
       {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          {{message}}
+        <div class="alert alert-custom alert-dismissible fade show" role="alert">
+          {{ message }}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endfor %}
       {% endif %}
+    </div>   
 
     <footer class="footer">
       <div class="container">
           <div class="row">
               <div class="text-center">
                   <p>&copy; {% now "Y" %} Designed and Built by 
-                    <a href="https://github.com/torbalansky" target="_blank" style="text-decoration: none; color:#cdff79;; font-weight: bold;">torbalansky</a>
+                    <a class="github-link" href="https://github.com/torbalansky" target="_blank">torbalansky</a>
                   </p>
               </div>
           </div>

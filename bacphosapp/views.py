@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import plotly.graph_objects as go
 import plotly.offline as py
+from django.template.defaulttags import register
 
 def home(request):
     return render(request, 'home.html', {})
@@ -133,7 +134,10 @@ class ProteinsListView(ListView):
             context["phosphosites_dict"] = phosphosites_dict # Add phosphosites dictionary to context
 
         return context
-    
+
+@register.filter
+def add_position(sequence):
+    return [(position + 1, aa) for position, aa in enumerate(sequence)]
 
 class ProteinDetailView(DetailView):
     model = PhosphoProtein
@@ -178,7 +182,11 @@ class ProteinDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['chart_image'] = self.phospho_chart_image()
         protein = self.get_object() 
-       
+        sequence = protein.sequence
+        phosphosites = PhosphoSite.objects.filter(protein=protein)
+        phosphosite_positions = [phosphosite.position for phosphosite in phosphosites]
+        context['phosphosite_positions'] = phosphosite_positions
+        context['sequence_with_positions'] = add_position(sequence)
         context['pdb_code'] = protein.pdb_code if protein.pdb_code else None
         return context
 
