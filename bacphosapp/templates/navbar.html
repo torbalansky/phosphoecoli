@@ -46,25 +46,24 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-4 ml-auto d-none d-md-block">
-        <div class="input-group">
-            <select class="custom-select" id="search_category">
-                <option value="uniprot">Uniprot ID</option>
-                <option value="gene">Gene Name</option>
-                <option value="protein">Protein Name</option>
-            </select>
-            <input type="text" class="form-control-navbar" id="search_query" placeholder="Enter search query">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button">Search</button>
+      <div class="col-md-4 ml-auto d-none d-md-block">
+        <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'protein_list' %}">
+            <div class="input-group">
+                <select class="custom-select" id="search_category" name="search_category">
+                    <option value="uniprot">Uniprot ID</option>
+                    <option value="gene">Gene Name</option>
+                    <option value="protein">Protein Name</option>
+                </select>
+                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" name="q">
+                    <button class="btn btn-primary" type="submit">Search</button>
             </div>
-        </div>
-      </div>
+        </form>
     </div>  
   </nav>
 
   <script>
     const searchCategoryDropdown = document.getElementById('search_category');
-    const searchQueryInput = document.getElementById('search_query');
+    const searchQueryInput = document.querySelector('.form-control-navbar');
 
     function setPlaceholder() {
         const selectedOption = searchCategoryDropdown.value;
@@ -86,5 +85,4 @@
 
     window.addEventListener('load', setPlaceholder);
     searchCategoryDropdown.addEventListener('change', setPlaceholder);
-  
   </script>

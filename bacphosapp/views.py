@@ -95,29 +95,41 @@ class ProteinsListView(ListView):
     model = PhosphoProtein # Define model
     template_name = "protein_list.html" # Define template name
     context_object_name = "proteins" # Define context object name
-    
+
     def get_queryset(self): # Override queryset method
         queryset = super().get_queryset()
+        search_category = self.request.GET.get("search_category")
+        search_query = self.request.GET.get("q")
+
+        # Filter queryset based on search query and category
+        if search_query and search_category:
+            if search_category == "uniprot":
+                queryset = queryset.filter(uniprot_code__icontains=search_query)
+            elif search_category == "gene":
+                queryset = queryset.filter(gene_name__icontains=search_query)
+            elif search_category == "protein":
+                queryset = queryset.filter(protein_name__icontains=search_query)
+            # Add more conditions for other search categories if needed
+
+        # Filter queryset based on other parameters
         uniprot_code = self.request.GET.get("uniprot_code")
         gene_name = self.request.GET.get("gene_name")
         protein_name = self.request.GET.get("protein_name")
         modification_type = self.request.GET.get("modification_type")
-
-        # Initialize combined query
+        
         combined_query = Q()
-
         if uniprot_code:
             combined_query |= Q(uniprot_code__icontains=uniprot_code)
         if gene_name:
             combined_query |= Q(gene_name__icontains=gene_name)
         if protein_name:
             combined_query |= Q(protein_name__icontains=protein_name)
-        if modification_type and modification_type != '': 
+        if modification_type and modification_type != '':
             combined_query |= Q(phosphosite__modification_type__iexact=modification_type)
 
-        return queryset.filter(combined_query).distinct() # Filter queryset and return
+        return queryset.filter(combined_query).distinct()
 
-    def get_context_data(self, **kwargs): # Override get_context_data method
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = ProteinSearchForm(self.request.GET)
         if not context["proteins"]:
@@ -125,14 +137,14 @@ class ProteinsListView(ListView):
             messages.error(self.request, error_message)
             context["error_message"] = error_message
 
-        phosphosites_dict = {}  # Initialize dictionary to store phosphosites
+        phosphosites_dict = {} # Initialize dictionary to store phosphosites
         for protein in context["proteins"]:
             phosphosites = list(PhosphoSite.objects.filter(protein=protein))
             phosphosites.sort(key=lambda x: x.modification_type)
             phosphosites_dict[protein.pk] = phosphosites 
 
-            context["phosphosites_dict"] = phosphosites_dict # Add phosphosites dictionary to context
-
+        context["phosphosites_dict"] = phosphosites_dict # Add phosphosites dictionary to context
+        
         return context
 
 @register.filter

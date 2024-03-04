@@ -5,42 +5,42 @@
 <div class="container protein-list-container">
     <h3 class="mt-5 mb-4 text-center"><em>E.coli</em> PhosphoProteome</h3>
 
-        <div class="search-container">
-            <div class="search-form-container">
-                <form method="get" action="{% url 'protein_list' %}">
-                    <div class="form-group">
-                        <label for="id_uniprot_code">Uniprot ID:</label>
-                        {{ form.uniprot_code }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_gene_name">Gene Name:</label>
-                        {{ form.gene_name }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_protein_name">Protein Name:</label>
-                        {{ form.protein_name }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_modification_type">Modification Type:</label>
-                        {{ form.modification_type }}
-                    </div>
-                    <div class="button-container">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                        <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
-                    </div>
-                </form>
-            </div>
+    <div class="search-container">
+        <div class="search-form-container">
+            <form method="get" action="{% url 'protein_list' %}">
+                <div class="form-group">
+                    <label for="search_criteria">Select</label>
+                    <select id="search_criteria" name="search_criteria" class="custom-select-list">
+                        <option value="" selected disabled>- Select -</option>
+                        <option value="uniprot">UniProt ID</option>
+                        <option value="gene">Gene Name</option>
+                        <option value="protein">Protein Name</option>
+                    </select>
+                </div>
+                <div class="form-group" id="input_field">
+                    <label for="search_term">Search Term</label>
+                    <input type="text" id="search_term" name="search_term" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="id_modification_type">Filter by type:</label>
+                    {{ form.modification_type }}
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
+                </div>
+            </form>
         </div>
-
+    </div>
         <div class="row">
             <div class="col">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Uniprot</th>
+                            <th>UniProt</th>
                             <th>Gene</th>
                             <th class="hide-on-sm">Protein</th>
-                            <th>Position</th>
+                            <th>pSites</th>
                             <th>Details</th>
                         </tr>
                     </thead>
@@ -78,20 +78,53 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#clearButton").click(function () {
-            $("#id_uniprot_code").val("");
-            $("#id_gene_name").val("");
-            $("#id_protein_name").val("");
-            $("#id_modification_type").val("");
+    function handleSearchCriteria() {
+        var selectedOption = $("#search_criteria").val();
+        if (selectedOption === "uniprot") {
+            $("#input_field").html('<label for="search_term">UniProt ID:</label>{{ form.uniprot_code }}');
+            $("#id_modification_type").prop('disabled', true);
+        } else if (selectedOption === "gene") {
+            $("#input_field").html('<label for="search_term">Gene Name:</label>{{ form.gene_name }}');
+            $("#id_modification_type").prop('disabled', true); 
+        } else if (selectedOption === "protein") {
+            $("#input_field").html('<label for="search_term">Protein Name:</label>{{ form.protein_name }}');
+            $("#id_modification_type").prop('disabled', true); 
+        } else {
+            $("#input_field").html('<label for="search_term">Search Term</label><input type="text" id="search_term" name="search_term" class="form-control">');
+            $("#id_modification_type").prop('disabled', false); 
+        }
+    }
+
+    $(document).ready(function() {
+        $("#search_criteria").change(function () {
+            handleSearchCriteria();
         });
+
+        $("#id_modification_type").change(function() {
+            var selectedOption = $("#search_criteria").val();
+            if (selectedOption !== "") {
+                $("#search_criteria").val("");
+                handleSearchCriteria();
+            }
+        });
+
+        handleSearchCriteria();
+
+        $("#clearButton").click(function () {
+            $("#search_term").val("");
+            $("#id_modification_type").val("");
+            handleSearchCriteria(); 
+        });
+
+        var selectedOption = "{{ request.GET.search_criteria }}";
+        $("#search_criteria").val(selectedOption);
+        handleSearchCriteria();
     });
 
     $("#clearButton").click(function () {
         window.location.href = "{% url 'protein_list' %}";
     });
-
 </script>
+
 {% endblock %}

@@ -35,13 +35,12 @@
 }
 
 .form-control-navbar {
-  width: 200px;
-  background-color: white;
   border: 1px solid rgb(9, 43, 77);
 }
 
 .btn.btn-primary {
   border-radius: 0;
+  margin-right: 20px;
 }
 
 .footer {
