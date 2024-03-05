@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .models import PhosphoProtein, PhosphoSite
 from django.contrib import messages
-from .forms import SignUpForm, ContactForm, ProteinSearchForm
+from .forms import SignUpForm, ContactForm, ProteinSearchForm, PhosphoProteinForm, UserUpdateForm
 from .models import Profile
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -17,9 +17,30 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import plotly.graph_objects as go
 import plotly.offline as py
 from django.template.defaulttags import register
+from django.http import Http404
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 def home(request):
     return render(request, 'home.html', {})
+
+# Register view function
+def register_user(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            institution_name = form.cleaned_data['institution_name']
+            country = form.cleaned_data['country']
+            profile = Profile.objects.create(user=user, institution_name=institution_name, country=country)
+            messages.success(request, "Your account has been created. It will be activated once approved by the admin.")
+            return redirect('home')
+    else:
+        form = SignUpForm() 
+    return render(request, "register.html", {'form': form})
 
 # Login view function
 def login_user(request):
@@ -28,41 +49,24 @@ def login_user(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  
-            messages.success(request, "You are logged in.")
-            return redirect('home')
+            profile = get_object_or_404(Profile, user=user)
+            if profile.approved:
+                login(request, user)
+                messages.success(request, "You are logged in.")
+                return redirect('home')
+            elif not user.is_active:
+                messages.error(request, "Your account is inactive. Please contact the administrator.")
+            elif not profile.approved:
+                messages.error(request, "Your account is not yet approved by the administrator.")
         else:
-            messages.error(request, "Ups, something went wrong. Please try again.")
-            return render(request, "login.html", {})
-    else:
-        return render(request, "login.html", {})
+            messages.error(request, "Invalid username or password. Please try again.")
+    return render(request, "login.html", {})
 
 # Logout view function
 def logout_user(request):
     logout(request)
     messages.success(request, "Logged out successfully.")
     return redirect('home')
-
-# Register view function
-def register_user(request):
-    if request.method == "POST":
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save() 
-            institution_name = form.cleaned_data['institution_name']
-            country = form.cleaned_data['country']
-            profile = Profile.objects.create(user=user, institution_name=institution_name, country=country)
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            messages.success(request, "You have successfully registered!")
-            return redirect('home')
-    else:
-        form = SignUpForm() 
-        return render(request, "register.html", {'form': form})
-    
-    return render(request, "register.html", {'form': form})
 
 # Contact view function
 def contact(request):
@@ -98,6 +102,7 @@ class ProteinsListView(ListView):
 
     def get_queryset(self): # Override queryset method
         queryset = super().get_queryset()
+        queryset = queryset.filter(approved=True)
         search_category = self.request.GET.get("search_category")
         search_query = self.request.GET.get("q")
 
@@ -144,7 +149,7 @@ class ProteinsListView(ListView):
             phosphosites_dict[protein.pk] = phosphosites 
 
         context["phosphosites_dict"] = phosphosites_dict # Add phosphosites dictionary to context
-        
+
         return context
 
 @register.filter
@@ -265,3 +270,122 @@ def export_protein_as_pdf(request, pk):
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
     return response
+
+# Update user view function
+def update_user(request, pk):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=request.user.id)
+        current_profile = Profile.objects.get(user=current_user)
+
+        if request.method == "POST":
+            user_form = UserUpdateForm(request.POST, instance=current_user)
+            if user_form.is_valid():
+                user_form.save()
+                current_profile.institution_name = user_form.cleaned_data['institution_name']
+                current_profile.country = user_form.cleaned_data['country']
+                current_profile.save()
+
+                login(request, current_user)
+                messages.success(request, "Your profile has been updated.")
+                return redirect('home')
+            else:
+                messages.error(request, "There was an error updating your profile. Please try again.")
+        else:
+            user_form = UserUpdateForm(instance=current_user)
+            return render(request, "update_user.html", {'user_form': user_form })
+    else:
+        messages.success(request, "You have to be logged in.")
+        return redirect('home')
+
+# Delete user view function
+def delete_user(request, pk):
+    if request.user.is_authenticated:
+        user = get_object_or_404(User, id=pk)
+        
+        if request.user == user:
+            user.delete()
+            messages.success(request, "Your account has been successfully deleted.")
+            return redirect('home')
+        else:
+            messages.error(request, "Something went wrong. Please try again.")
+    else:
+        messages.error(request, "You must be logged in to perform this task.")
+    
+    return redirect('home')
+
+# Profile view function
+def profile(request, pk):
+    if request.user.is_authenticated:
+        try:
+            profile = Profile.objects.get(user_id=pk)
+            user = profile.user
+
+            # Fetch existing phosphoproteins
+            user_phosphoproteins = PhosphoProtein.objects.filter(submitted_by=user)
+
+            if request.method == 'POST':
+                phosphoprotein_form = PhosphoProteinForm(request.POST)
+                if phosphoprotein_form.is_valid():
+                    phosphoprotein = phosphoprotein_form.save(commit=False)
+                    phosphoprotein.submitted_by = request.user
+                    phosphoprotein.approved = False  # Mark as unapproved for all users
+                    phosphoprotein.save()
+                    messages.success(request, "Phosphoprotein submitted successfully. It will be visible after approval.")
+                    return HttpResponseRedirect(request.path_info)  # Redirect to the same page to avoid resubmission
+                else:
+                    messages.error(request, "Phosphoprotein form validation failed.")
+            else:
+                phosphoprotein_form = PhosphoProteinForm()
+
+            # Fetch only approved phosphoproteins for display
+            approved_phosphoproteins = PhosphoProtein.objects.filter(
+                Q(submitted_by=user) | Q(approved=True)
+            )
+
+            context = {
+                "profile": profile,
+                "user_phosphoproteins": user_phosphoproteins,
+                "approved_phosphoproteins": approved_phosphoproteins,
+                "phosphoprotein_form": phosphoprotein_form,
+            }
+            return render(request, "profile.html", context)
+        except Profile.DoesNotExist:
+            raise Http404("Profile does not exist")
+    else:
+        messages.error(request, "You must be logged in to access this!")
+        return redirect('login')
+
+@login_required
+def update_phosphoprotein(request, user_id, pk):
+    # Fetch the phosphoprotein instance to update
+    phosphoprotein = get_object_or_404(PhosphoProtein, pk=pk)
+
+    if request.method == 'POST':
+        # Populate the form with the instance data
+        form = PhosphoProteinForm(request.POST, instance=phosphoprotein)
+        if form.is_valid():
+            phosphoprotein = form.save(commit=False)
+            phosphoprotein.submitted_by = request.user
+            phosphoprotein.save()
+            messages.success(request, "Phosphoprotein updated successfully.")
+            return redirect('profile', pk=user_id)
+        else:
+            messages.error(request, "Form validation failed.")
+    else:
+        # Populate the form with the instance data
+        form = PhosphoProteinForm(instance=phosphoprotein)
+
+    return render(request, 'update_phosphoprotein.html', {'form': form})
+
+# Delete phosphoprotein view function
+@login_required
+def delete_phosphoprotein(request, user_id, pk):
+    phosphoprotein = get_object_or_404(PhosphoProtein, pk=pk)
+
+    if request.user == phosphoprotein.submitted_by:
+        phosphoprotein.delete()
+        messages.success(request, "The phosphoprotein has been deleted.")
+    else:
+        messages.error(request, "You have no power here.")
+
+    return redirect('profile', pk=user_id)

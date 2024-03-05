@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Account Info</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>Username:</th>
+                            <td>{{ profile.user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{ profile.user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>First name:</th>
+                            <td>{{ profile.user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last name:</th>
+                            <td>{{ profile.user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Institute:</th>
+                            <td>{{ profile.institution_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Country:</th>
+                            <td>{{ profile.country }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'update_user' user.id %}" class="btn btn-primary update-profile">Update Account</a>
+                    <button id="deleteAccount" class="btn btn-danger profile">Delete Account</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Add Phosphoprotein</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_uniprot_code" class="form-label">UniProt Code</label>
+                            {{ phosphoprotein_form.uniprot_code }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_gene_name" class="form-label">Gene Name</label>
+                            {{ phosphoprotein_form.gene_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_protein_name" class="form-label">Protein Name</label>
+                            {{ phosphoprotein_form.protein_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_protein_description" class="form-label">Description</label>
+                            {{ phosphoprotein_form.protein_description }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_reference" class="form-label">Reference</label>
+                            {{ phosphoprotein_form.reference }}
+                        </div>
+                        <input type="hidden" name="phosphoprotein_form" value="1">
+                        <button type="submit" class="btn btn-success profile">Add Phosphoprotein</button>
+                    </form>
+
+                    <hr>
+                    <h5 class="text-center">My Submissions</h5>
+                    {% for phosphoprotein in user_phosphoproteins %}
+                    <div class="card mb-2 bg-dark text-white">
+                        <div class="row g-0">
+                            <div class="col-md-8 bg-dark text-white">
+                                <div class="card-body" style="color: rgb(230, 226, 226); font-weight: lighter;">
+                                    <h5 class="card-title">{{ phosphoprotein.protein_name }}</h5>
+                                    <p class="card-text">{{ phosphoprotein.protein_description }}</p>
+                                    <p class="card-text"><small style="color: rgb(213, 209, 209); font-weight: lighter;">Last updated {{ phosphoprotein.created_at|timesince }} ago</small></p>
+                                    <a href="{% url 'update_phosphoprotein' user_id=user.id pk=phosphoprotein.id %}" title="Edit">
+                                        <span style="color: rgb(3, 248, 252); margin-right: 10px;">
+                                            <i class="fas fa-pen-to-square"></i>
+                                        </span>
+                                    </a>
+                                    <a href="{% url 'delete_phosphoprotein' user_id=user.id pk=phosphoprotein.id %}" title="Delete" class="delete-protein">
+                                        <span style="color: rgb(242, 156, 156);">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('deleteAccount').addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete your account?')) {
+            window.location.href = "{% url 'delete_user' user.id %}";
+        }
+    });
+
+    var deleteButtons = document.querySelectorAll('.delete-protein');
+    deleteButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to delete it?')) {
+                window.location.href = this.href;
+            }
+        });
+    });
+</script>
+
+{% endblock %}

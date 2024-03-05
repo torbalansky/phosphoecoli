@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Update Phosphoprotein</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_uniprot_code" class="form-label">UniProt Code</label>
+                            {{ form.uniprot_code }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_gene_name" class="form-label">Gene Name</label>
+                            {{ form.gene_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_protein_name" class="form-label">Protein Name</label>
+                            {{ form.protein_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_protein_description" class="form-label">Description</label>
+                            {{ form.protein_description }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_reference" class="form-label">Reference</label>
+                            {{ form.reference }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Phosphoprotein</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                    
+
+{% endblock %}

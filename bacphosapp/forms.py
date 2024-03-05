@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from .models import PhosphoProtein
 
 class SignUpForm(UserCreationForm):
     username = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'User Name'}))
@@ -32,6 +33,29 @@ class SignUpForm(UserCreationForm):
 
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = ''
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(label="E-mail", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
+    first_name = forms.CharField(label="First name", max_length=50, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}))
+    last_name = forms.CharField(label="Last name", max_length=50, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
+    username = forms.CharField(label="Username", max_length=50,  widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'New Password'}), required=False)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm New Password'}), required=False)
+    institution_name = forms.CharField(label="Institution Name", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Institution Name'}))
+    country = forms.CharField(label="Country", max_length=60, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Country'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'country', 'institution_name', )
+    
+    def clean(self):
+        cleaned_data = super(UserUpdateForm, self).clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+        if password != confirm_password:
+            raise forms.ValidationError("The passwords do not match.")
+        
+        return cleaned_data
 
 class ContactForm(forms.Form):
     name = forms.CharField(label="Name", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}))
@@ -65,3 +89,15 @@ class ProteinSearchForm(forms.Form):
                 "Please provide at least one search criteria."
             )
         return cleaned_data
+
+class PhosphoProteinForm(forms.ModelForm):
+    class Meta:
+        model = PhosphoProtein
+        fields = ['uniprot_code', 'gene_name', 'protein_name', 'protein_description', 'reference']
+        widgets = {
+            'uniprot_code': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'gene_name': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'protein_name': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'protein_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'required': True}),
+            'reference': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'required': True}),
+        }

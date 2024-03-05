@@ -5,20 +5,14 @@
 .navbar {
   background-color: #cdff79;
 }
-.navbar-brand {
-  margin-left: 20px;
-  margin-right: 50px;
-  font-weight: bold;
-  color: rgb(9, 43, 77);
-  font-style: italic;
-  font-family: 'Pixel Operator', '04b_03', 'Press Start 2P', 'Pixelade', 'VCR OSD Mono', monospace;
-}
 
 .navbar-nav .nav-link {
     color: rgb(9, 43, 77);
     margin-left: 15px;
     font-family: 'Pixel Operator', '04b_03', 'Press Start 2P', 'Pixelade', 'VCR OSD Mono', monospace;
+    font-size: 18px;
 }
+
 .navbar-nav .nav-link:hover {
     background-color: rgb(9, 43, 77);
     color: white;
@@ -26,12 +20,9 @@
 }
 
 .navbar img {
-  width: 35px;
-}
-
-.custom-select {
-  background-color: white;
-  width: 100px;
+  width: 80px;
+  margin-left: 30px;
+  margin-right: 50px;
 }
 
 .form-control-navbar {
@@ -41,6 +32,11 @@
 .btn.btn-primary {
   border-radius: 0;
   margin-right: 20px;
+}
+
+.custom-select {
+  background-color: rgb(245, 250, 241);
+  width: 100px;
 }
 
 .footer {
@@ -271,6 +267,7 @@ a {
 .protein-list-container .btn.btn-light {
   background-color: rgb(9, 43, 77);
   color: #cdff79;
+  font-weight: bold;
 }
 
 .protein-list-container .button-container {
@@ -349,4 +346,8 @@ a {
 
 .form-control {
   background-color: #edeff094; 
+}
+
+.btn.btn-danger.profile, .btn.btn-success.profile {
+  border-radius: 0;
 }

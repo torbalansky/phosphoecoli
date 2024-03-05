@@ -2,16 +2,32 @@
 {% load static %}
 {% block content %}
 
-<div class="card mt-4 border-0">
-  <div class="row no-gutters">
+<div class="card border-0 mt-2">
+  <div class="row justify-content-center">
+    <h2 class="card-title text-center m-5"><em>Phoshorylation E.coli Data Base (pEDB)</em></h2>
+  <div class="col-lg-5">
+    <form class="form-inline" method="get" action="{% url 'protein_list' %}">
+      <h6 class="text-center">Quick Search</h6>
+        <div class="input-group">
+            <select class="custom-select" id="search_category" name="search_category">
+                <option value="uniprot">Uniprot ID</option>
+                <option value="gene">Gene Name</option>
+                <option value="protein">Protein Name</option>
+            </select>
+            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+  </div>
+</div>
+  <div class="row no-gutters mt-2">
     <div class="col-md-2">
       <div class="home-protein-view" id="protein-viewer"></div>
     </div>
     <div class="col-md-10 p-5">
       <div class="card-body">
-        <h5 class="card-title"><em>PhosEcoli</em></h5>
         <p class="card-text">
-          <em>PhosEcoli</em> serves as an exhaustive repository for protein phosphorylation data within 
+          <em>pEDB</em> serves as an exhaustive repository for protein phosphorylation data within 
           <em>E.coli</em>, comprising a considerable collection of phospho-proteins totaling ***** and 
           identifying **** phospho-sites. Acknowledged as a cornerstone in prokaryotic systems, 
           protein phosphorylation represents an estimated ***% of the total phosphorylated amino 
@@ -43,9 +59,37 @@
     stage.setSpin(true);
   } else {
     var proteinViewer = document.getElementById("protein-viewer");
-    proteinViewer.innerHTML = "<img src='{% static 'images/4icd.pdb' %}' alt='Protein Image'>";
-    proteinViewer.style.display = "none";
+    proteinViewer.innerHTML = "<img src='{% static 'images/logo_PS_s.png' %}' alt='Protein Image'>";
+    proteinViewer.querySelector("img").style.width = "150px"; 
+    proteinViewer.querySelector("img").style.height = "auto"; 
+    proteinViewer.querySelector("img").style.marginTop = "100px"; 
+    proteinViewer.querySelector("img").style.marginLeft = "15px";
   }
+
+  const searchCategoryDropdown = document.getElementById('search_category');
+  const searchQueryInput = document.querySelector('.form-control-navbar');
+
+    function setPlaceholder() {
+        const selectedOption = searchCategoryDropdown.value;
+  
+        switch (selectedOption) {
+            case 'uniprot':
+                searchQueryInput.placeholder = 'P08200';
+                break;
+            case 'gene':
+                searchQueryInput.placeholder = 'icd';
+                break;
+            case 'protein':
+                searchQueryInput.placeholder = 'Isocitrate dehydrogenase';
+                break;
+            default:
+                searchQueryInput.placeholder = 'P08200';
+        }
+    }
+
+  window.addEventListener('load', setPlaceholder);
+  searchCategoryDropdown.addEventListener('change', setPlaceholder);
+
 </script>
 
 {% endblock %}

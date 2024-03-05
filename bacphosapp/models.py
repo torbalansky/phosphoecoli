@@ -20,6 +20,8 @@ class PhosphoProtein(models.Model):
     ecocyc_url = models.URLField(null=True, blank=True)
     submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=False)
+    reference = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.gene_name
@@ -33,6 +35,7 @@ class PhosphoSite(models.Model):
     reference = models.TextField(default='')
     submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.protein.gene_name} - {self.position}"
@@ -41,6 +44,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     institution_name = models.CharField(max_length=100)
     country = models.CharField(max_length=60)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
