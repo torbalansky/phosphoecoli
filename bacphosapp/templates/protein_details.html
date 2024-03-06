@@ -33,6 +33,7 @@
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div><strong>Protein Description:</strong> {{ protein.protein_description }}</div>
+                                    <hr>
                                     <div><strong>Uniprot ID:</strong>
                                         {% if protein.uniprot_url %}
                                             <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
@@ -57,7 +58,6 @@
                                             No phosphosites found
                                         {% endif %}
                                     </div>
-                                    <div><strong>Sequence:</strong> {{ protein.sequence }}</div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="card mt-4">

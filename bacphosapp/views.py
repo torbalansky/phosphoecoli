@@ -53,7 +53,7 @@ def login_user(request):
             if profile.approved:
                 login(request, user)
                 messages.success(request, "You are logged in.")
-                return redirect('home')
+                return redirect('profile' , pk=user.pk)
             elif not user.is_active:
                 messages.error(request, "Your account is inactive. Please contact the administrator.")
             elif not profile.approved:

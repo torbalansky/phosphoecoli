@@ -39,15 +39,15 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    <a href="{% url 'update_user' user.id %}" class="btn btn-primary update-profile">Update Account</a>
-                    <button id="deleteAccount" class="btn btn-danger profile">Delete Account</button>
+                    <a href="{% url 'update_user' user.id %}" class="btn btn-primary update-profile mb-1">Update Account</a>
+                    <button id="deleteAccount" class="btn btn-danger profile mb-1">Delete Account</button>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Add Phosphoprotein</h5>
+                    <h5 class="card-title">Add phosphoprotein and phosphosite</h5>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -82,18 +82,18 @@
                     <div class="card mb-2 bg-dark text-white">
                         <div class="row g-0">
                             <div class="col-md-8 bg-dark text-white">
-                                <div class="card-body" style="color: rgb(230, 226, 226); font-weight: lighter;">
-                                    <h5 class="card-title">{{ phosphoprotein.protein_name }}</h5>
-                                    <p class="card-text">{{ phosphoprotein.protein_description }}</p>
-                                    <p class="card-text"><small style="color: rgb(213, 209, 209); font-weight: lighter;">Last updated {{ phosphoprotein.created_at|timesince }} ago</small></p>
+                                <div class="card-body">
+                                    <h5 class="card-title">Protein: {{ phosphoprotein.protein_name }}</h5>
+                                    <p class="card-text">Description: {{ phosphoprotein.protein_description }}</p>
+                                    <p class="card-text"><small>Last updated {{ phosphoprotein.created_at|timesince }} ago</small></p>
                                     <a href="{% url 'update_phosphoprotein' user_id=user.id pk=phosphoprotein.id %}" title="Edit">
-                                        <span style="color: rgb(3, 248, 252); margin-right: 10px;">
-                                            <i class="fas fa-pen-to-square"></i>
+                                        <span class="me-2">
+                                            <i class="fas fa-pen-to-square fa-inverse"></i>
                                         </span>
                                     </a>
                                     <a href="{% url 'delete_phosphoprotein' user_id=user.id pk=phosphoprotein.id %}" title="Delete" class="delete-protein">
-                                        <span style="color: rgb(242, 156, 156);">
-                                            <i class="fas fa-trash"></i>
+                                        <span>
+                                            <i class="fas fa-trash text-danger"></i>
                                         </span>
                                     </a>
                                 </div>
