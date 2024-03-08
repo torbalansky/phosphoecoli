@@ -60,7 +60,7 @@ class UserUpdateForm(forms.ModelForm):
 class ContactForm(forms.Form):
     name = forms.CharField(label="Name", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}))
     email = forms.EmailField(label="Email", max_length=100, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your email'}))
-    content = forms.CharField(label="Message", widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your message'}))
+    content = forms.CharField(label="Message", widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your message', 'rows': 3})) 
 
 class ProteinSearchForm(forms.Form):
     
@@ -93,11 +93,22 @@ class ProteinSearchForm(forms.Form):
 class PhosphoProteinForm(forms.ModelForm):
     class Meta:
         model = PhosphoProtein
-        fields = ['uniprot_code', 'gene_name', 'protein_name', 'protein_description', 'reference']
+        fields = ['uniprot_code', 'uniprot_url', 'gene_name', 'protein_name', 'position', 'window_5_aa',
+                  'modification_type', 'method', 'sequence', 'pdb_code', 'pdb_url', 'submitted_by', 'reference',
+                  'approved']
         widgets = {
             'uniprot_code': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'uniprot_url': forms.URLInput(attrs={'class': 'form-control'}),
             'gene_name': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
             'protein_name': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
-            'protein_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'required': True}),
+            'position': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
+            'window_5_aa': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'modification_type': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'method': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'sequence': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'required': True}),
+            'pdb_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'pdb_url': forms.URLInput(attrs={'class': 'form-control'}),
+            'submitted_by': forms.Select(attrs={'class': 'form-control'}),
             'reference': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'required': True}),
+            'approved': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

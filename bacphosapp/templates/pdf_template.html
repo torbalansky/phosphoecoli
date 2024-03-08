@@ -33,32 +33,8 @@
             </td>
         </tr>
         <tr>
-            <th>Synonyms</th>
-            <td>{{ protein.synonyms }}</td>
-        </tr>
-        <tr>
             <th>Gene Name</th>
             <td>{{ protein.gene_name }}</td>
-        </tr>
-        <tr>
-            <th>Protein Description</th>
-            <td>{{ protein.protein_description }}</td>
-        </tr>
-        <tr>
-            <th>Biological Process</th>
-            <td>{{ protein.biological_process }}</td>
-        </tr>
-        <tr>
-            <th>Molecular Function</th>
-            <td>{{ protein.molecular_function }}</td>
-        </tr>
-        <tr>
-            <th>Cellular Component</th>
-            <td>{{ protein.cellular_component }}</td>
-        </tr>
-        <tr>
-            <th>Molecular Weight (kDa)</th>
-            <td>{{ protein.molecular_weight }}</td>
         </tr>
         <tr>
             <th>Phosphosites</th>
@@ -76,15 +52,5 @@
         <tr>
             <th>PDB</th>
             <td>{{ protein.pdb_code }}</td>
-        </tr>
-        <tr>
-            <th>AlphaFold link</th>
-            <td>
-                {% if protein.alphafold_structure %}
-                    <a href="{{ protein.alphafold_url }}" target="_blank" style="text-decoration: none;">{{ protein.alphafold_structure }}</a>
-                {% else %}
-                    {{ protein.alphafold_structure }}
-                {% endif %}
-            </td>
         </tr>
     </table>

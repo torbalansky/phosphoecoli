@@ -2,37 +2,39 @@
 {% load static %}
 {% block content %}
 
-
-<div class="container-contact mt-4 mb-4">
-    <h3 class="card-title text-center mb-4">Contact Information</h3>
-    <p class="text-center">Feel free to reach out to me using the form below, or via email or phone:</p>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-3"><i class="fas fa-envelope"></i> <strong>Email:</strong> torbalansky@gmail.com</li>
-                        <li class="mb-3"><i class="fas fa-phone"></i> <strong>Phone:</strong> +351 910-808-938</li>
-                        <li class="mb-3"><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> Musagenitsa 96, Sofia, Bulgaria</li>
-                    </ul>
-                </div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-6 text-white">
+            <div class="custom-bg rounded p-4 mb-4">
+                <h3 class="text-center mb-4">Contact Information</h3>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent border-0"><i class="fas fa-envelope me-2"></i> <strong>Email:</strong> torbalansky@gmail.com</li>
+                    <li class="list-group-item bg-transparent border-0"><i class="fas fa-phone me-2"></i> <strong>Phone:</strong> +351 910-808-938</li>
+                    <li class="list-group-item bg-transparent border-0"><i class="fas fa-map-marker-alt me-2"></i> <strong>Address:</strong> Musagenitsa 96, Sofia, Bulgaria</li>
+                </ul>
             </div>
         </div>
-        <div class="col-md-6 mb-5">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4 class="card-title mb-4 text-center">Contact Form</h4>
-                    <form method="post" action=".">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary btn-block" type="submit">Submit</button>
-                        </div>
-                    </form>
-                </div>
+        <div class="col-lg-6 text-white">
+            <div class="custom-bg rounded p-4 mb-4 shadow">
+                <h3 class="text-center mb-4">Contact Form</h3>
+                <form method="post" action=".">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.content.label_tag }}
+                        {{ form.content }}
+                    </div>
+                    <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

@@ -2,9 +2,9 @@
   {% load static %}
   <div class="container">
     <a class="navbar-brand" href="{% url 'home' %}">
-      <img src="{% static 'images/logo_PS_s.png' %}" alt="Logo">
+      <img src="{% static 'images/logo.png' %}" alt="Logo">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -15,17 +15,15 @@
         <li class="nav-item {% if request.path == '/protein_list/' %}active{% endif %}">
           <a class="nav-link" href="{% url 'protein_list' %}">Search</a>
         </li>
-        <li class="nav-item {% if request.path == '/guide/' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'guide' %}">Guide</a>
-        </li>
-        <li class="nav-item dropdown {% if request.path == '/about/' or request.path == '/overview/' or request.path == '/resources/' or request.path == '/cite/' %}active{% endif %}">
+        <li class="nav-item dropdown {% if request.path == '/guide/' or request.path == '/overview/' or request.path == '/resources/' or request.path == '/cite/' %}active{% endif %}">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAbout" role="button" data-bs-toggle="dropdown" aria-expanded="false">About</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownAbout">
+              <li><a class="dropdown-item {% if request.path == '/guide/' %}active{% endif %}" href="{% url 'guide' %}">Guide</a></li>
               <li><a class="dropdown-item {% if request.path == '/overview/' %}active{% endif %}" href="{% url 'overview' %}">Overview</a></li>
               <li><a class="dropdown-item {% if request.path == '/resources/' %}active{% endif %}" href="{% url 'resources' %}">Resources</a></li>
               <li><a class="dropdown-item {% if request.path == '/cite/' %}active{% endif %}" href="{% url 'cite' %}">How to cite</a></li>
           </ul>
-      </li>
+        </li>           
       <li class="nav-item dropdown {% if '/profile/' in request.path %}active{% endif %}">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownContribute" role="button" data-bs-toggle="dropdown" aria-expanded="false">Contribute</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownContribute">

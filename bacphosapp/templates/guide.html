@@ -2,35 +2,46 @@
 {% load static %}
 
 {% block content %}
-<div class="container mb-5">
+<div class="container site-map-container">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="mt-5 mb-4 text-center">Site Map</h3>
-            <div class="list-group mb-5">
-                <a href="{% url 'home' %}" class="list-group-item list-group-item-action">
-                    <h5 class="mb-1">Homepage <i class="fas fa-home"></i></h5>
+            <h1 class="mt-1 mb-4 text-center text-white">Site Map</h1>
+            <div class="list-group"><br>
+                <a href="{% url 'home' %}" class="list-group-item list-group-item-action text-white">
+                    <h5 class="mb-1">Homepage <i class="fas fa-home text-white"></i></h5><br>
                     <p class="mb-1">The Homepage serves as the entry point to the application, offering users an intuitive search function for quick access. Users select their search criteria and input the corresponding search term.</p>
-                </a>
-                <a href="{% url 'protein_list' %}" class="list-group-item list-group-item-action">
-                    <h5 class="mb-1">Search Page <i class="fas fa-search"></i></h5>
-                    <p class="mb-1">The Search Page hosts the protein list containing all phosphoproteins and their respective phosphosites, along with a search engine. Users can search for phosphosites by UniProt code, gene, or protein name. Detailed information and features such as PDF downloads are accessible via the view button.</p>
-                </a>
-                <a href="{% url 'login' %}" class="list-group-item list-group-item-action">
-                    <h5 class="mb-1">Contribute <i class="fas fa-upload"></i></h5>
-                    <p class="mb-1">The Contribute page allows users to submit new phosphoprotein/phosphosite data from their research to our database. Access to the submission form requires registration, and all submissions undergo thorough review before approval, including user registrations. Permission-based access is enforced.</p>
-                </a>
-                <a href="{% url 'resources' %}" class="list-group-item list-group-item-action">
-                    <h5 class="mb-1">Resources <i class="fas fa-book"></i></h5>
+                </a><br>
+                <a href="{% url 'protein_list' %}" class="list-group-item list-group-item-action text-white">
+                    <h5 class="mb-1">Search Page <i class="fas fa-search text-white"></i></h5><br>
+                    <p class="mb-1">
+                        The Search Page hosts the protein list containing all phosphoproteins and their respective phosphosites, along with a search engine. 
+                        Users can search for phosphosites by UniProt code, gene, or protein name. The search functionality is sensitive and requires users to input their query correctly. 
+                        For example, if a user wants to search by UniProt ID, they must enter only the UniProt code. Mixing protein/gene names with UniProt codes may result in inaccurate search results. 
+                        Additionally, users can filter their search results based on the phosphorylated amino acid, including H (Histidine), Y (Tyrosine), T (Threonine), or S (Serine), using the dropdown menu.
+                    </p><br>
+                    <p class="mb-1">
+                        After performing a search, the search form is automatically cleared. However, users can use the "Clear" button provided in the form to return to the full list of proteins if they wish to start a new search or explore all proteins again.
+                    </p><br>
+                    <p class="mb-1">
+                        Detailed information and features such as PDF downloads are accessible via the view button for each phosphoprotein.
+                    </p>
+                </a><br>                    
+                <a href="{% url 'login' %}" class="list-group-item list-group-item-action text-white">
+                    <h5 class="mb-1">Contribute <i class="fas fa-upload text-white"></i></h5><br>
+                    <p class="mb-1">The Contribute page allows users to submit new phosphoprotein/phosphosite data to our database. Access to the submission form requires registration, and all submissions undergo thorough review before approval, including user registrations. Permission-based access is enforced.</p>
+                </a><br>
+                <a href="{% url 'resources' %}" class="list-group-item list-group-item-action text-white">
+                    <h5 class="mb-1">Resources <i class="fas fa-book text-white"></i></h5><br>
                     <p class="mb-1">This page offers a variety of valuable resources related to protein phosphorylation.</p>
-                </a>
-                <a href="{% url 'contact' %}" class="list-group-item list-group-item-action">
-                    <h5 class="mb-1">Contact <i class="fas fa-envelope"></i></h5>
+                </a><br>
+                <a href="{% url 'contact' %}" class="list-group-item list-group-item-action text-white">
+                    <h5 class="mb-1">Contact <i class="fas fa-envelope text-white"></i></h5><br>
                     <p class="mb-1">Users can provide feedback or make inquiries through this interface.</p>
-                </a>
-                <a href="{% url 'cite' %}" class="list-group-item list-group-item-action">
-                    <h5 class="mb-1">About/General Information/Citation <i class="fas fa-info-circle"></i></h5>
+                </a><br>
+                <a href="{% url 'cite' %}" class="list-group-item list-group-item-action text-white">
+                    <h5 class="mb-1">About/General Information/Citation <i class="fas fa-info-circle text-white"></i></h5><br>
                     <p class="mb-1">For users utilizing data from pEDB, we kindly request citation of our article for acknowledgment.</p>
-                </a>                
+                </a><br>                
             </div>
         </div>
     </div>

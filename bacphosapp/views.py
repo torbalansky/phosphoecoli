@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .models import PhosphoProtein, PhosphoSite
+from .models import PhosphoProtein
 from django.contrib import messages
 from .forms import SignUpForm, ContactForm, ProteinSearchForm, PhosphoProteinForm, UserUpdateForm
 from .models import Profile
@@ -21,6 +21,7 @@ from django.http import Http404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def home(request):
     return render(request, 'home.html', {})
@@ -94,19 +95,25 @@ def contact(request):
         'form': form
     })
 
-# Proteins list view class
+# Protein list view function
 class ProteinsListView(ListView):
-    model = PhosphoProtein # Define model
-    template_name = "protein_list.html" # Define template name
-    context_object_name = "proteins" # Define context object name
+    model = PhosphoProtein
+    template_name = "protein_list.html"
+    context_object_name = "proteins"
+    paginate_by = 10
 
-    def get_queryset(self): # Override queryset method
+    def get_queryset(self):
+        # Get the initial queryset of all PhosphoProtein objects
         queryset = super().get_queryset()
+
+        # Filter queryset to include only approved proteins
         queryset = queryset.filter(approved=True)
+
+        # Get search parameters from the request
         search_category = self.request.GET.get("search_category")
         search_query = self.request.GET.get("q")
 
-        # Filter queryset based on search query and category
+        # Apply search filters if provided
         if search_query and search_category:
             if search_category == "uniprot":
                 queryset = queryset.filter(uniprot_code__icontains=search_query)
@@ -114,14 +121,14 @@ class ProteinsListView(ListView):
                 queryset = queryset.filter(gene_name__icontains=search_query)
             elif search_category == "protein":
                 queryset = queryset.filter(protein_name__icontains=search_query)
-            # Add more conditions for other search categories if needed
 
-        # Filter queryset based on other parameters
+        # Get additional search parameters
         uniprot_code = self.request.GET.get("uniprot_code")
         gene_name = self.request.GET.get("gene_name")
         protein_name = self.request.GET.get("protein_name")
         modification_type = self.request.GET.get("modification_type")
         
+        # Combine additional search parameters into a single query
         combined_query = Q()
         if uniprot_code:
             combined_query |= Q(uniprot_code__icontains=uniprot_code)
@@ -130,32 +137,32 @@ class ProteinsListView(ListView):
         if protein_name:
             combined_query |= Q(protein_name__icontains=protein_name)
         if modification_type and modification_type != '':
-            combined_query |= Q(phosphosite__modification_type__iexact=modification_type)
+            combined_query |= Q(modification_type__iexact=modification_type)
 
-        return queryset.filter(combined_query).distinct()
+        # Filter queryset with combined query
+        queryset = queryset.filter(combined_query).distinct()
+
+        return queryset
 
     def get_context_data(self, **kwargs):
+        # Get the context data including pagination information
         context = super().get_context_data(**kwargs)
-        context["form"] = ProteinSearchForm(self.request.GET)
-        if not context["proteins"]:
-            error_message = "There is no data available."
-            messages.error(self.request, error_message)
-            context["error_message"] = error_message
 
-        phosphosites_dict = {} # Initialize dictionary to store phosphosites
-        for protein in context["proteins"]:
-            phosphosites = list(PhosphoSite.objects.filter(protein=protein))
-            phosphosites.sort(key=lambda x: x.modification_type)
-            phosphosites_dict[protein.pk] = phosphosites 
-
-        context["phosphosites_dict"] = phosphosites_dict # Add phosphosites dictionary to context
+        # Pass search parameters to the template
+        context['search_category'] = self.request.GET.get('search_category', '')
+        context['q'] = self.request.GET.get('q', '')
+        context['uniprot_code'] = self.request.GET.get('uniprot_code', '')
+        context['gene_name'] = self.request.GET.get('gene_name', '')
+        context['protein_name'] = self.request.GET.get('protein_name', '')
+        context['modification_type'] = self.request.GET.get('modification_type', '')
 
         return context
-
+    
 @register.filter
 def add_position(sequence):
     return [(position + 1, aa) for position, aa in enumerate(sequence)]
 
+# Protein detail view function
 class ProteinDetailView(DetailView):
     model = PhosphoProtein
     template_name = "protein_details.html"
@@ -164,30 +171,43 @@ class ProteinDetailView(DetailView):
     def phospho_chart_image(self):
         protein = self.get_object()
         sequence = protein.sequence
-        phosphosites = PhosphoSite.objects.filter(protein=protein)
 
         # Create a scatter plot
         fig = go.Figure(layout=dict(height=400, width=1000))
         fig.add_trace(go.Scatter(x=list(range(1, len(sequence) + 1)), y=[0] * len(sequence),
-        mode='text', text=list(sequence), textposition="top center", showlegend=False))
+                                mode='text', text=list(sequence), textposition="top center", showlegend=False))
 
-        # Add phosphosites as points
-        for phosphosite in phosphosites:
-            hover_text = f"Phosphosite - {phosphosite.modification_type}{phosphosite.position}<br>Window -/+ 5aa: {phosphosite.window_5_aa}"
-            fig.add_trace(go.Scatter(x=[phosphosite.position], y=[0.5], mode='markers', 
-            marker=dict(size=10, color='blue'), name=f'Phosphosite - {phosphosite.modification_type}{phosphosite.position}', 
-            hoverinfo='text', text=hover_text))
-            fig.add_trace(go.Scatter(x=[phosphosite.position, phosphosite.position], y=[0.04, 0.5], mode='lines',
-                                     line=dict(color='black', width=0.2), showlegend=False))
+        # Add main phosphosite
+        phosphosite_positions = str(protein.position).split(',') if protein.position else []
+        for position in phosphosite_positions:
+            hover_text = f"Phosphosite - {protein.modification_type}{position}<br>Window -/+ 5aa: {protein.window_5_aa}"
+            fig.add_trace(go.Scatter(x=[int(position)], y=[0.5], mode='markers',
+                                    marker=dict(size=10, color='blue'), name=f'Phosphosite - {protein.modification_type}{position}',
+                                    hoverinfo='text', text=hover_text))
+            fig.add_trace(go.Scatter(x=[int(position), int(position)], y=[0.04, 0.5], mode='lines',
+                                    line=dict(color='black', width=0.2), showlegend=False))
+
+        # Add related phosphosites
+        related_phosphosites = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
+        for related_protein in related_phosphosites:
+            related_positions = str(related_protein.position).split(',') if related_protein.position else []
+            for position in related_positions:
+                hover_text = f"Phosphosite - {related_protein.modification_type}{position}<br>Window -/+ 5aa: {related_protein.window_5_aa}"
+                fig.add_trace(go.Scatter(x=[int(position)], y=[0.5], mode='markers',
+                                        marker=dict(size=10, color='black'), name=f'Phosphosite - {related_protein.modification_type}{position}',
+                                        hoverinfo='text', text=hover_text))
+                fig.add_trace(go.Scatter(x=[int(position), int(position)], y=[0.04, 0.5], mode='lines',
+                                        line=dict(color='black', width=0.2), showlegend=False))
+
         # Update layout
         fig.update_layout(
             title=f'Phosphosites in {protein.gene_name}',
-            xaxis_title='Residue Number', 
+            xaxis_title='Residue Number',
             yaxis_title='Phosphosites',
-            xaxis=dict(tickmode='linear', range=[0, len(sequence)], dtick=50), 
+            xaxis=dict(tickmode='linear', range=[0, len(sequence)], dtick=50),
             yaxis=dict(visible=False),
-            clickmode='event+select'              
-            )
+            clickmode='event+select'
+        )
 
         # Generate HTML representation of the chart
         chart_html = py.plot(fig, output_type='div')
@@ -198,15 +218,21 @@ class ProteinDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['chart_image'] = self.phospho_chart_image()
-        protein = self.get_object() 
-        sequence = protein.sequence
-        phosphosites = PhosphoSite.objects.filter(protein=protein)
-        phosphosite_positions = [phosphosite.position for phosphosite in phosphosites]
-        context['phosphosite_positions'] = phosphosite_positions
-        context['sequence_with_positions'] = add_position(sequence)
-        context['pdb_code'] = protein.pdb_code if protein.pdb_code else None
-        return context
+        protein = self.get_object()
+        context['sequence_with_positions'] = add_position(protein.sequence) if protein.sequence else None
+        context['pdb_code'] = protein.pdb_code
+        # Fetch all PhosphoProtein instances with the same gene name
+        related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
 
+        # Extract related positions
+        related_positions = [int(position) for related_protein in related_proteins for position in str(related_protein.position).split(',')]
+        context['related_positions'] = related_positions
+
+        # Pass related proteins to the template context
+        context['related_proteins'] = related_proteins
+
+        return context
+    
 # Overview view function
 def overview(request):
     return render(request, 'overview.html')

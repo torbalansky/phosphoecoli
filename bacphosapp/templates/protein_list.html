@@ -2,129 +2,128 @@
 {% load static %}
 {% block content %}
 
-<div class="container protein-list-container">
-    <h3 class="mt-4 mb-1 text-center">Search</h3>
-
-    <div class="search-container">
-        <div class="search-form-container">
-            <form method="get" action="{% url 'protein_list' %}">
-                <div class="form-group">
-                    <label for="search_criteria">Select</label>
-                    <select id="search_criteria" name="search_criteria" class="custom-select-list">
-                        <option value="" selected disabled>- Select -</option>
-                        <option value="uniprot">UniProt ID</option>
-                        <option value="gene">Gene Name</option>
-                        <option value="protein">Protein Name</option>
-                    </select>
-                </div>
-                <div class="form-group" id="input_field">
-                    <label for="search_term">Search Term</label>
-                    <input type="text" id="search_term" name="search_term" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="id_modification_type">Filter by type:</label>
-                    {{ form.modification_type }}
-                </div>
-                <div class="button-container">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                    <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
-                </div>
-            </form>
+<div class="search-list">
+    <form class="form-inline" method="get" action="{% url 'protein_list' %}">
+        <div class="input-group mb-2">
+            <label for="search_category" class="visually-hidden">Search Category:</label>
+            <select class="custom-select-list" id="search_category" name="search_category">
+                <option value="uniprot">UniProt ID</option>
+                <option value="gene">Gene Name</option>
+                <option value="protein">Protein Name</option>
+            </select>
+            <input class="form-control form-control-list border-0" type="search" placeholder="Search" aria-label="Search" name="q" id="q">
         </div>
-    </div>
-        <div class="row">
-            <div class="col">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>UniProt</th>
-                            <th>Gene</th>
-                            <th class="hide-on-sm">Protein</th>
-                            <th>pSites</th>
-                            <th>Details</th>
+        <div class="input-group mb-2">
+            <label for="modification_type" class="visually-hidden">Modification Type:</label>
+            <select class="custom-select-list" id="modification_type" name="modification_type">
+                <option value="">Amino acid</option>
+                <option value="Y">Y</option>
+                <option value="H">H</option>
+                <option value="S">S</option>
+                <option value="T">T</option>
+            </select>
+            <button class="btn btn-primary list" type="submit">Search</button>
+        </div>
+        <div class="button-clear">
+            <button type="button" id="clearButton" class="btn btn-danger list">Clear</button>
+        </div>
+    </form>
+</div>
+    <div class="row protein-list-container">
+        <div class="col">
+            <table class="table table-striped res">
+                <thead>
+                    <tr>
+                        <th>UniProt</th>
+                        <th>Gene</th>
+                        <th class="hide-on-sm">Protein</th>
+                        <th>pSite</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for protein in proteins %}
+                        <tr class="{% cycle 'odd' 'even' %}">
+                            <td class="uniprot_link">
+                                {% if protein.uniprot_url %}
+                                    <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
+                                {% else %}
+                                    {{ protein.uniprot_code }}
+                                {% endif %}
+                            </td>
+                            <td>{{ protein.gene_name }}</td>
+                            <td class="hide-on-sm">{{ protein.protein_name }}</td>
+                            <td>
+                                {% if protein.position %}
+                                {{ protein.modification_type }}{{ protein.position }}
+                                {% else %}
+                                    No phosphosite found
+                                {% endif %}
+                            </td>                                                
+                            <td><a href="{% url 'protein_details' pk=protein.pk %}" class="btn btn-light">View</a></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for protein in proteins %}
-                            <tr class="{% cycle 'odd' 'even' %}">
-                                <td class="uniprot_link">
-                                    {% if protein.uniprot_url %}
-                                        <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
-                                    {% else %}
-                                        {{ protein.uniprot_code }}
-                                    {% endif %}
-                                </td>
-                                <td>{{ protein.gene_name }}</td>
-                                <td class="hide-on-sm">{{ protein.protein_name }}</td>
-                                <td>
-                                    {% if protein.phosphosite_set.all %}
-                                    {% for phosphosite in protein.phosphosite_set.all|dictsort:"modification_type" %}
-                                        {{ phosphosite.modification_type }}{{ phosphosite.position }}{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                    {% else %}
-                                        No phosphosites found
-                                    {% endif %}
-                                </td>
-                                <td><a href="{% url 'protein_details' pk=protein.pk %}" class="btn btn-light">View</a></td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="7" class="text-center">No proteins found.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>                
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No proteins found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>                
             </table>
         </div>
     </div>
-</div>
+
+    {% if is_paginated %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next <i class="fas fa-angle-right"></i></a>
+                <a href="?page={{ paginator.num_pages }}">last <i class="fas fa-angle-double-right"></i></a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
 
 <script>
-    function handleSearchCriteria() {
-        var selectedOption = $("#search_criteria").val();
-        if (selectedOption === "uniprot") {
-            $("#input_field").html('<label for="search_term">UniProt ID:</label>{{ form.uniprot_code }}');
-            $("#id_modification_type").prop('disabled', true);
-        } else if (selectedOption === "gene") {
-            $("#input_field").html('<label for="search_term">Gene Name:</label>{{ form.gene_name }}');
-            $("#id_modification_type").prop('disabled', true); 
-        } else if (selectedOption === "protein") {
-            $("#input_field").html('<label for="search_term">Protein Name:</label>{{ form.protein_name }}');
-            $("#id_modification_type").prop('disabled', true); 
-        } else {
-            $("#input_field").html('<label for="search_term">Search Term</label><input type="text" id="search_term" name="search_term" class="form-control">');
-            $("#id_modification_type").prop('disabled', false); 
+    const searchCategoryDropdown = document.getElementById('search_category');
+    const searchQueryInput = document.querySelector('.form-control-list');
+      
+    function setPlaceholder() {
+    const selectedOption = searchCategoryDropdown.value;
+        
+        switch (selectedOption) {
+            case 'uniprot':
+                searchQueryInput.placeholder = 'Enter UniProt code, e.g. P08200';
+                break;
+            case 'gene':
+                searchQueryInput.placeholder = 'Enter Gene Name, e.g. icd';
+                break;
+            case 'protein':
+                searchQueryInput.placeholder = 'Enter protein Name, e.g. Isocitrate dehydrogenase';
+                break;
+            default:
+                searchQueryInput.placeholder = 'P08200';
         }
     }
-
-    $(document).ready(function() {
-        $("#search_criteria").change(function () {
-            handleSearchCriteria();
+      
+    window.addEventListener('load', setPlaceholder);
+    searchCategoryDropdown.addEventListener('change', setPlaceholder);
+    document.addEventListener('DOMContentLoaded', function() {
+    const clearButton = document.getElementById('clearButton');
+        clearButton.addEventListener('click', function() {
+            searchCategoryDropdown.value = 'uniprot';
+            searchQueryInput.value = '';
+            const form = clearButton.closest('form');
+            form.submit();
         });
-
-        $("#id_modification_type").change(function() {
-            var selectedOption = $("#search_criteria").val();
-            if (selectedOption !== "") {
-                $("#search_criteria").val("");
-                handleSearchCriteria();
-            }
-        });
-
-        handleSearchCriteria();
-
-        $("#clearButton").click(function () {
-            $("#search_term").val("");
-            $("#id_modification_type").val("");
-            handleSearchCriteria(); 
-        });
-
-        var selectedOption = "{{ request.GET.search_criteria }}";
-        $("#search_criteria").val(selectedOption);
-        handleSearchCriteria();
-    });
-
-    $("#clearButton").click(function () {
-        window.location.href = "{% url 'protein_list' %}";
     });
 </script>
-
 {% endblock %}

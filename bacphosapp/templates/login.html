@@ -7,7 +7,7 @@
       <div class="col-12 custom-login-form">
         <form method="POST" action="{% url 'login' %}">
           {% csrf_token %}
-          <h3>Login</h3>
+          <h3 class="text-white">Login</h3>
           <div class="mb-3 input-group">
             <span class="input-group-text"><i class="fa-regular fa-user"></i></span>
             <input type="text" class="form-control" name="username" placeholder="Your email...">

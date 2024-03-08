@@ -5,7 +5,7 @@
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Account Info</h5>
@@ -47,7 +47,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Add phosphoprotein and phosphosite</h5>
+                    <h5 class="card-title">Submit</h5>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -65,8 +65,20 @@
                             {{ phosphoprotein_form.protein_name }}
                         </div>
                         <div class="mb-3">
-                            <label for="id_protein_description" class="form-label">Description</label>
-                            {{ phosphoprotein_form.protein_description }}
+                            <label for="id_position" class="form-label">Position</label>
+                            {{ phosphoprotein_form.position }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_window_5_aa" class="form-label">Window -/+ 5aa</label>
+                            {{ phosphoprotein_form.window_5_aa }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_method" class="form-label">Method</label>
+                            {{ phosphoprotein_form.method }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_modification_type" class="form-label">Amino acid</label>
+                            {{ phosphoprotein_form.modification_type }}
                         </div>
                         <div class="mb-3">
                             <label for="id_reference" class="form-label">Reference</label>
@@ -84,13 +96,10 @@
                             <div class="col-md-8 bg-dark text-white">
                                 <div class="card-body">
                                     <h5 class="card-title">Protein: {{ phosphoprotein.protein_name }}</h5>
-                                    <p class="card-text">Description: {{ phosphoprotein.protein_description }}</p>
+                                    <p class="card-text">Reference: {{ phosphoprotein.reference }}</p>
                                     <p class="card-text"><small>Last updated {{ phosphoprotein.created_at|timesince }} ago</small></p>
                                     <a href="{% url 'update_phosphoprotein' user_id=user.id pk=phosphoprotein.id %}" title="Edit">
-                                        <span class="me-2">
-                                            <i class="fas fa-pen-to-square fa-inverse"></i>
-                                        </span>
-                                    </a>
+                                        <span class="me-2"><i class="fas fa-pen-to-square fa-inverse"></i></span></a>
                                     <a href="{% url 'delete_phosphoprotein' user_id=user.id pk=phosphoprotein.id %}" title="Delete" class="delete-protein">
                                         <span>
                                             <i class="fas fa-trash text-danger"></i>
