@@ -12,7 +12,10 @@ class ProfileInline(admin.StackedInline):
 class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline, )
 
+class PhosphoProteinAdmin(admin.ModelAdmin):
+    search_fields = ['uniprot_code', 'gene_name', 'protein_name']
+
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(PhosphoProtein)
+admin.site.register(PhosphoProtein, PhosphoProteinAdmin)
 admin.site.register(Profile)

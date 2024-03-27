@@ -17,6 +17,7 @@ class PhosphoProtein(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
     reference = models.TextField(null=True, blank=True)
+    alphafold_url = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.gene_name

@@ -10,3 +10,5 @@ venv/
 ecp/
 
 __pycache__/
+
+/management/commands/*.py

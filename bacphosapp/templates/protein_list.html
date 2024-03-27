@@ -7,21 +7,24 @@
         <div class="input-group mb-2">
             <label for="search_category" class="visually-hidden">Search Category:</label>
             <select class="custom-select-list" id="search_category" name="search_category">
-                <option value="uniprot">UniProt ID</option>
-                <option value="gene">Gene Name</option>
-                <option value="protein">Protein Name</option>
+                <option value="uniprot" {% if request.GET.search_category == 'uniprot' %} selected {% endif %}>UniProt ID</option>
+                <option value="gene" {% if request.GET.search_category == 'gene' %} selected {% endif %}>Gene Name</option>
+                <option value="protein" {% if request.GET.search_category == 'protein' %} selected {% endif %}>Protein Name</option>
             </select>
-            <input class="form-control form-control-list border-0" type="search" placeholder="Search" aria-label="Search" name="q" id="q">
+            <input class="form-control form-control-list border-0" type="search" placeholder="Search" aria-label="Search" name="q" id="q" value="{{ request.GET.q }}">            
         </div>
         <div class="input-group mb-2">
             <label for="modification_type" class="visually-hidden">Modification Type:</label>
             <select class="custom-select-list" id="modification_type" name="modification_type">
-                <option value="">Amino acid</option>
-                <option value="Y">Y</option>
-                <option value="H">H</option>
-                <option value="S">S</option>
-                <option value="T">T</option>
-            </select>
+                <option value="" {% if request.GET.modification_type == '' %} selected {% endif %}>Amino acid</option>
+                <option value="Y" {% if request.GET.modification_type == 'Y' %} selected {% endif %}>Y</option>
+                <option value="H" {% if request.GET.modification_type == 'H' %} selected {% endif %}>H</option>
+                <option value="S" {% if request.GET.modification_type == 'S' %} selected {% endif %}>S</option>
+                <option value="T" {% if request.GET.modification_type == 'T' %} selected {% endif %}>T</option>
+                <option value="D" {% if request.GET.modification_type == 'D' %} selected {% endif %}>D</option>
+                <option value="K" {% if request.GET.modification_type == 'K' %} selected {% endif %}>K</option>
+                <option value="R" {% if request.GET.modification_type == 'R' %} selected {% endif %}>R</option>
+            </select>            
             <button class="btn btn-primary list" type="submit">Search</button>
         </div>
         <div class="button-clear">
@@ -71,59 +74,80 @@
             </table>
         </div>
     </div>
-
     {% if is_paginated %}
-    <div class="pagination">
-        <span class="step-links">
+    <div class="pagination mb-4">
+        <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> previous</a>
+            <li class="page-item">
+                <a class="page-link" href="?{{ request.GET.urlencode }}&page=1">&laquo; First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> Previous</a>
+            </li>
             {% endif %}
-
-            <span class="current">
-                Page {{ page_obj.number }} of {{ paginator.num_pages }}
-            </span>
-
+    
+            {% for num in page_obj.paginator.page_range %}
+                {% if num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+                    <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+                        <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+    
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next <i class="fas fa-angle-right"></i></a>
-                <a href="?page={{ paginator.num_pages }}">last <i class="fas fa-angle-double-right"></i></a>
+            <li class="page-item">
+                <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">Next <i class="fas fa-angle-right"></i></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ paginator.num_pages }}">Last &raquo;</a>
+            </li>
             {% endif %}
-        </span>
+        </ul>
     </div>
-{% endif %}
-
+    {% endif %}
+    
 <script>
-    const searchCategoryDropdown = document.getElementById('search_category');
-    const searchQueryInput = document.querySelector('.form-control-list');
-      
-    function setPlaceholder() {
-    const selectedOption = searchCategoryDropdown.value;
-        
-        switch (selectedOption) {
-            case 'uniprot':
-                searchQueryInput.placeholder = 'Enter UniProt code, e.g. P08200';
-                break;
-            case 'gene':
-                searchQueryInput.placeholder = 'Enter Gene Name, e.g. icd';
-                break;
-            case 'protein':
-                searchQueryInput.placeholder = 'Enter protein Name, e.g. Isocitrate dehydrogenase';
-                break;
-            default:
-                searchQueryInput.placeholder = 'P08200';
-        }
-    }
-      
-    window.addEventListener('load', setPlaceholder);
-    searchCategoryDropdown.addEventListener('change', setPlaceholder);
     document.addEventListener('DOMContentLoaded', function() {
-    const clearButton = document.getElementById('clearButton');
+        const searchForm = document.querySelector('.form-inline');
+        const searchCategoryDropdown = document.getElementById('search_category');
+        const searchQueryInput = document.querySelector('.form-control-list');
+        const modificationTypeDropdown = document.getElementById('modification_type');
+
+        searchForm.addEventListener('submit', function(event) {
+            const selectedCategory = searchCategoryDropdown.value;
+            const searchQuery = searchQueryInput.value.trim();
+            const selectedModificationType = modificationTypeDropdown.value;
+
+            if (!searchQuery && !selectedModificationType) {
+                event.preventDefault();
+                return;
+            }
+
+            const urlParams = [];
+            if (searchQuery) {
+                urlParams.push(`q=${searchQuery}`);
+            }
+            if (selectedCategory) {
+                urlParams.push(`search_category=${selectedCategory}`);
+            }
+            if (selectedModificationType) {
+                urlParams.push(`modification_type=${selectedModificationType}`);
+            }
+            const url = `?${urlParams.join('&')}`;
+
+            window.location.href = url;
+            event.preventDefault();
+        });
+
+        const clearButton = document.getElementById('clearButton');
         clearButton.addEventListener('click', function() {
             searchCategoryDropdown.value = 'uniprot';
             searchQueryInput.value = '';
-            const form = clearButton.closest('form');
-            form.submit();
+            modificationTypeDropdown.value = '';
+            searchForm.submit();
         });
     });
+
 </script>
+
 {% endblock %}
