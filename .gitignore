@@ -11,4 +11,4 @@ ecp/
 
 __pycache__/
 
-/management/commands/*.py
+/management/

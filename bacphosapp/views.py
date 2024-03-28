@@ -22,6 +22,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.safestring import mark_safe
 
 def home(request):
     return render(request, 'home.html', {})
@@ -214,6 +215,11 @@ class ProteinDetailView(DetailView):
 
         return chart_html
 
+    def get_related_proteins(self):
+        protein = self.get_object()
+        related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
+        related_proteins = related_proteins.order_by('modification_type', 'position')
+        return related_proteins
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -224,12 +230,18 @@ class ProteinDetailView(DetailView):
         # Fetch all PhosphoProtein instances with the same gene name
         related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
 
+        # Fetch related proteins ordered alphabetically
+        related_proteins = self.get_related_proteins()
+
         # Extract related positions
         related_positions = [int(position) for related_protein in related_proteins for position in str(related_protein.position).split(',')]
         context['related_positions'] = related_positions
 
         # Pass related proteins to the template context
         context['related_proteins'] = related_proteins
+
+        pmids = [pmid.strip() for pmid in protein.reference.split(';') if pmid.strip()]
+        context['pmids'] = pmids
 
         return context
     
@@ -279,10 +291,18 @@ def search_phosphoprotein(request):
 def export_protein_as_pdf(request, pk):
     protein = get_object_or_404(PhosphoProtein, id=pk)
 
+    # Fetch related proteins
+    related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
+    related_proteins = related_proteins.order_by('modification_type', 'position')
+
+    sequence_chunks = [protein.sequence[i:i+80] for i in range(0, len(protein.sequence), 60)]
+    protein.sequence_chunks = sequence_chunks
+
     template_path = 'pdf_template.html'
 
     context = {
         'protein': protein,
+        'related_proteins': related_proteins,
     }
 
     response = HttpResponse(content_type='application/pdf')

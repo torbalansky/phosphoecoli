@@ -1,13 +1,14 @@
 body {
-  background: -o-linear-gradient(315deg, #092B4D 0%, #06101E 100%);
-  background: linear-gradient(135deg, #092B4D 0%, #06101E 100%);
+  background: -webkit-gradient(linear, left top, right top, from(rgba(9, 43, 77,1)), color-stop(35%, rgba(9, 43, 77,1)), to(rgba(0,87,107,1)));
+  background: -o-linear-gradient(left, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
+  background: linear-gradient(90deg, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
   width: 100%;
   height: 100vh;
   font-family: 'Barlow', sans-serif;
 }
 
 .container.block {
-  padding: 50px 20px 50px 20px;
+  padding: 50px 20px 100px 20px;
 }
 
 .navbar-nav .nav-link {
@@ -174,7 +175,9 @@ body {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #092B4D;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(9, 43, 77,1)), color-stop(35%, rgba(9, 43, 77,1)), to(rgba(0,87,107,1)));
+  background: -o-linear-gradient(left, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
+  background: linear-gradient(90deg, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
   color: white;
   padding: 5px;
   font-weight: 100;
@@ -402,23 +405,16 @@ body {
   margin-bottom: 20px;
 }
 
-.protein-viewer {
-  height: 500px;
-  width: 100%;
-}
-
 .phosphosite-highlight {
   background-color: yellow;
   color: blue;
   font-weight: bold;
-  padding: 2px;
 }
 
 .related-phosphosite-highlight {
   background-color: rgb(0, 255, 55);
   color: rgb(0, 0, 0);
   font-weight: bold;
-  padding: 2px;
 }
 
 .protein-sequence {
@@ -460,8 +456,12 @@ body {
 }
 
 .pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   margin-top: 5px;
 }
 
@@ -491,10 +491,21 @@ body {
 
 @media (max-width: 576px) {
   .pagination {
-      flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
   }
 
   .pagination .page-item {
       margin: 2px 0;
+  }
+}
+
+.protein-name {
+  font-size: 24px;
+}
+
+@media (max-width: 576px) {
+  .protein-name {
+      font-size: 12px;
   }
 }

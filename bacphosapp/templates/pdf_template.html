@@ -1,56 +1,144 @@
-<title>{{ protein.protein_name }}</title>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ protein.protein_name }}</title>
     <style>
+       body {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; 
+            margin: 0;
+            padding: 0;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            text-align: justify;
+            font-family: 'Courier New', Courier, monospace;
         }
         th, td {
-            border: 1px solid #dddddd;
+            border: 1px solid #bebebe;
             padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #e3f6f2;
             width: 20%;
+        }
+        .reference-cell {
+            width: 60%;
+            font-size: 8px;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            font-style: italic;
+            font-family: 'Barlow', sans-serif;
+            margin-left: 400px; 
+            color: #7b7b7b;
+        }
+
+        h1 {
+            margin-left: 20px; 
+        }
+
+        .table-container {
+            margin-left: 20px; 
+            margin-top: 20px; 
         }
     </style>
 </head>
 <body>
-    <h2>Phos<em>Ecoli</em></h2>
-    <table>
-        <tr>
-            <th>Protein Name</th>
-            <td>{{ protein.protein_name }}</td>
-        </tr>
-        <tr>
-            <th>UniProtKB</th>
-            <td>
-                {% if protein.uniprot_url %}
-                    <a href="{{ protein.uniprot_url }}" target="_blank" style="text-decoration: none;">{{ protein.uniprot_code }}</a>
-                {% else %}
-                    {{ protein.uniprot_code }}
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Gene Name</th>
-            <td>{{ protein.gene_name }}</td>
-        </tr>
-        <tr>
-            <th>Phosphosites</th>
-            <td>
-                {% if protein.phosphosite_set.all %}
-                    {% for phosphosite in protein.phosphosite_set.all %}
-                        <span class="phosphosite" data-reference="{{ phosphosite.reference }}">{{ phosphosite.modification_type }}{{ phosphosite.position }}</span>
-                        {% if not forloop.last %}, {% endif %}
+    <div class="title"> 
+        <p>pEDB Database</p>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div>
+                    <h1>Phosphosite/s in {{ protein.protein_name }}</h1>
+                </div>
+                <div class="table-container"> 
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Phosphosite/s</th>
+                                <th scope="col">Window</th>
+                                <th scope="col">Reference, PMID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ protein.modification_type }}{{ protein.position }}</td>
+                                <td>{{ protein.window_5_aa }}</td>
+                                <td class="reference-cell">
+                                    {{ protein.reference }}
+                                </td>
+                            </tr>
+                            {% for related_protein in related_proteins %}
+                            <tr>
+                                <td>{{ related_protein.modification_type }}{{ related_protein.position }}</td>
+                                <td>{{ related_protein.window_5_aa }}</td>
+                                <td class="reference-cell">
+                                    {{ related_protein.reference }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Protein Name</th>
+                <td>{{ protein.protein_name }}</td>
+            </tr>
+            <tr>
+                <th>Gene Name</th>
+                <td>{{ protein.gene_name }}</td>
+            </tr>
+            <tr>
+                <th>UniProtKB</th>
+                <td>
+                    {% if protein.uniprot_url %}
+                        <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_url }}</a>
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Alphafold</th>
+                <td>
+                    {% if protein.alphafold_url %}
+                        <a href="{{ protein.alphafold_url }}" target="_blank">{{ protein.alphafold_url }}</a>
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </td>
+            </tr>
+            {% if protein.pdb_code and protein.pdb_code != 'nan' %}
+                <tr>
+                    <th>PDB Link</th>
+                    <td>
+                        <a href="https://www.rcsb.org/structure/{{ protein.pdb_code }}" target="_blank">https://www.rcsb.org/structure/{{ protein.pdb_code }}</a>
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>Protein Sequence</th>
+                <td>
+                    {% for chunk in protein.sequence_chunks %}
+                        {{ chunk }}<br>
                     {% endfor %}
-                {% else %}
-                    No phosphosites found
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>PDB</th>
-            <td>{{ protein.pdb_code }}</td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

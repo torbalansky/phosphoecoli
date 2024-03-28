@@ -5,182 +5,158 @@
 <div class="container-fluid protein-details mt-4">
     <div class="row">
         <div class="col-lg-12">
-            <div class="nav_protein_details mb-2">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active details" id="details-tab" data-toggle="tab" href="#details-section">Phosphosite/s</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link details" id="structure-tab" data-toggle="tab" href="#structure-section">More info</a>
-                    </li>
-                </ul>
+            <div class="row justify-content-end mb-3">
+                <div class="col-auto">
+                    <button class="btn btn-primary" onclick="goBack()">Back to Search</button>
+                </div>
             </div>
-            <div class="tab-content mt-4">
-                <div class="tab-pane fade show active" id="details-section">
-                    <div class="card text-left">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5>{{ protein.protein_name }}</h5>
-                            <div class="download-overlay">
-                                <a href="{% url 'export_protein_as_pdf' protein.pk %}" class="btn-fa" title="Download as PDF">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">UniProt</th>
-                                        <th scope="col">Gene</th>
-                                        <th class="hide-on-sm" scope="col">Protein</th>
-                                        <th scope="col">Position</th>
-                                        <th class="hide-on-sm" scope="col">Window</th>
-                                        <th class="hide-on-sm" scope="col">Method</th>
-                                        <th scope="col">Reference</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            {% if protein.uniprot_url %}
-                                                <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
-                                            {% else %}
-                                                {{ protein.uniprot_code }}
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ protein.gene_name }}</td>
-                                        <td class="hide-on-sm">{{ protein.protein_name }}</td>
-                                        <td>{{ protein.modification_type }}{{ protein.position }}</td>
-                                        <td class="hide-on-sm">{{ protein.window_5_aa }}</td>
-                                        <td class="hide-on-sm">{{ protein.method }}</td>
-                                        <td>
-                                            <button class="btn btn-primary main-ref-button" data-reference="{{ protein.reference }}">Ref</button>
-                                            <div class="references" style="display: none;">
-                                                <ul class="references-list"></ul>
-                                                <button class="btn btn-danger clearrefButton">Close</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% for related_protein in related_proteins %}
-                                    <tr>
-                                        <td class="hide-on-sm"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{ related_protein.modification_type }}{{ related_protein.position }}</td>
-                                        <td class="hide-on-sm">{{ related_protein.window_5_aa }}</td>
-                                        <td class="hide-on-sm">{{ related_protein.method }}</td>
-                                        <td>
-                                            <button class="btn btn-primary related-ref-button" data-reference="{{ related_protein.reference }}">Ref</button>
-                                            <div class="references" style="display: none;">
-                                                <ul class="references-list"></ul>
-                                                <button class="btn btn-danger clearrefButtonRelated">Close</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <div class="chart-container d-none d-md-block">{{ chart_image | safe }}</div>
-                            <div class="protein-sequence">
-                                <h5>Protein Sequence:</h5>
-                                {% for position, aa in sequence_with_positions %}
-                                    {% if position == protein.position %}
-                                        <span class="phosphosite-highlight">{{ aa }}</span>
-                                    {% elif position in related_positions %}
-                                        <span class="related-phosphosite-highlight">{{ aa }}</span>
-                                    {% else %}
-                                        <span>{{ aa }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
+            <div class="card text-left">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="protein-name">{{ protein.protein_name }}</h5>
+                    <div class="download-overlay">
+                        <a href="{% url 'export_protein_as_pdf' protein.pk %}" class="btn-fa" title="Download as PDF">
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="structure-section">
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h5>Useful links</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <tbody>
-                                    {% if protein.pdb_code and protein.pdb_code != 'nan' %}
-                                    <tr>
-                                        <td>PDB Link:</td>
-                                        <td>
-                                            <div class="link-wrapper">
-                                                <a href="https://www.rcsb.org/structure/{{ protein.pdb_code }}" target="_blank">https://www.rcsb.org/structure/{{ protein.pdb_code }}</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">UniProt</th>
+                                <th scope="col">Gene</th>
+                                <th class="hide-on-sm" scope="col">Protein</th>
+                                <th scope="col">Position</th>
+                                <th class="hide-on-sm" scope="col">Window</th>
+                                <th class="hide-on-sm" scope="col">Method</th>
+                                <th scope="col">Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {% if protein.uniprot_url %}
+                                        <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
+                                    {% else %}
+                                        {{ protein.uniprot_code }}
                                     {% endif %}
-                                    <tr>
-                                        <td>Alphafold Link:</td>
-                                        <td>
-                                            <div class="link-wrapper">
-                                                <a href="{{ protein.alphafold_url }}" target="_blank">{{ protein.alphafold_url }}</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>UniProt Link:</td>
-                                        <td>
-                                            <div class="link-wrapper">
-                                                {% if protein.uniprot_url %}
-                                                    <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_url }}</a>
-                                                {% else %}
-                                                    Not available
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>                        
+                                </td>
+                                <td>{{ protein.gene_name }}</td>
+                                <td class="hide-on-sm">{{ protein.protein_name }}</td>
+                                <td>{{ protein.modification_type }}{{ protein.position }}</td>
+                                <td class="hide-on-sm">{{ protein.window_5_aa }}</td>
+                                <td class="hide-on-sm">{{ protein.method }}</td>
+                                <td>
+                                    <button class="btn btn-primary main-ref-button" data-reference="{{ protein.reference }}">View</button>
+                                    <div class="references" style="display: none;">
+                                        <ul class="references-list">
+                                            {% if pmids %}
+                                            <p>Debug: {{ pmids }}</p>
+                                            {% for pmid in pmids %}
+                                                <li><a href="https://pubmed.ncbi.nlm.nih.gov/{{ pmid }}/" target="_blank">PMID: {{ pmid }}</a></li>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </ul>
+                                        <button class="btn btn-danger clearrefButton">Close</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% for related_protein in related_proteins %}
+                            <tr>
+                                <td class="hide-on-sm"></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ related_protein.modification_type }}{{ related_protein.position }}</td>
+                                <td class="hide-on-sm">{{ related_protein.window_5_aa }}</td>
+                                <td class="hide-on-sm">{{ related_protein.method }}</td>
+                                <td>
+                                    <button class="btn btn-primary related-ref-button" data-reference="{{ related_protein.reference }}">View</button>
+                                    <div class="references" style="display: none;">
+                                        <ul class="references-list"></ul>
+                                        <button class="btn btn-danger clearrefButtonRelated">Close</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="chart-container d-none d-md-block">{{ chart_image | safe }}</div>
+                    <div class="protein-sequence">
+                        <h5>Protein Sequence:</h5>
+                        {% for position, aa in sequence_with_positions %}
+                            {% if position == protein.position %}
+                                <span class="phosphosite-highlight">{{ aa }}</span>
+                            {% elif position in related_positions %}
+                                <span class="related-phosphosite-highlight">{{ aa }}</span>
+                            {% else %}
+                                <span>{{ aa }}</span>
+                            {% endif %}
+                        {% endfor %}
                     </div>
-                        {% if protein.pdb_code and protein.pdb_code != 'nan' %}
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                <h5>Structure PDB: {{ protein.pdb_code }}</h5>
-                            </div>
-                            <div class="card-body protein">
-                                <div class="protein-viewer" id="protein-viewer"></div>
-                            </div>
-                        </div>
-                        {% else %}
-                            <div class="card mt-4">
-                                <div class="card-header">
-                                    <h5>No PDB Structure Available</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p>There is no structure available for this protein.</p>
-                                </div>
-                            </div>
-                        {% endif %}                
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Useful links</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            {% if protein.pdb_code and protein.pdb_code != 'nan' %}
+                            <tr>
+                                <td>PDB Link:</td>
+                                <td>
+                                    <div class="link-wrapper">
+                                        <a href="https://www.rcsb.org/structure/{{ protein.pdb_code }}" target="_blank">https://www.rcsb.org/structure/{{ protein.pdb_code }}</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td>Alphafold Link:</td>
+                                <td>
+                                    <div class="link-wrapper">
+                                        <a href="{{ protein.alphafold_url }}" target="_blank">{{ protein.alphafold_url }}</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>UniProt Link:</td>
+                                <td>
+                                    <div class="link-wrapper">
+                                        {% if protein.uniprot_url %}
+                                            <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_url }}</a>
+                                        {% else %}
+                                            Not available
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://unpkg.com/ngl@latest/dist/ngl.js"></script>
-<link href="https://unpkg.com/ngl@latest/dist/css/ngl.css" rel="stylesheet">
 <script>
     $(document).ready(function() {
-        $('.nav-tabs a').click(function() {
-            $(this).tab('show');
-        });
-    });
-
-    $(document).ready(function() {
         $('.main-ref-button, .related-ref-button').click(function() {
-            var reference = $(this).data('reference');
+            var referenceData = $(this).data('reference');
+            console.log("Reference data:", referenceData);
+            var pmids = String(referenceData).split(';'); 
             var referencesContainer = $(this).closest('tr').find('.references');
-            referencesContainer.find('.references-list').html('<li>' + reference + '</li>');
+            var referencesList = referencesContainer.find('.references-list');
+            referencesList.empty(); 
+            pmids.forEach(function(pmid) {
+                if (pmid.trim() !== '') {
+                    var listItem = $('<li><a href="https://pubmed.ncbi.nlm.nih.gov/' + pmid.trim() + '/" target="_blank">PMID: ' + pmid.trim() + '</a></li>');
+                    referencesList.append(listItem);
+                }
+            });
             referencesContainer.show();
-            $(this).hide(); 
+            $(this).hide();
         });
 
         $(document).on('click', '.clearrefButton, .clearrefButtonRelated', function() {
@@ -190,22 +166,9 @@
         });
     });
 
-    var stage = new NGL.Stage("protein-viewer");
-
-    window.addEventListener("resize", function(event) {
-        stage.handleResize();
-    }, false);
-
-    var pdbCode = "{{ protein.pdb_code }}";
-
-    if (pdbCode) {
-        stage.loadFile("rcsb://" + pdbCode, { defaultRepresentation: true });
-        stage.setParameters({ backgroundColor: "white" });
-    } else {
-        var proteinViewer = document.getElementById("protein-viewer");
-        proteinViewer.innerHTML = "<p>No PDB code available for this protein.</p>";
-        proteinViewer.style.display = "none";
-    }
+    function goBack() {
+            window.history.back();
+        }
 
 </script>
 
