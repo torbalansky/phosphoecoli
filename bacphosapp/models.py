@@ -18,6 +18,7 @@ class PhosphoProtein(models.Model):
     approved = models.BooleanField(default=False)
     reference = models.TextField(null=True, blank=True)
     alphafold_url = models.URLField(null=True, blank=True)
+    coli_strain = models.TextField(null=True, blank=True, default='')
 
     def __str__(self):
         return self.gene_name

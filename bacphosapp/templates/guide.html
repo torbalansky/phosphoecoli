@@ -14,16 +14,17 @@
                 <a href="{% url 'protein_list' %}" class="list-group-item list-group-item-action text-white">
                     <h5 class="mb-1">Search Page <i class="fas fa-search text-white"></i></h5><br>
                     <p class="mb-1">
-                        The Search Page hosts the protein list containing all phosphoproteins and their respective phosphosites, along with a search engine. 
-                        Users can search for phosphosites by UniProt code, gene, or protein name. The search functionality is sensitive and requires users to input their query correctly. 
-                        For example, if a user wants to search by UniProt ID, they must enter only the UniProt code. Mixing protein/gene names with UniProt codes may result in inaccurate search results. 
-                        Additionally, users can filter their search results based on the phosphorylated amino acid, including H (Histidine), Y (Tyrosine), T (Threonine), or S (Serine), using the dropdown menu.
+                        The Search Page hosts the protein list containing all phosphoproteins and their respective phospho-sites, along with a search engine. 
+                        Users can search for phospho-sites by UniProt code, gene, or protein name. The search functionality is sensitive and requires users to input their query correctly. 
+                        For example, if a user wants to search by UniProt ID, they must enter only the UniProt code.
+                        Additionally, users can filter their search results based on the phosphorylated amino acid, using the dropdown menu.
                     </p><br>
                     <p class="mb-1">
-                        After performing a search, the search form is automatically cleared. However, users can use the "Clear" button provided in the form to return to the full list of proteins if they wish to start a new search or explore all proteins again.
+                        Users can use the "Clear" button provided in the form to return to the full list of proteins if they wish to start a new search or explore all proteins again.
                     </p><br>
                     <p class="mb-1">
-                        Detailed information and features such as PDF downloads are accessible via the view button for each phosphoprotein.
+                        In the detailed view of a protein entry in PEDB, users are presented with a comprehensive overview. At the forefront, users immediately encounter the exact phospho-site they clicked on, ensuring precision and clarity in their exploration. Following this, a structured list unveils all phospho-sites associated with the protein. Through the interactive chart, users can focus on specific regions of interest, facilitating a nuanced understanding of phospho-site distribution. Below this visualization, the protein sequence unfolds, with phospho-sites prominently highlighted. This intuitive presentation enables users to pinpoint phospho-sites within the broader protein sequence.<br><br>
+                        Additionally, users benefit from convenient access to valuable resources via curated links. While PEDB serves as an invaluable repository for phospho-site data, it is essential to underscore that its purpose is complementary, not substitutive, to established databases such as UniProt, NCBI, PDB etc. Moreover, users have the option to download a PDF file containing the data related to this entry, enabling offline access and further analysis.
                     </p>
                 </a><br>                    
                 <a href="{% url 'login' %}" class="list-group-item list-group-item-action text-white">
@@ -40,7 +41,7 @@
                 </a><br>
                 <a href="{% url 'cite' %}" class="list-group-item list-group-item-action text-white">
                     <h5 class="mb-1">About/General Information/Citation <i class="fas fa-info-circle text-white"></i></h5><br>
-                    <p class="mb-1">For users utilizing data from pEDB, we kindly request citation of our article for acknowledgment.</p>
+                    <p class="mb-1">For users utilizing data from PEDB, we kindly request citation of our article for acknowledgment.</p>
                 </a><br>                
             </div>
         </div>

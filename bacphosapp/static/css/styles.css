@@ -147,6 +147,23 @@ body {
   border-color: white;
 }
 
+.table-striped.res td {
+  text-align: center;
+}
+
+.table-striped.res th {
+  text-align: center;
+  background-color: rgba(92, 44, 135, 0.757);
+}
+
+.protein-details-container th {
+  text-align: center;
+}
+
+.protein-details-container td {
+  text-align: center;
+}
+
 .table-striped.res tbody tr:nth-child(odd) {
   background-color: rgba(195, 225, 226, 0.1);
 }
@@ -167,7 +184,7 @@ body {
 }
 
 .logo-icon {
-  width: 100px;
+  width: 80px;
 }
 
 .footer {
@@ -217,17 +234,6 @@ body {
 .protein-list-container td {
   font-size: 14px;
   font-weight: 600;
-}
-
-.protein-list-container .uniprot_link a {
-  text-decoration: none;
-  color: rgb(222, 211, 252);
-  padding: 8px;
-  border-radius: 5px;
-}
-
-.protein-list-container .uniprot_link a:hover {
-  text-decoration: underline;
 }
 
 .protein-list-container .btn.btn-light {
@@ -355,7 +361,7 @@ body {
   }
 
   .logo-icon {
-    width: 100px;
+    width: 50px;
   }
 
   .btn.btn-primary.list {
@@ -508,4 +514,17 @@ body {
   .protein-name {
       font-size: 12px;
   }
+}
+
+.table.table-striped.res tbody tr:hover {
+  cursor: pointer;
+  background-color: rgba(3, 114, 118, 0.973);
+}
+
+.highlighted-row td {
+  background-color: rgba(75, 202, 170, 0.14); 
+}
+
+.site-map-container {
+  text-align: justify;
 }

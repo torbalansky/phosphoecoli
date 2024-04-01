@@ -173,6 +173,9 @@ class ProteinDetailView(DetailView):
         protein = self.get_object()
         sequence = protein.sequence
 
+        # Sort phosphosites alphabetically or numerically
+        phosphosite_positions = sorted(str(protein.position).split(',')) if protein.position else []
+
         # Create a scatter plot
         fig = go.Figure(layout=dict(height=400, width=1000))
         fig.add_trace(go.Scatter(x=list(range(1, len(sequence) + 1)), y=[0] * len(sequence),
@@ -217,7 +220,7 @@ class ProteinDetailView(DetailView):
 
     def get_related_proteins(self):
         protein = self.get_object()
-        related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
+        related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name, coli_strain=protein.coli_strain).exclude(pk=protein.pk)
         related_proteins = related_proteins.order_by('modification_type', 'position')
         return related_proteins
 
@@ -240,9 +243,12 @@ class ProteinDetailView(DetailView):
         # Pass related proteins to the template context
         context['related_proteins'] = related_proteins
 
+        # Sort phosphosite positions alphabetically or numerically
+        phosphosite_positions = sorted(str(protein.position).split(',')) if protein.position else []
+        context['phosphosite_positions'] = phosphosite_positions
         pmids = [pmid.strip() for pmid in protein.reference.split(';') if pmid.strip()]
         context['pmids'] = pmids
-
+        context['coli_strain'] = protein.coli_strain
         return context
     
 # Overview view function

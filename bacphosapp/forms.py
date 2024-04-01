@@ -73,6 +73,7 @@ class ProteinSearchForm(forms.Form):
         ('D', 'D'),
         ('K', 'K'),
         ('R', 'R'),
+        ('C', 'C'),
     )
 
     uniprot_code = forms.CharField(required=False, max_length=20, label="UniprotID", widget=forms.TextInput(attrs={"class": "form-item", "placeholder": "Enter Uniprot ID"}))

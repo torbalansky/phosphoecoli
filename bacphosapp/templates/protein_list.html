@@ -24,6 +24,7 @@
                 <option value="D" {% if request.GET.modification_type == 'D' %} selected {% endif %}>D</option>
                 <option value="K" {% if request.GET.modification_type == 'K' %} selected {% endif %}>K</option>
                 <option value="R" {% if request.GET.modification_type == 'R' %} selected {% endif %}>R</option>
+                <option value="C" {% if request.GET.modification_type == 'C' %} selected {% endif %}>C</option>
             </select>            
             <button class="btn btn-primary list" type="submit">Search</button>
         </div>
@@ -40,22 +41,18 @@
                         <th>UniProt</th>
                         <th>Gene</th>
                         <th class="hide-on-sm">Protein</th>
+                        <th class="hide-on-sm">Strain</th>
                         <th>pSite</th>
                         <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for protein in proteins %}
-                        <tr class="{% cycle 'odd' 'even' %}">
-                            <td class="uniprot_link">
-                                {% if protein.uniprot_url %}
-                                    <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
-                                {% else %}
-                                    {{ protein.uniprot_code }}
-                                {% endif %}
-                            </td>
+                        <tr class="{% cycle 'odd' 'even' %}" data-protein-url="{% url 'protein_details' pk=protein.pk %}">
+                            <td>{{ protein.uniprot_code }}</td>
                             <td>{{ protein.gene_name }}</td>
                             <td class="hide-on-sm">{{ protein.protein_name }}</td>
+                            <td class="hide-on-sm" style="font-style: italic">{{ protein.coli_strain }}</td>
                             <td>
                                 {% if protein.position %}
                                 {{ protein.modification_type }}{{ protein.position }}
@@ -70,7 +67,7 @@
                             <td colspan="5" class="text-center">No proteins found.</td>
                         </tr>
                     {% endfor %}
-                </tbody>                
+                </tbody>
             </table>
         </div>
     </div>
@@ -112,12 +109,20 @@
         const searchCategoryDropdown = document.getElementById('search_category');
         const searchQueryInput = document.querySelector('.form-control-list');
         const modificationTypeDropdown = document.getElementById('modification_type');
-
+        const tableRows = document.querySelectorAll('.protein-list-container tbody tr');
+            
+        tableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                const proteinUrl = row.dataset.proteinUrl;
+                window.location.href = proteinUrl;
+            });
+        });
+            
         searchForm.addEventListener('submit', function(event) {
             const selectedCategory = searchCategoryDropdown.value;
             const searchQuery = searchQueryInput.value.trim();
             const selectedModificationType = modificationTypeDropdown.value;
-
+        
             if (!searchQuery && !selectedModificationType) {
                 event.preventDefault();
                 return;
@@ -134,11 +139,11 @@
                 urlParams.push(`modification_type=${selectedModificationType}`);
             }
             const url = `?${urlParams.join('&')}`;
-
+        
             window.location.href = url;
             event.preventDefault();
         });
-
+        
         const clearButton = document.getElementById('clearButton');
         clearButton.addEventListener('click', function() {
             searchCategoryDropdown.value = 'uniprot';
@@ -147,7 +152,7 @@
             searchForm.submit();
         });
     });
-
+        
 </script>
 
 {% endblock %}

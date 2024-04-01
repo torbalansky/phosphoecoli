@@ -12,14 +12,14 @@
             </div>
             <div class="card text-left">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="protein-name">{{ protein.protein_name }}</h5>
+                    <h5 class="protein-name">{{ protein.protein_name }} - <em>{{ protein.coli_strain }}</em></h5>
                     <div class="download-overlay">
                         <a href="{% url 'export_protein_as_pdf' protein.pk %}" class="btn-fa" title="Download as PDF">
                             <i class="fas fa-download"></i>
                         </a>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body protein-details-container">
                     <table class="table">
                         <thead>
                             <tr>
@@ -33,7 +33,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr class="highlighted-row">
                                 <td>
                                     {% if protein.uniprot_url %}
                                         <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
@@ -45,7 +45,7 @@
                                 <td class="hide-on-sm">{{ protein.protein_name }}</td>
                                 <td>{{ protein.modification_type }}{{ protein.position }}</td>
                                 <td class="hide-on-sm">{{ protein.window_5_aa }}</td>
-                                <td class="hide-on-sm">{{ protein.method }}</td>
+                                <td class="hide-on-sm" title="{% if protein.method == 'LTP' %}This modification site, identified through Low Throughput (LTP) method, was discovered using a technique distinct from mass spectrometry (MS).{% endif %}">{{ protein.method }}</td>
                                 <td>
                                     <button class="btn btn-primary main-ref-button" data-reference="{{ protein.reference }}">View</button>
                                     <div class="references" style="display: none;">
@@ -53,7 +53,7 @@
                                             {% if pmids %}
                                             <p>Debug: {{ pmids }}</p>
                                             {% for pmid in pmids %}
-                                                <li><a href="https://pubmed.ncbi.nlm.nih.gov/{{ pmid }}/" target="_blank">PMID: {{ pmid }}</a></li>
+                                                <li><a href="https://pubmed.ncbi.nlm.nih.gov/{{ pmid }}/" target="_blank">{{ pmid }}</a></li>
                                             {% endfor %}
                                             {% endif %}
                                         </ul>
@@ -141,7 +141,7 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+        $(document).ready(function() {
         $('.main-ref-button, .related-ref-button').click(function() {
             var referenceData = $(this).data('reference');
             console.log("Reference data:", referenceData);
@@ -150,10 +150,12 @@
             var referencesList = referencesContainer.find('.references-list');
             referencesList.empty(); 
             pmids.forEach(function(pmid) {
-                if (pmid.trim() !== '') {
+                if (!isNaN(pmid.trim())) {
                     var listItem = $('<li><a href="https://pubmed.ncbi.nlm.nih.gov/' + pmid.trim() + '/" target="_blank">PMID: ' + pmid.trim() + '</a></li>');
-                    referencesList.append(listItem);
+                } else {
+                    var listItem = $('<li>' + pmid.trim() + '</li>');
                 }
+                referencesList.append(listItem);
             });
             referencesContainer.show();
             $(this).hide();

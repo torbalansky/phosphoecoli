@@ -30,6 +30,7 @@ class Command(BaseCommand):
                 existing_record.submitted_by = None
                 existing_record.approved = row['approved']
                 existing_record.reference = row['reference']
+                existing_record.coli_strain = row['coli_strain']
                 existing_record.save()
             else:
                 new_record = PhosphoProtein.objects.create(
@@ -48,6 +49,7 @@ class Command(BaseCommand):
                     approved=row['approved'],
                     reference=row['reference'],
                     alphafold_url=row['alphafold_url'],
+                    coli_strain=row['coli_strain'],
                 )
                 existing_records[(uniprot_code, gene_name, protein_name, position)] = new_record
 
