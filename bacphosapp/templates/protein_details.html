@@ -36,7 +36,7 @@
                             <tr class="highlighted-row">
                                 <td>
                                     {% if protein.uniprot_url %}
-                                        <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
+                                        <a  style="text-decoration: none;" href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_code }}</a>
                                     {% else %}
                                         {{ protein.uniprot_code }}
                                     {% endif %}
@@ -97,45 +97,17 @@
             </div>
             <div class="card mt-4">
                 <div class="card-header">
-                    <h5>Useful links</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <tbody>
-                            {% if protein.pdb_code and protein.pdb_code != 'nan' %}
-                            <tr>
-                                <td>PDB Link:</td>
-                                <td>
-                                    <div class="link-wrapper">
-                                        <a href="https://www.rcsb.org/structure/{{ protein.pdb_code }}" target="_blank">https://www.rcsb.org/structure/{{ protein.pdb_code }}</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endif %}
-                            <tr>
-                                <td>Alphafold Link:</td>
-                                <td>
-                                    <div class="link-wrapper">
-                                        <a href="{{ protein.alphafold_url }}" target="_blank">{{ protein.alphafold_url }}</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>UniProt Link:</td>
-                                <td>
-                                    <div class="link-wrapper">
-                                        {% if protein.uniprot_url %}
-                                            <a href="{{ protein.uniprot_url }}" target="_blank">{{ protein.uniprot_url }}</a>
-                                        {% else %}
-                                            Not available
-                                        {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                    Cross-references to other databases:
+                    {% if protein.uniprot_url %}
+                        <a href="{{ protein.uniprot_url }}" target="_blank">UniProt</a> |
+                    {% if protein.pdb_code and protein.pdb_code != 'nan' %}
+                        <a href="https://www.rcsb.org/structure/{{ protein.pdb_code }}" target="_blank">PDB</a> |
+                    {% endif %}
+                    <a href="{{ protein.alphafold_url }}" target="_blank">AlphaFold</a>
+                    {% else %}
+                    Not available
+                {% endif %}
+            </div>            
         </div>
     </div>
 </div>

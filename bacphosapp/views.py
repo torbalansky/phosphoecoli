@@ -192,9 +192,9 @@ class ProteinDetailView(DetailView):
                                     line=dict(color='black', width=0.2), showlegend=False))
 
         # Add related phosphosites
-        related_phosphosites = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
+        related_phosphosites = PhosphoProtein.objects.filter(gene_name=protein.gene_name, coli_strain=protein.coli_strain).exclude(pk=protein.pk)
         for related_protein in related_phosphosites:
-            related_positions = str(related_protein.position).split(',') if related_protein.position else []
+            related_positions = sorted(str(related_protein.position).split(',')) if related_protein.position else []
             for position in related_positions:
                 hover_text = f"Phosphosite - {related_protein.modification_type}{position}<br>Window -/+ 5aa: {related_protein.window_5_aa}"
                 fig.add_trace(go.Scatter(x=[int(position)], y=[0.5], mode='markers',
