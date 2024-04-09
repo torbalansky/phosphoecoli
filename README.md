@@ -1,6 +1,6 @@
-# Ecoliphos
+# Phosphoecoli (PEDB)
 
-Ecoliphos is a Django-based web application designed for exploring and managing phosphoprotein data from <em>E. coli</em>. It offers a range of features including user registration, login, data submission, visualization, and more.
+Phosphoecoli (PEDB) is a Django-based web application designed for exploring and managing phosphoprotein data from <em>E. coli</em>. It offers a range of features including user registration, login, data submission, visualization, and more.
 
 ## Table of Contents
 

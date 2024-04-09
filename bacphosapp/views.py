@@ -192,7 +192,7 @@ class ProteinDetailView(DetailView):
                                     line=dict(color='black', width=0.2), showlegend=False))
 
         # Add related phosphosites
-        related_phosphosites = PhosphoProtein.objects.filter(gene_name=protein.gene_name, coli_strain=protein.coli_strain).exclude(pk=protein.pk)
+        related_phosphosites = PhosphoProtein.objects.filter(gene_name=protein.gene_name, coli_strain=protein.coli_strain, uniprot_code=protein.uniprot_code).exclude(pk=protein.pk)
         for related_protein in related_phosphosites:
             related_positions = sorted(str(related_protein.position).split(',')) if related_protein.position else []
             for position in related_positions:
@@ -220,7 +220,7 @@ class ProteinDetailView(DetailView):
 
     def get_related_proteins(self):
         protein = self.get_object()
-        related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name, coli_strain=protein.coli_strain).exclude(pk=protein.pk)
+        related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name, coli_strain=protein.coli_strain, uniprot_code=protein.uniprot_code).exclude(pk=protein.pk)
         related_proteins = related_proteins.order_by('modification_type', 'position')
         return related_proteins
 
