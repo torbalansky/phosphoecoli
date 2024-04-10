@@ -28,13 +28,13 @@
     <div class="col-md-10 p-1">
       <div class="card-body">
         <p class="card-text">
-          <em>pEDB</em> stands as an exhaustive repository for protein phosphorylation data within 
-          <em>E. coli</em>, comprising a significant collection of more than 1600 phosphoproteins and 
-          identifying 6408 phospho-sites. This comprehensive dataset represents an estimated 37% of the total 
-          <em>E. coli K12</em> proteome, underscoring its crucial role across diverse cellular processes. 
-          With its rich array of annotated phospho-sites, this online database serves as an indispensable 
-          resource for researchers investigating protein phosphorylation. Moreover, access to the platform is
-          unrestricted and freely available to all users.
+          <em>PEDB</em> stands as an exhaustive repository for protein phosphorylation data within 
+          <em>E. coli</em>, comprising a significant collection of over 1600 phosphoproteins and 
+          identifying more than 5000 phospho-sites. This comprehensive dataset represents approximately 
+          38% of the total <em>E. coli</em> proteome, highlighting the crucial role of protein 
+          phosphorylation. With its rich array of annotated phospho-sites, this online database serves 
+          as an indispensable resource for researchers investigating protein phosphorylation. 
+          Moreover, access to the platform is unrestricted and freely available to all users.
         </p>
       </div>
     </div>
@@ -50,13 +50,13 @@
   
         switch (selectedOption) {
             case 'uniprot':
-                searchQueryInput.placeholder = 'Enter UniProt code, e.g. P08200';
+                searchQueryInput.placeholder = 'Enter UniProt code, e.g. P0A9M0';
                 break;
             case 'gene':
-                searchQueryInput.placeholder = 'Enter Gene Name, e.g. icd';
+                searchQueryInput.placeholder = 'Enter Gene Name, e.g. lon';
                 break;
             case 'protein':
-                searchQueryInput.placeholder = 'Enter protein Name, e.g. Isocitrate dehydrogenase';
+                searchQueryInput.placeholder = 'Enter protein name, e.g. Lon protease';
                 break;
             default:
                 searchQueryInput.placeholder = 'P08200';
