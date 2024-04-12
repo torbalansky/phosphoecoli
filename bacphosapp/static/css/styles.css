@@ -436,17 +436,6 @@ body {
   color: white;
 }
 
-.nav-link.active.details {
-  background-color:  #cdff79;
-  color: #092B4D;
-  font-weight: bold;
-}
-
-.nav-link.details:hover {
-  background-color: #cdff79;
-  color: #092B4D;
-}
-
 @media (max-width: 576px) {
   .hide-on-sm {
     display: none;
@@ -527,7 +516,7 @@ body {
 }
 
 .highlighted-row td {
-  background-color: rgba(75, 202, 170, 0.14); 
+  background-color: rgba(242, 245, 64, 0.14); 
 }
 
 .site-map-container {
@@ -543,4 +532,13 @@ body {
 .btn.list:hover {
   background-color: red;
   color: white;
+}
+
+.references-list {
+  list-style-type: none;
+  padding: 10px;
+  margin: 0; }
+
+.references-list a {
+  text-decoration: none;
 }

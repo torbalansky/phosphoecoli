@@ -208,7 +208,7 @@ class ProteinDetailView(DetailView):
             title=f'Phosphosites in {protein.gene_name}',
             xaxis_title='Residue Number',
             yaxis_title='Phosphosites',
-            xaxis=dict(tickmode='linear', range=[0, len(sequence)], dtick=50),
+            xaxis=dict(tickmode='linear', range=[0, len(sequence)], dtick=25),
             yaxis=dict(visible=False),
             clickmode='event+select'
         )
@@ -242,7 +242,7 @@ class ProteinDetailView(DetailView):
 
         # Pass related proteins to the template context
         context['related_proteins'] = related_proteins
-
+        context['pdb_code'] = protein.pdb_code
         # Sort phosphosite positions alphabetically or numerically
         phosphosite_positions = sorted(str(protein.position).split(',')) if protein.position else []
         context['phosphosite_positions'] = phosphosite_positions
