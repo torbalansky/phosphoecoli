@@ -1,0 +1,568 @@
+body {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(9, 43, 77,1)), color-stop(35%, rgba(9, 43, 77,1)), to(rgba(0,87,107,1)));
+  background: -o-linear-gradient(left, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
+  background: linear-gradient(90deg, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
+  width: 100%;
+  height: 100vh;
+  font-family: 'Barlow', sans-serif;
+}
+
+.container.block {
+  padding: 50px 20px 100px 20px;
+}
+
+.navbar-nav .nav-link {
+  color: white;
+  margin-left: 15px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 20px;
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: #cdff79;
+  color: rgb(9, 43, 77);
+  border-radius: 5px;
+}
+
+.navbar img {
+  width: 100px;
+  margin-left: 30px;
+  margin-right: 50px;
+}
+
+.form-control-navbar {
+  border: 2px solid white;
+}
+
+.navbar-nav .nav-item.active .nav-link {
+  background-color: #cdff79;
+  color: rgb(9, 43, 77);
+  border-radius: 5px;
+}
+
+.btn.btn-primary.home {
+  background-color: #cdff79;
+  color: rgb(9, 43, 77);
+  border-radius: 5px;
+  width: 80px;
+  border: 1px solid white;
+  font-weight: bold;
+}
+
+.btn.btn-primary.home:hover {
+  background-color: #79ff8f;
+}
+
+.alert-container {
+  position: fixed;
+  top: 50px;
+  left: 10px;
+  z-index: 1000;
+  width: 600px;
+  font-weight: bold;
+}
+
+.alert-custom {
+  position: relative;
+  padding: 1rem 1.25rem;
+  border-radius: 0.25rem;
+  background-color: #007bff; 
+  color: #fff; 
+  border: 1px solid #007bff; 
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); 
+          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); 
+}
+
+@media (max-width: 576px) {
+  .alert-custom {
+    position: absolute;
+    top: 0;
+    width: 300px;
+    font-size: 16px;
+  }
+
+  .btn.btn-primary.home {
+    width: 50px;
+  }
+}
+
+.card-text.home {
+  font-size: 18px;
+}
+
+.custom-select {
+  background-color: white;
+  color: rgb(9, 43, 77);
+  font-weight: bold;
+  width: 120px;
+  border-radius: 5px;
+  border: 1px solid #cdff79;
+}
+
+.custom-select-list {
+  background-color: white;
+  color: rgb(9, 43, 77);
+  font-weight: bold;
+  width: 120px;
+  border: 2px solid rgb(192, 192, 192);
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+}
+
+.card-title-home {
+  font-size: 60px;
+}
+
+.card.home {
+  background-color: rgba(255, 255, 255, 0);
+  text-align: justify;
+  padding: 10px;
+}
+
+.card.overview {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-align: justify;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.card.resources, .card.cite {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-align: justify;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.card.resources table th,
+.card.resources table td {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-align: justify;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.card.resources, .res th, .res td {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-align: justify;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  border-color: white;
+}
+
+.table-striped.res td {
+  text-align: center;
+}
+
+.table-striped.res th {
+  text-align: center;
+  background-color: #63709ab7;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+}
+
+.protein-details-container th {
+  text-align: center;
+}
+
+.protein-details-container td {
+  text-align: center;
+}
+
+.table-striped.res tbody tr:nth-child(odd) {
+  background-color: rgba(195, 225, 226, 0.1);
+}
+
+.card.resources table td a {
+  color: white;
+  text-decoration: none;
+}
+
+.card.resources table td a:hover {
+  color: rgb(122, 122, 251);
+}
+
+.container-ref a {
+  text-decoration: none;
+  padding: 10px;
+  margin: 10px;
+}
+
+.logo-icon {
+  width: 80px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(9, 43, 77,1)), color-stop(35%, rgba(9, 43, 77,1)), to(rgba(0,87,107,1)));
+  background: -o-linear-gradient(left, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
+  background: linear-gradient(90deg, rgba(9, 43, 77,1) 0%, rgba(9, 43, 77,1) 35%, rgba(0,87,107,1) 100%);
+  color: white;
+  padding: 5px;
+  font-weight: 100;
+}
+
+.github-link {
+  color: #cdff79;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  border: 1px solid black;
+  background-color: #f5feff;
+  border-radius: 0;
+}
+
+.dropdown-item:hover {
+  background-color: rgb(9, 43, 77);
+  color: white;
+  font-weight: bold;
+}
+
+.btn-container {
+  position: relative;
+}
+
+.protein-list-container .table {
+  text-align: center;
+  border: 0.5px solid rgb(9, 43, 77);
+}
+
+.protein-list-container th {
+  font-size: 18px;
+}
+
+.protein-list-container td {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.protein-list-container .btn.btn-light {
+  background-color:  rgba(195, 225, 226, 0.1);
+  color: white;
+  font-weight: bold;
+}
+
+.btn.btn-light:hover {
+  background-color: #8cebe596;
+}
+
+.protein-list-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 10px;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: end;
+}
+
+.button-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  margin-left: 10px;
+}
+
+.form-group.filter label {
+  display: block;
+  color: white;
+}
+
+.form-group.filter select {
+  width: 100%;
+  padding: 10px;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+@media (max-width: 576px) {
+  .protein-list-container .hide-on-sm {
+    display: none;
+  }
+
+  .protein-list-container th,
+  .protein-list-container td {
+    font-size: 10px;
+  }
+
+  .custom-select {
+    width: 80px;
+  }
+}
+
+  #clearButton {
+    width: 380px;
+    font-weight: bold;
+    font-size: 18px;
+    float: right;
+}
+
+.btn.btn-primary.list {
+  background-color:  #cdff79;
+  border: 1px solid white;
+  width: 380px;
+  font-weight: bold;
+  color: #06101E;
+}
+
+.btn.btn-primary.list:hover {
+  background-color: #79ff8f;
+  color:#092B4D;
+}
+
+.search-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.input-group.mb-2 {
+  width: 70%;
+  height: 45px;
+}
+
+@media (max-width: 912px) {
+  .input-group.mb-2 {
+    margin: 0 auto;
+    width: 80%;
+  }
+
+  #clearButton {
+    width: 100px;
+  }
+
+  .card-title-home {
+    font-size: 50px;
+  }
+
+  .logo-icon {
+    width: 50px;
+  }
+
+  .btn.btn-primary.list {
+    width: 130px;
+  }
+
+  .card-text.home {
+    font-size: 22px;
+    text-align: left;
+  }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+  .input-group.mb-2 {
+    margin-top: 10px;
+    width: 100%;
+  }
+}
+
+.list-group-item {
+  background-color: #092B4D;
+}
+
+.list-group-item:hover {
+  background-color: #01635c;
+}
+
+.custom-login-form {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  width: 350px;
+  margin-top: 50px;
+  border-radius: 5px;
+}
+
+.custom-registration-form {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.custom-login-btn {
+  width: 260px;
+}
+
+.container-register {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  border-radius: 5px;
+  color: rgb(2, 52, 70);
+}
+
+.btn.btn-primary.register {
+  width: 260px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.phosphosite-highlight {
+  background-color: yellow;
+  color: blue;
+  font-weight: bold;
+}
+
+.related-phosphosite-highlight {
+  background-color: rgb(0, 255, 55);
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+.protein-sequence {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.nav-link.details {
+  color: white;
+}
+
+@media (max-width: 576px) {
+  .hide-on-sm {
+    display: none;
+  }
+
+  .link-wrapper {
+    max-width: 100px;
+    overflow-x: auto; 
+  }
+}
+
+@media (max-width: 1200px) {
+  .chart-container {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .card-title-home {
+    margin: 40px;
+  }
+}
+
+.custom-bg {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.list-group.list-group-flush li.list-group-item {
+  color: white;
+}
+
+.pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 5px;
+}
+
+.pagination .page-item {
+  margin: 0 2px;
+  border: 0;
+}
+
+.pagination .page-link {
+  color: #007bff;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  padding: 6px 15px;
+  border-radius: 0.25rem;
+}
+
+.pagination .page-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: #007bff;
+}
+
+@media (max-width: 576px) {
+  .pagination {
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  }
+
+  .pagination .page-item {
+      margin: 2px 0;
+  }
+}
+
+.protein-name {
+  font-size: 24px;
+}
+
+@media (max-width: 576px) {
+  .protein-name {
+      font-size: 12px;
+  }
+}
+
+.table.table-striped.res tbody tr:hover {
+  cursor: pointer;
+  background-color: rgba(3, 114, 118, 0.973);
+}
+
+.highlighted-row td {
+  background-color: rgba(242, 245, 64, 0.14); 
+}
+
+.site-map-container {
+  text-align: justify;
+}
+
+.btn.list {
+  background-color: none;
+  border: 1px solid white;
+  color: white;
+}
+
+.btn.list:hover {
+  background-color: red;
+  color: white;
+}
+
+.references-list {
+  list-style-type: none;
+  padding: 10px;
+  margin: 0; }
+
+.references-list a {
+  text-decoration: none;
+}
