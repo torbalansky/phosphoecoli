@@ -2,8 +2,6 @@
 
 db.sqlite3
 
-/media/
-
 venv/
 
 ecp/
