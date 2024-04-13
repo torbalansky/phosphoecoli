@@ -205,7 +205,7 @@ class ProteinDetailView(DetailView):
 
         # Update layout
         fig.update_layout(
-            title=f'Phosphosites in {protein.gene_name}',
+            title=f'',
             xaxis_title='Residue Number',
             yaxis_title='Phosphosites',
             xaxis=dict(tickmode='linear', range=[0, len(sequence)], dtick=25),

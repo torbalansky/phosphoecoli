@@ -15,7 +15,7 @@
                     <h5 class="mb-1">Search Page <i class="fas fa-search text-white"></i></h5><br>
                     <p class="mb-1">
                         The Search Page hosts the protein list containing all phosphoproteins and their respective phospho-sites, along with a search engine. 
-                        Users can search for phospho-sites by UniProt code, gene, or protein name. The search functionality is sensitive and requires users to input their query correctly. 
+                        Users can search for phosphoproteins by UniProt code, gene, or protein name. The search functionality is sensitive and requires users to input their query correctly. 
                         For example, if a user wants to search by UniProt ID, they must enter only the UniProt code.
                         Additionally, users can filter their search results based on the phosphorylated amino acid, using the dropdown menu.
                     </p><br>
@@ -23,13 +23,16 @@
                         Users can use the "Clear" button provided in the form to return to the full list of proteins if they wish to start a new search or explore all proteins again.
                     </p><br>
                     <p class="mb-1">
-                        In the detailed view of a protein entry in PEDB, users are presented with a comprehensive overview. At the forefront, users immediately encounter the exact phospho-site they clicked on, ensuring precision and clarity in their exploration. Following this, a structured list unveils all phospho-sites associated with the protein. Through the interactive chart, users can focus on specific regions of interest, facilitating a nuanced understanding of phospho-site distribution. Below this visualization, the protein sequence unfolds, with phospho-sites prominently highlighted. This intuitive presentation enables users to pinpoint phospho-sites within the broader protein sequence.<br><br>
-                        Additionally, users benefit from convenient access to valuable resources via curated links. While PEDB serves as an invaluable repository for phospho-site data, it is essential to underscore that its purpose is complementary, not substitutive, to established databases such as UniProt, NCBI, PDB etc. Moreover, users have the option to download a PDF file containing the data related to this entry, enabling offline access and further analysis.
-                    </p>
+                        When viewing a protein entry in PEDB, users are presented with a comprehensive overview. The detailed view immediately displays the exact phosphosite clicked on, ensuring precision and clarity in exploration. A structured list then reveals all phosphosites associated with the protein, accompanied by a reference button to access studies referencing each phosphosite. If you encounter unpublished results, feel free to reach out to me, and I will provide you with the MS data and the rationale behind the analysis.
+                        Through the interactive chart, users can focus on specific regions of interest, facilitating a nuanced understanding of phosphosite distribution. Below this visualization, the protein sequence unfolds, with phosphosites prominently highlighted. This intuitive presentation enables users to pinpoint phosphosites within the broader protein sequence.
+                        Additionally, users have the option to download a PDF file containing the data related to this entry, enabling offline access and further analysis. 
+                        Furthermore, users benefit from convenient access to valuable resources via curated links. While PEDB serves as an invaluable repository for phosphosite data in <em>E. coli</em>, it is essential to underscore that its purpose is complementary, not substitutive, to established databases such as UniProt, NCBI, and PDB.
+                    </p>                    
                 </a><br>                    
                 <a href="{% url 'login' %}" class="list-group-item list-group-item-action text-white">
                     <h5 class="mb-1">Contribute <i class="fas fa-upload text-white"></i></h5><br>
-                    <p class="mb-1">The Contribute page allows users to submit new phosphoprotein/phosphosite data to our database. Access to the submission form requires registration, and all submissions undergo thorough review before approval, including user registrations. Permission-based access is enforced.</p>
+                    <p class="mb-1">The Contribute page allows users to submit new phosphoprotein/phosphosite data to our database. For larger files, such as Excel files containing multiple phosphosites, please contact us at torbalansky@gmail.com. We will carefully analyze the data and incorporate it into the database, while ensuring to acknowledge the contribution and attribute it to the specific user.
+                    Access to the submission form is available upon registration, and all submissions undergo rigorous review before approval, including user registrations. We enforce permission-based access to ensure data integrity and security.</p>                        
                 </a><br>
                 <a href="{% url 'resources' %}" class="list-group-item list-group-item-action text-white">
                     <h5 class="mb-1">Resources <i class="fas fa-book text-white"></i></h5><br>

@@ -86,6 +86,10 @@ body {
   }
 }
 
+.card-text.home {
+  font-size: 18px;
+}
+
 .custom-select {
   background-color: white;
   color: rgb(9, 43, 77);
@@ -155,7 +159,7 @@ body {
 
 .table-striped.res th {
   text-align: center;
-  background-color: rgba(0, 76, 112, 0.716);
+  background-color: #63709ab7;
   border-top: 2px solid white;
   border-bottom: 2px solid white;
 }
@@ -242,7 +246,7 @@ body {
 
 .protein-list-container .btn.btn-light {
   background-color:  rgba(195, 225, 226, 0.1);
-  color: #cdff79;
+  color: white;
   font-weight: bold;
 }
 
@@ -304,10 +308,6 @@ body {
   .custom-select {
     width: 80px;
   }
-
-  .input-group.mb-2 {
-    margin-left: 20px;
-  }
 }
 
   #clearButton {
@@ -347,14 +347,14 @@ body {
 }
 
 .input-group.mb-2 {
-  width: 500px;
+  width: 70%;
   height: 45px;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 912px) {
   .input-group.mb-2 {
-    width: 300px;
-    height: 45px;
+    margin: 0 auto;
+    width: 80%;
   }
 
   #clearButton {
@@ -370,7 +370,19 @@ body {
   }
 
   .btn.btn-primary.list {
-    width: 180px;
+    width: 130px;
+  }
+
+  .card-text.home {
+    font-size: 22px;
+    text-align: left;
+  }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+  .input-group.mb-2 {
+    margin-top: 10px;
+    width: 100%;
   }
 }
 
@@ -444,6 +456,18 @@ body {
   .link-wrapper {
     max-width: 100px;
     overflow-x: auto; 
+  }
+}
+
+@media (max-width: 1200px) {
+  .chart-container {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .card-title-home {
+    margin: 40px;
   }
 }
 
