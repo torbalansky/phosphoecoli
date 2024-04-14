@@ -1,6 +1,8 @@
 # Phosphoecoli (PEDB)
 
-Phosphoecoli (PEDB) is a Django-based web application designed for exploring and managing phosphoprotein data from <em>E. coli</em>. It offers a range of features including user registration, login, data submission, visualization, and more.
+<em>PEDB</em> (Phosphorylation <em>Escherichia</em> DataBase) is a Django-based web application designed for exploring and managing phosphoprotein data from <em>E. coli</em>. It offers a range of features including user registration, login, data submission, visualization, and more.
+
+You can visit the app here: [https://pedb.onrender.com/](https://pedb.onrender.com/)
 
 ## Table of Contents
 
