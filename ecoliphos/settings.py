@@ -22,7 +22,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://pedb.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['pedb.onrender.com', '127.0.0.1', 'localhost']
 
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
