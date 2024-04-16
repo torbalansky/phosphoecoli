@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+<style>
+    .protein-viewer {
+        cursor: pointer;
+    }
+</style>
 <div class="container-fluid protein-details mt-4">
     <div class="row">
         <div class="col-lg-12"> 
@@ -84,7 +88,9 @@
                             {% if protein.pdb_code and protein.pdb_code != 'nan' %}
                             <div class="card mt-4">
                                 <div class="card-header" style="background-color: #63709a; color: white;">
-                                    <h5>PDB: {{ protein.pdb_code }}</h5>
+                                {% if protein.pdb_code and protein.pdb_code != 'nan' %}
+                                    <a href="https://www.rcsb.org/structure/{{ protein.pdb_code }}" target="_blank" style="text-decoration: none; color: white; font-weight: 600;">PDB {{ protein.pdb_code }}</a>
+                                {% endif %}
                                 </div>
                                 <div class="card-body protein">
                                     <div class="protein-viewer" id="protein-viewer" style="height: 300px;"></div>
@@ -101,7 +107,7 @@
                                     <h5>Protein Structure</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p>There is no structure available for this protein.</p>
+                                    <a href="{{ protein.alphafold_url }}" target="_blank" style="text-decoration: none; font-weight: 500;">Please check AlphaFold for predicted structure.</a>
                                 </div>
                             </div>
                             {% endif %}
@@ -201,7 +207,7 @@
             function loadProteinFile(pdbCode) {
                 if (pdbCode) {
                     stage.loadFile("rcsb://" + pdbCode, { defaultRepresentation: true }).then(function(component) {
-                        stage.setSpin(true);
+                        stage.setSpin(false);
                     });
                     stage.setParameters({ backgroundColor: "white" });
                 } else {
