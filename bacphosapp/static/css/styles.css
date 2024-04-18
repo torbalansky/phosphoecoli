@@ -40,7 +40,7 @@ body {
   border-radius: 5px;
 }
 
-.btn.btn-primary.home {
+.btn-primary.home {
   background-color: #cdff79;
   color: rgb(9, 43, 77);
   border-radius: 5px;
@@ -97,16 +97,6 @@ body {
   width: 120px;
   border-radius: 5px;
   border: 1px solid #cdff79;
-}
-
-.custom-select-list {
-  background-color: white;
-  color: rgb(9, 43, 77);
-  font-weight: bold;
-  width: 120px;
-  border: 2px solid rgb(192, 192, 192);
-  border-top-left-radius: 5px !important;
-  border-bottom-left-radius: 5px !important;
 }
 
 .card-title-home {
@@ -328,22 +318,6 @@ body {
 .btn.btn-primary.list:hover {
   background-color: #79ff8f;
   color:#092B4D;
-}
-
-.search-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
 }
 
 .input-group.mb-2 {
