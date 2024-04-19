@@ -92,6 +92,10 @@ span:hover {
     margin: 0;
     text-align: center;
     }
+
+    .pagination .page-item {
+      margin: 5px 3px;
+  }
 }
 
 .input-group-append span {
@@ -137,7 +141,7 @@ span:hover {
                         <option value="gene" {% if request.GET.search_category == 'gene' %} selected {% endif %}>Gene</option>
                         <option value="protein" {% if request.GET.search_category == 'protein' %} selected {% endif %}>Protein</option>
                     </select>
-                    <div class="input-group-append">
+                    <div class="input-group-append hide-on-sm">
                         <span class="input-group-text text-dark border-0" id="searchDropdownIndicator">▼</span>
                     </div>
                 </div>
@@ -156,7 +160,7 @@ span:hover {
                         <option value="R" {% if request.GET.modification_type == 'R' %} selected {% endif %}>R</option>
                         <option value="C" {% if request.GET.modification_type == 'C' %} selected {% endif %}>C</option>
                     </select>
-                    <div class="input-group-append">
+                    <div class="input-group-append hide-on-sm">
                         <span class="input-group-text text-dark border-0" id="modificationDropdownIndicator">▼</span>
                     </div>
                 </div>
