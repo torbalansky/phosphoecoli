@@ -3,21 +3,21 @@
 {% block content %}
 
 <style>
-
 .search-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+    margin-bottom: 1em;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .form-control-list {
@@ -29,6 +29,14 @@
 
 .custom-select {
     border-radius: 0 !important;
+}
+
+.custom-select:hover {
+    cursor: pointer;
+}
+
+span:hover {
+    cursor: pointer;
 }
 
 .btn.btn-primary {
@@ -44,8 +52,80 @@
     border-radius: 0 !important;
 }
 
+.protein-list-help {
+    color: white;
+    margin-left: 50px;
+}
+
+@media (max-width: 576px) {
+    .input-group {
+        margin-left: 20px;
+        width: 70%;
+    }
+
+    .form-control-list {
+        margin-left: 20px;
+        margin-bottom: 10px;
+        width: 80%;
+    }
+
+    .search-list {
+        -webkit-box-align: start;
+            -ms-flex-align: start;
+                align-items: flex-start;
+    }
+
+    .hide-on-sm {
+        display: none;
+    }
+
+  .col-md-4 {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: start !important;
+            -ms-flex-pack: start !important;
+                justify-content: flex-start !important;
+    }
+
+    .protein-list-help {
+    margin: 0;
+    text-align: center;
+    }
+}
+
+.input-group-append span {
+    border: 1px solid #cdff79 !important;
+    border-radius: 0 !important;
+    padding: 6px 1px;
+    margin: 0;
+    background-color: white;
+}
+
+.btn.btn-primary {
+    background-color: #cdff79;
+    color: rgb(9, 43, 77);
+    border: 0.5px solid white;
+}
+
+.btn.btn-danger {
+    border: 0.5px solid white;
+    font-weight: 500 !important;
+}
+
+.btn.btn-primary:hover {
+    background-color:  #ceff79a0;
+}
+
+.btn.btn-danger:hover {
+    background-color: rgba(255, 0, 0, 0.503);
+}
 </style>
 
+<div class="protein-list-help">
+    <p>Use the search menu below to find proteins by UniProt code, Gene name, or Protein name. 
+        You can also filter by amino acid (p-site).</p>
+</div>
 <div class="search-list">
     <form class="form-inline" method="get" action="{% url 'protein_list' %}">
         <div class="row">
@@ -58,7 +138,7 @@
                         <option value="protein" {% if request.GET.search_category == 'protein' %} selected {% endif %}>Protein</option>
                     </select>
                     <div class="input-group-append">
-                        <span class="input-group-text bg-transparent text-white border-0 p-0" id="searchDropdownIndicator">▼</span>
+                        <span class="input-group-text text-dark border-0" id="searchDropdownIndicator">▼</span>
                     </div>
                 </div>
             </div>
@@ -77,7 +157,7 @@
                         <option value="C" {% if request.GET.modification_type == 'C' %} selected {% endif %}>C</option>
                     </select>
                     <div class="input-group-append">
-                        <span class="input-group-text bg-transparent text-white border-0 p-0" id="modificationDropdownIndicator">▼</span>
+                        <span class="input-group-text text-dark border-0" id="modificationDropdownIndicator">▼</span>
                     </div>
                 </div>
             </div>            
@@ -99,9 +179,9 @@
                     <th>UniProt</th>
                     <th>Gene</th>
                     <th class="hide-on-sm">Protein</th>
-                    <th class="hide-on-sm">Strain</th>
+                    <th>Strain</th>
                     <th>pSite</th>
-                    <th>Details</th>
+                    <th class="hide-on-sm">Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -110,7 +190,7 @@
                         <td>{{ protein.uniprot_code }}</td>
                         <td>{{ protein.gene_name }}</td>
                         <td class="hide-on-sm">{{ protein.protein_name }}</td>
-                        <td class="hide-on-sm" style="font-style: italic">{{ protein.coli_strain }}</td>
+                        <td style="font-style: italic">{{ protein.coli_strain }}</td>
                         <td>
                             {% if protein.position %}
                             {{ protein.modification_type }}{{ protein.position }}
@@ -118,7 +198,7 @@
                                 No phosphosite found
                             {% endif %}
                         </td>                                                
-                        <td><a href="{% url 'protein_details' pk=protein.pk %}" class="btn btn-light">View</a></td>
+                        <td class="hide-on-sm"><a href="{% url 'protein_details' pk=protein.pk %}" class="btn btn-light">View</a></td>
                     </tr>
                 {% empty %}
                     <tr>
@@ -162,76 +242,94 @@
 {% endif %}
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchForm = document.querySelector('.form-inline');
-    const searchCategoryDropdown = document.getElementById('search_category');
-    const searchQueryInput = document.querySelector('.form-control-list');
-    const modificationTypeDropdown = document.getElementById('modification_type');
-    const tableRows = document.querySelectorAll('.protein-list-container tbody tr');
-
-    tableRows.forEach(row => {
-        row.addEventListener('click', function() {
-            const proteinUrl = row.dataset.proteinUrl;
-            window.location.href = proteinUrl;
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.querySelector('.form-inline');
+        const searchCategoryDropdown = document.getElementById('search_category');
+        const searchQueryInput = document.querySelector('.form-control-list');
+        const modificationTypeDropdown = document.getElementById('modification_type');
+        const tableRows = document.querySelectorAll('.protein-list-container tbody tr');
+    
+        tableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                const proteinUrl = row.dataset.proteinUrl;
+                window.location.href = proteinUrl;
+            });
         });
-    });
-
-    searchForm.addEventListener('submit', function(event) {
-        const selectedCategory = searchCategoryDropdown.value;
-        const searchQuery = searchQueryInput.value.trim();
-        const selectedModificationType = modificationTypeDropdown.value;
-
-        if (!searchQuery && !selectedModificationType) {
+    
+        function toggleDropdownSize(dropdown) {
+            dropdown.size = dropdown.size === 1 ? dropdown.options.length : 1;
+        }
+    
+        document.getElementById('searchDropdownIndicator').addEventListener('click', function(event) {
+            toggleDropdownSize(searchCategoryDropdown);
+            event.stopPropagation();
+        });
+    
+        document.getElementById('modificationDropdownIndicator').addEventListener('click', function(event) {
+            toggleDropdownSize(modificationTypeDropdown);
+            event.stopPropagation();
+        });
+    
+        document.addEventListener('click', function() {
+            searchCategoryDropdown.size = 1;
+            modificationTypeDropdown.size = 1;
+        });
+    
+        searchForm.addEventListener('submit', function(event) {
+            const selectedCategory = searchCategoryDropdown.value;
+            const searchQuery = searchQueryInput.value.trim();
+            const selectedModificationType = modificationTypeDropdown.value;
+    
+            if (!searchQuery && !selectedModificationType) {
+                event.preventDefault();
+                return;
+            }
+    
+            const urlParams = [];
+            if (searchQuery) {
+                urlParams.push(`q=${searchQuery}`);
+            }
+            if (selectedCategory) {
+                urlParams.push(`search_category=${selectedCategory}`);
+            }
+            if (selectedModificationType) {
+                urlParams.push(`modification_type=${selectedModificationType}`);
+            }
+            const url = `?${urlParams.join('&')}`;
+    
+            window.location.href = url;
             event.preventDefault();
-            return;
+        });
+    
+        const clearButton = document.getElementById('clearButton');
+        clearButton.addEventListener('click', function() {
+            searchCategoryDropdown.value = 'uniprot';
+            searchQueryInput.value = '';
+            modificationTypeDropdown.value = '';
+            searchForm.submit();
+        });
+    
+        function setPlaceholder() {
+            const selectedOption = searchCategoryDropdown.value;
+      
+            switch (selectedOption) {
+                case 'uniprot':
+                    searchQueryInput.placeholder = 'e.g. P0A862';
+                    break;
+                case 'gene':
+                    searchQueryInput.placeholder = 'e.g. tpx';
+                    break;
+                case 'protein':
+                    searchQueryInput.placeholder = 'e.g. Thiol peroxidase';
+                    break;
+                default:
+                    searchQueryInput.placeholder = 'P08200';
+            }
         }
-
-        const urlParams = [];
-        if (searchQuery) {
-            urlParams.push(`q=${searchQuery}`);
-        }
-        if (selectedCategory) {
-            urlParams.push(`search_category=${selectedCategory}`);
-        }
-        if (selectedModificationType) {
-            urlParams.push(`modification_type=${selectedModificationType}`);
-        }
-        const url = `?${urlParams.join('&')}`;
-
-        window.location.href = url;
-        event.preventDefault();
+    
+        window.addEventListener('load', setPlaceholder);
+        searchCategoryDropdown.addEventListener('change', setPlaceholder);
     });
-
-    const clearButton = document.getElementById('clearButton');
-    clearButton.addEventListener('click', function() {
-        searchCategoryDropdown.value = 'uniprot';
-        searchQueryInput.value = '';
-        modificationTypeDropdown.value = '';
-        searchForm.submit();
-    });
-
-    function setPlaceholder() {
-        const selectedOption = searchCategoryDropdown.value;
-  
-        switch (selectedOption) {
-            case 'uniprot':
-                searchQueryInput.placeholder = 'e.g. P0A862';
-                break;
-            case 'gene':
-                searchQueryInput.placeholder = 'e.g. tpx';
-                break;
-            case 'protein':
-                searchQueryInput.placeholder = 'e.g. Thiol peroxidase';
-                break;
-            default:
-                searchQueryInput.placeholder = 'P08200';
-        }
-    }
-
-    window.addEventListener('load', setPlaceholder);
-    searchCategoryDropdown.addEventListener('change', setPlaceholder);
-    });
-
-</script>
+</script>    
 
 {% endblock %}
