@@ -23,6 +23,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.safestring import mark_safe
+import base64
+import matplotlib
+matplotlib.use('Agg')
+import requests
+import io
+import numpy as np
 
 def home(request):
     return render(request, 'home.html', {})
@@ -163,11 +169,53 @@ class ProteinsListView(ListView):
 def add_position(sequence):
     return [(position + 1, aa) for position, aa in enumerate(sequence)]
 
+def parse_iupred_response(text):
+    # Split the response by lines
+    lines = text.split('\n')
+
+    # Initialize a list to store disordered regions
+    disordered_regions = []
+
+    # Iterate over each line in the response
+    for line in lines:
+        # Skip empty lines and lines starting with #
+        if not line.strip() or line.startswith("#"):
+            continue
+
+        # Split the line by tabs
+        parts = line.split()
+
+        # Check if the line has enough parts and if the first part is a valid integer
+        if len(parts) >= 3 and parts[0].isdigit():
+            # Extract residue position, amino acid, and IUPred score
+            position = int(parts[0])
+            amino_acid = parts[1]
+            iupred_score = float(parts[2])
+
+            # Check if the residue is predicted to be disordered (IUPred score > 0.5)
+            if iupred_score > 0.001:
+                # Add the disordered region to the list
+                disordered_regions.append({'position': position, 'amino_acid': amino_acid, 'iupred_score': iupred_score})
+
+    return disordered_regions
+
 # Protein detail view function
 class ProteinDetailView(DetailView):
     model = PhosphoProtein
     template_name = "protein_details.html"
     context_object_name = "protein"
+
+    def get_disordered_regions(self, uniprot_code):
+        # Make a request to the IUPred2A API
+        url = f"http://iupred2a.elte.hu/iupred2a/{uniprot_code}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            # Parse the response to extract disordered regions
+            disordered_regions = parse_iupred_response(response.text)
+            return disordered_regions
+        else:
+            return None
 
     def phospho_chart_image(self):
         protein = self.get_object()
@@ -176,19 +224,41 @@ class ProteinDetailView(DetailView):
         # Sort phosphosites alphabetically or numerically
         phosphosite_positions = sorted(str(protein.position).split(',')) if protein.position else []
 
-        # Create a scatter plot
+        # Fetch disordered regions for the protein
+        disordered_regions = self.get_disordered_regions(protein.uniprot_code)
+
+        # Get disorder propensity scores for all residues
+        disorder_scores = np.zeros(len(sequence))
+
+        if disordered_regions:
+            for region in disordered_regions:
+                start_pos = region['position']
+                end_pos = start_pos + len(region['amino_acid']) - 1
+                disorder_scores[start_pos - 1:end_pos] = region['iupred_score']
+
+        # Create a scatter plot with disorder propensity overlay
         fig = go.Figure(layout=dict(height=400, width=1000))
         fig.add_trace(go.Scatter(x=list(range(1, len(sequence) + 1)), y=[0] * len(sequence),
                                 mode='text', text=list(sequence), textposition="top center", showlegend=False))
 
+        # Add disorder propensity curve
+        fig.add_trace(go.Scatter(x=list(range(1, len(sequence) + 1)), y=disorder_scores,
+                                mode='lines', line=dict(color='red', width=1), name='Disorder Propensity'))
+       
+        # Calculate the range around the leading phosphosite and update x-axis range for the disorder propensity curve
+        leading_position = int(phosphosite_positions[0])
+        start_range = max(leading_position - 50, 0)
+        end_range = min(leading_position + 50, len(sequence))
+        disorder_range_x = list(range(start_range, end_range + 1))
+        disorder_range_y = disorder_scores[start_range - 1:end_range]
+
         # Add main phosphosite
-        phosphosite_positions = str(protein.position).split(',') if protein.position else []
         for position in phosphosite_positions:
             hover_text = f"Phosphosite - {protein.modification_type}{position}<br>Window -/+ 5aa: {protein.window_5_aa}"
-            fig.add_trace(go.Scatter(x=[int(position)], y=[0.5], mode='markers',
+            fig.add_trace(go.Scatter(x=[int(position)], y=[0.8], mode='markers',
                                     marker=dict(size=10, color='blue'), name=f'Phosphosite - {protein.modification_type}{position}',
                                     hoverinfo='text', text=hover_text))
-            fig.add_trace(go.Scatter(x=[int(position), int(position)], y=[0.04, 0.5], mode='lines',
+            fig.add_trace(go.Scatter(x=[int(position), int(position)], y=[0.04, 0.8], mode='lines',
                                     line=dict(color='black', width=0.2), showlegend=False))
 
         # Add related phosphosites
@@ -197,24 +267,81 @@ class ProteinDetailView(DetailView):
             related_positions = sorted(str(related_protein.position).split(',')) if related_protein.position else []
             for position in related_positions:
                 hover_text = f"Phosphosite - {related_protein.modification_type}{position}<br>Window -/+ 5aa: {related_protein.window_5_aa}"
-                fig.add_trace(go.Scatter(x=[int(position)], y=[0.5], mode='markers',
+                fig.add_trace(go.Scatter(x=[int(position)], y=[0.8], mode='markers',
                                         marker=dict(size=10, color='black'), name=f'Phosphosite - {related_protein.modification_type}{position}',
                                         hoverinfo='text', text=hover_text))
-                fig.add_trace(go.Scatter(x=[int(position), int(position)], y=[0.04, 0.5], mode='lines',
+                fig.add_trace(go.Scatter(x=[int(position), int(position)], y=[0.04, 0.8], mode='lines',
                                         line=dict(color='black', width=0.2), showlegend=False))
 
+        # Add threshold line at y = 0.5
+        fig.add_shape(type="line", x0=1, x1=len(sequence), y0=0.5, y1=0.5,
+                line=dict(color="black", width=1, dash="dash"), name='Threshold')
+        
         # Update layout
         fig.update_layout(
-            title=f'',
+            title=f'Phosphosite Visualization with Disorder Propensity-IUPred3 ({protein.gene_name})',
             xaxis_title='Residue Number',
-            yaxis_title='Phosphosites',
-            xaxis=dict(tickmode='linear', range=[0, len(sequence)], dtick=25),
-            yaxis=dict(visible=False),
-            clickmode='event+select'
+            yaxis_title='',
+            yaxis=dict(
+                range=[0, 1],
+                tickvals=[0, 0.5, 1],
+                ticktext=['0', '0.5', '1'],
+                visible=True
+            ),
+            xaxis=dict(
+                range=[start_range, end_range]
+            ),
+            clickmode='event+select',
+            margin=dict(t=50),
         )
 
         # Generate HTML representation of the chart
         chart_html = py.plot(fig, output_type='div')
+
+        return chart_html
+
+    def disordered_chart_image(self):
+        protein = self.get_object()
+        uniprot_code = protein.uniprot_code
+
+        # Fetch disordered regions for the protein
+        disordered_regions = self.get_disordered_regions(uniprot_code)
+
+        # Get disorder propensity scores for all residues
+        disorder_scores = np.zeros(len(protein.sequence))
+
+        if disordered_regions:
+            for region in disordered_regions:
+                start_pos = region['position']
+                end_pos = start_pos + len(region['amino_acid']) - 1
+                disorder_scores[start_pos - 1:end_pos] = region['iupred_score']
+
+        # Create a curve plot for disorder propensity
+        plt.figure(figsize=(10, 4))
+        plt.plot(range(1, len(protein.sequence) + 1), disorder_scores, color='red', label='Disorder Propensity')
+        plt.xlabel('Residue Number')
+        plt.ylabel('Disorder Propensity')
+        plt.title(f'Disorder Propensity Visualization ({protein.gene_name})')
+        plt.xlim(1, len(protein.sequence))
+        plt.ylim(0, 1)
+        plt.gca().spines['top'].set_visible(False)
+        plt.gca().spines['right'].set_visible(False)
+        plt.legend(loc='upper right')
+        plt.tight_layout()
+
+        # Convert the plot to a base64-encoded string
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        plot_image = buffer.getvalue()
+        buffer.close()
+
+        plot_base64 = base64.b64encode(plot_image).decode('utf-8')
+
+        # Generate HTML representation of the plot
+        chart_html = f'<img src="data:image/png;base64,{plot_base64}" />'
+
+        plt.close()
 
         return chart_html
 
@@ -227,9 +354,11 @@ class ProteinDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['chart_image'] = self.phospho_chart_image()
+        context['disordered_chart_image'] = self.disordered_chart_image()
         protein = self.get_object()
         context['sequence_with_positions'] = add_position(protein.sequence) if protein.sequence else None
         context['pdb_code'] = protein.pdb_code
+        uniprot_code = protein.uniprot_code
         # Fetch all PhosphoProtein instances with the same gene name
         related_proteins = PhosphoProtein.objects.filter(gene_name=protein.gene_name).exclude(pk=protein.pk)
 
@@ -249,6 +378,10 @@ class ProteinDetailView(DetailView):
         pmids = [pmid.strip() for pmid in protein.reference.split(';') if pmid.strip()]
         context['pmids'] = pmids
         context['coli_strain'] = protein.coli_strain
+        # Fetch disordered regions for the protein
+        disordered_regions = self.get_disordered_regions(uniprot_code)
+        # Pass disordered regions to the template context
+        context['disordered_regions'] = disordered_regions
         return context
     
 # Overview view function

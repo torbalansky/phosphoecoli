@@ -31,10 +31,10 @@
                                     <tr>
                                         <th scope="col">UniProt</th>
                                         <th scope="col">Gene</th>
-                                        <th scope="col">Position</th>
-                                        <th class="hide-on-sm" scope="col">Window</th>
+                                        <th scope="col" title="Position within protein.">Position</th>
+                                        <th class="hide-on-sm" scope="col" title="Window -/+ 5 amino acids.">Window</th>
                                         <th class="hide-on-sm" scope="col">Method</th>
-                                        <th scope="col">Ref</th>
+                                        <th scope="col" title="Reference/s.">Ref</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -51,7 +51,7 @@
                                         <td class="hide-on-sm" style="font-family: 'Courier New', Courier, monospace;">{{ protein.window_5_aa }}</td>
                                         <td class="hide-on-sm" title="{% if protein.method == 'LTP' %}This modification site, identified through Low Throughput (LTP) method, was discovered using a technique distinct from mass spectrometry (MS).{% endif %}">{{ protein.method }}</td>
                                         <td>
-                                            <button class="btn main-ref-button" data-reference="{{ protein.reference }}"><i class="fa-solid fa-arrow-down-short-wide" style="color: rgb(9, 85, 177);"></i></button>
+                                            <button class="btn main-ref-button" data-reference="{{ protein.reference }}" title="View reference list."><i class="fa-solid fa-arrow-down-short-wide" style="color: rgb(9, 85, 177);"></i></button>
                                             <div class="references" style="display: none;">
                                                 <ul class="references-list">
                                                     {% if pmids %}
@@ -61,7 +61,7 @@
                                                     {% endfor %}
                                                     {% endif %}
                                                 </ul>
-                                                <button class="btn  clearrefButton"><i class="fa-solid fa-arrow-up-short-wide" style="color: rgb(177, 9, 9);"></i></button>
+                                                <button class="btn  clearrefButton" title="Close reference list."><i class="fa-solid fa-arrow-up-short-wide" style="color: rgb(177, 9, 9);"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -73,10 +73,10 @@
                                         <td class="hide-on-sm" style="font-family: 'Courier New', Courier, monospace;">{{ related_protein.window_5_aa }}</td>
                                         <td class="hide-on-sm">{{ related_protein.method }}</td>
                                         <td>
-                                            <button class="btn related-ref-button" data-reference="{{ related_protein.reference }}"><i class="fa-solid fa-arrow-down-short-wide" style="color: rgb(9, 85, 177);"></i></button>
+                                            <button class="btn related-ref-button" data-reference="{{ related_protein.reference }}" title="View reference list."><i class="fa-solid fa-arrow-down-short-wide" style="color: rgb(9, 85, 177);"></i></button>
                                             <div class="references" style="display: none;">
                                                 <ul class="references-list"></ul>
-                                                <button class="btn clearrefButtonRelated"><i class="fa-solid fa-arrow-up-short-wide"  style="color: rgb(177, 9, 9);"></i></button>
+                                                <button class="btn clearrefButtonRelated" title="Close reference list."><i class="fa-solid fa-arrow-up-short-wide"  style="color: rgb(177, 9, 9);"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -120,7 +120,7 @@
             <div class="card mt-4 p-2">
                 <div class="chart-container d-none d-md-block">{{ chart_image | safe }}</div>
                 <div class="protein-sequence" style="padding: 10px;">
-                    <h5 style="font-family: Barlow, sans-serif;">Protein Sequence with Highlighted Phosphorylation Sites:</h5>
+                    <h5 style="font-family: Barlow, sans-serif; font-size: 14px;"> >{{ protein.uniprot_code }}</h5>
                     {% for position, aa in sequence_with_positions %}
                         {% if position == protein.position %}
                             <span class="phosphosite-highlight">{{ aa }}</span>
