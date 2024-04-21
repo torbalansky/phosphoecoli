@@ -4,14 +4,14 @@
 
 <div class="card home text-white border-0">
   <div class="row justify-content-center">
-    <div class="card-title-home text-center mb-3">
+    <div class="card-title-home text-center mb-4 mt-5">
       <img src="{% static 'images/logo_icon.png' %}" alt="Logo" class="logo-icon">
       PEDB Database
     </div>
     <div class="col-lg-5 text-center">
         <form class="form-inline" method="get" action="{% url 'protein_list' %}">
           <h4 style="margin-bottom: 20px;">Search <em>E. coli</em> phosphoprotein</h4>
-          <div class="input-group home-search mb-2">
+          <div class="input-group home-search mb-4 mt-4">
             <select class="custom-select" id="search_category" name="search_category">
               <option value="uniprot">Uniprot ID</option>
               <option value="gene">Gene Name</option>

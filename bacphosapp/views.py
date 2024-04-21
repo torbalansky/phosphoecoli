@@ -207,7 +207,7 @@ class ProteinDetailView(DetailView):
 
     def get_disordered_regions(self, uniprot_code):
         # Make a request to the IUPred2A API
-        url = f"http://iupred2a.elte.hu/iupred2a/{uniprot_code}"
+        url = f"http://iupred3.elte.hu/iupred3/{uniprot_code}"
         response = requests.get(url)
 
         if response.status_code == 200:
@@ -279,7 +279,7 @@ class ProteinDetailView(DetailView):
         
         # Update layout
         fig.update_layout(
-            title=f'Phosphosite Visualization with Disorder Propensity-IUPred3 ({protein.gene_name})',
+            title=f'Phosphosites & Disorder Propensity (IUPred3) - {protein.gene_name}',
             xaxis_title='Residue Number',
             yaxis_title='',
             yaxis=dict(

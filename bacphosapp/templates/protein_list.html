@@ -23,6 +23,7 @@
 .form-control {
     border: 1px solid #cdff79 !important;
     border-right: none !important;
+    border-left: none !important;
     border-radius: 0 !important;
     margin-left: 5px;
     width: 200px;
@@ -101,6 +102,7 @@ span:hover {
 
 .input-group-append span {
     border: 1px solid #cdff79 !important;
+    border-right: none !important;
     border-left: none !important;
     border-radius: 0 !important;
     padding: 10px 2px;
@@ -126,9 +128,18 @@ span:hover {
 .btn.btn-danger:hover {
     background-color: rgba(255, 0, 0, 0.503);
 }
+
+.custom-select:hover,
+.input-group-append span:hover, 
+.form-control-list:hover,
+.fa-solid.fa-chevron-down:hover,
+.form-control-list.Search:hover {
+    background-color: #63709ab7;
+    color: white;
+}
 </style>
 
-<div class="protein-list-help">
+<div class="protein-list-help mt-5">
     <p>Use the search menu below to find proteins by UniProt code, Gene name, or Protein name. 
         You can also filter by residue type (p-site).</p>
 </div>
@@ -138,20 +149,20 @@ span:hover {
             <div class="col-md-2 mt-2">
                 <label for="search_category" class="visually-hidden">Search Category:</label>
                 <div class="input-group">
-                    <select class="custom-select form-control" id="search_category" name="search_category">
+                    <select class="custom-select form-control" id="search_category" name="search_category" title="Click to view all options">
                         <option value="uniprot" {% if request.GET.search_category == 'uniprot' %} selected {% endif %}>UniProt</option>
                         <option value="gene" {% if request.GET.search_category == 'gene' %} selected {% endif %}>Gene</option>
                         <option value="protein" {% if request.GET.search_category == 'protein' %} selected {% endif %}>Protein</option>
                     </select>
                     <div class="input-group-append hide-on-sm">
-                        <span class="input-group-text text-dark border-0" id="searchDropdownIndicator"><i class="fa-solid fa-caret-down"></i></span>
+                        <span class="input-group-text text-dark border-0" id="searchDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
                     </div>
                 </div>
             </div>
             <div class="col-md-2 mt-2">
                 <label for="modification_type" class="visually-hidden">Modification Type:</label>
                 <div class="input-group">
-                    <select class="custom-select form-control" id="modification_type" name="modification_type">
+                    <select class="custom-select form-control" id="modification_type" name="modification_type" title="Click to view all options">
                         <option value="" {% if request.GET.modification_type == '' %} selected {% endif %}>p-site</option>
                         <option value="Y" {% if request.GET.modification_type == 'Y' %} selected {% endif %}>Y</option>
                         <option value="H" {% if request.GET.modification_type == 'H' %} selected {% endif %}>H</option>
@@ -163,7 +174,7 @@ span:hover {
                         <option value="C" {% if request.GET.modification_type == 'C' %} selected {% endif %}>C</option>
                     </select>
                     <div class="input-group-append hide-on-sm">
-                        <span class="input-group-text text-dark border-0" id="modificationDropdownIndicator"><i class="fa-solid fa-caret-down"></i></span>
+                        <span class="input-group-text text-dark border-0" id="modificationDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
                     </div>
                 </div>
             </div>            
@@ -172,7 +183,7 @@ span:hover {
             </div>
             <div class="col-md-4 d-flex align-items-end justify-content-end mt-2">
                 <button class="btn btn-primary" type="submit">Search</button>
-                <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
+                <button type="button" id="clearButton" class="btn btn-danger" title="Click to clear the form">Clear</button>
             </div>
         </div>
     </form>
