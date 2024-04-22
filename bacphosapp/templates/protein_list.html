@@ -141,20 +141,21 @@ span:hover {
 
 <div class="protein-list-help mt-5">
     <p>Use the search menu below to find proteins by UniProt code, Gene name, or Protein name. 
-        You can also filter by residue type (p-site).</p>
+        You can also filter by phosphorylated residue (p-site).</p>
 </div>
-<div class="search-list">
+<div class="search-list mt-4 mb-4">
     <form class="form-inline" method="get" action="{% url 'protein_list' %}">
         <div class="row">
             <div class="col-md-2 mt-2">
                 <label for="search_category" class="visually-hidden">Search Category:</label>
                 <div class="input-group">
                     <select class="custom-select form-control" id="search_category" name="search_category" title="Click to view all options">
-                        <option value="uniprot" {% if request.GET.search_category == 'uniprot' %} selected {% endif %}>UniProt</option>
-                        <option value="gene" {% if request.GET.search_category == 'gene' %} selected {% endif %}>Gene</option>
-                        <option value="protein" {% if request.GET.search_category == 'protein' %} selected {% endif %}>Protein</option>
-                    </select>
-                    <div class="input-group-append hide-on-sm">
+                        <option value="" selected>Any Field</option>
+                        <option value="uniprot">UniProt</option>
+                        <option value="gene">Gene</option>
+                        <option value="protein">Protein</option>
+                    </select>                                                                          
+                    <div class="input-group-append">
                         <span class="input-group-text text-dark border-0" id="searchDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
                     </div>
                 </div>
@@ -173,7 +174,7 @@ span:hover {
                         <option value="R" {% if request.GET.modification_type == 'R' %} selected {% endif %}>R</option>
                         <option value="C" {% if request.GET.modification_type == 'C' %} selected {% endif %}>C</option>
                     </select>
-                    <div class="input-group-append hide-on-sm">
+                    <div class="input-group-append">
                         <span class="input-group-text text-dark border-0" id="modificationDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
                     </div>
                 </div>
@@ -298,6 +299,7 @@ span:hover {
             const selectedModificationType = modificationTypeDropdown.value;
     
             if (!searchQuery && !selectedModificationType) {
+                alert('Please enter a search term.');
                 event.preventDefault();
                 return;
             }
@@ -340,7 +342,7 @@ span:hover {
                     searchQueryInput.placeholder = 'e.g. Thiol peroxidase';
                     break;
                 default:
-                    searchQueryInput.placeholder = 'P08200';
+                    searchQueryInput.placeholder = 'e.g. P08200';
             }
         }
     

@@ -112,57 +112,44 @@ class ProteinsListView(ListView):
     def get_queryset(self):
         # Get the initial queryset of all PhosphoProtein objects
         queryset = super().get_queryset()
-
         # Filter queryset to include only approved proteins
         queryset = queryset.filter(approved=True)
 
         # Get search parameters from the request
         search_category = self.request.GET.get("search_category")
         search_query = self.request.GET.get("q")
+        modification_type = self.request.GET.get("modification_type")
 
         # Apply search filters if provided
-        if search_query and search_category:
+        if search_query:
             if search_category == "uniprot":
                 queryset = queryset.filter(uniprot_code__icontains=search_query)
             elif search_category == "gene":
                 queryset = queryset.filter(gene_name__icontains=search_query)
             elif search_category == "protein":
                 queryset = queryset.filter(protein_name__icontains=search_query)
+            else:
+                # If search_category is empty or "Any Field" is selected, search across all relevant fields
+                queryset = queryset.filter(
+                    Q(uniprot_code__icontains=search_query) |
+                    Q(gene_name__icontains=search_query) |
+                    Q(protein_name__icontains=search_query)
+                )
 
-        # Get additional search parameters
-        uniprot_code = self.request.GET.get("uniprot_code")
-        gene_name = self.request.GET.get("gene_name")
-        protein_name = self.request.GET.get("protein_name")
-        modification_type = self.request.GET.get("modification_type")
-        
-        # Combine additional search parameters into a single query
-        combined_query = Q()
-        if uniprot_code:
-            combined_query |= Q(uniprot_code__icontains=uniprot_code)
-        if gene_name:
-            combined_query |= Q(gene_name__icontains=gene_name)
-        if protein_name:
-            combined_query |= Q(protein_name__icontains=protein_name)
-        if modification_type and modification_type != '':
-            combined_query |= Q(modification_type__iexact=modification_type)
+        # Apply modification type filter if provided
+        if modification_type:
+            queryset = queryset.filter(modification_type=modification_type)
 
-        # Filter queryset with combined query
-        queryset = queryset.filter(combined_query).distinct()
-
-        return queryset
+        # Return distinct results
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         # Get the context data including pagination information
         context = super().get_context_data(**kwargs)
-
         # Pass search parameters to the template
         context['search_category'] = self.request.GET.get('search_category', '')
         context['q'] = self.request.GET.get('q', '')
-        context['uniprot_code'] = self.request.GET.get('uniprot_code', '')
-        context['gene_name'] = self.request.GET.get('gene_name', '')
-        context['protein_name'] = self.request.GET.get('protein_name', '')
         context['modification_type'] = self.request.GET.get('modification_type', '')
-
         return context
     
 @register.filter
