@@ -11,7 +11,7 @@ class PhosphoProtein(models.Model):
     modification_type = models.CharField(max_length=50, default='')
     method = models.CharField(max_length=50, default='')
     sequence = models.TextField(null=True, blank=True, default='')
-    pdb_code = models.CharField(max_length=20, null=True, blank=True)
+    pdb_code = models.CharField(max_length=50, null=True, blank=True)
     pdb_url = models.URLField(null=True, blank=True)
     submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
