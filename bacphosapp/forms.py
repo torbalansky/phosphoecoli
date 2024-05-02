@@ -80,15 +80,17 @@ class ProteinSearchForm(forms.Form):
     gene_name = forms.CharField(required=False, max_length=50, label="Gene Name", widget=forms.TextInput(attrs={"class": "form-item", "placeholder": "Enter Gene Name"}))
     protein_name = forms.CharField(required=False, max_length=100, label="Protein Name", widget=forms.TextInput(attrs={"class": "form-item", "placeholder": "Enter Protein Name"}))
     modification_type = forms.ChoiceField(required=False, label="Modification", choices=MODIFICATION_CHOICES, widget=forms.Select(attrs={"class": "form-item"}))
-    
+    peptide_sequence = forms.CharField(required=False, max_length=20, label="Peptide Sequence", widget=forms.TextInput(attrs={"class": "form-item", "placeholder": "Enter Peptide Sequence"}))
+
     def clean(self):
         cleaned_data = super().clean()
         uniprot_code = cleaned_data.get("uniprot_code")
         gene_name = cleaned_data.get("gene_name")
         protein_name = cleaned_data.get("protein_name")
         modification_type = cleaned_data.get("modification_type")
+        peptide_sequence = cleaned_data.get('peptide_sequence')
 
-        if not (uniprot_code or gene_name or protein_name or modification_type):
+        if not (uniprot_code or gene_name or protein_name or modification_type or peptide_sequence):
             raise forms.ValidationError(
                 "Please provide at least one search criteria."
             )

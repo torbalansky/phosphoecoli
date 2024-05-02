@@ -119,6 +119,7 @@ class ProteinsListView(ListView):
         search_category = self.request.GET.get("search_category")
         search_query = self.request.GET.get("q")
         modification_type = self.request.GET.get("modification_type")
+        window_5_aa = self.request.GET.get("window_5_aa")
 
         # Apply search filters if provided
         if search_query:
@@ -128,12 +129,15 @@ class ProteinsListView(ListView):
                 queryset = queryset.filter(gene_name__icontains=search_query)
             elif search_category == "protein":
                 queryset = queryset.filter(protein_name__icontains=search_query)
+            elif search_category == 'window':
+                queryset = queryset.filter(window_5_aa__icontains=search_query)
             else:
                 # If search_category is empty or "Any Field" is selected, search across all relevant fields
                 queryset = queryset.filter(
                     Q(uniprot_code__icontains=search_query) |
                     Q(gene_name__icontains=search_query) |
-                    Q(protein_name__icontains=search_query)
+                    Q(protein_name__icontains=search_query) |
+                    Q(window_5_aa__icontains=search_query)
                 )
 
         # Apply modification type filter if provided
@@ -150,6 +154,7 @@ class ProteinsListView(ListView):
         context['search_category'] = self.request.GET.get('search_category', '')
         context['q'] = self.request.GET.get('q', '')
         context['modification_type'] = self.request.GET.get('modification_type', '')
+        context['peptide_sequence'] = self.request.GET.get('peptide_sequence', '')
         return context
     
 @register.filter

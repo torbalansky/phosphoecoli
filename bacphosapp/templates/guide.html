@@ -14,19 +14,86 @@
                 <a href="{% url 'protein_list' %}" class="list-group-item list-group-item-action text-white">
                     <h5 class="mb-1">Search Page <i class="fas fa-search text-white"></i></h5><br>
                     <p class="mb-1">
-                        The Search Page hosts the protein list containing all phosphoproteins and their respective phospho-sites, along with a search engine. 
-                        Users can search for phosphoproteins by UniProt code, gene, or protein name. The search functionality is sensitive and requires users to input their query correctly. 
-                        For example, if a user wants to search by UniProt ID, they must enter only the UniProt code.
-                        Additionally, users can filter their search results based on the phosphorylated amino acid, using the dropdown menu.
-                    </p><br>
+                        The Search Page hosts the protein list containing all phosphoproteins and their respective phosphosites, along with a search engine (schematically represented below). 
+                        Users can search for phosphoproteins by UniProt code, gene, protein name, or peptide sequence. 
+                        The peptide sequence search functionality allows users to specify any sequence of amino acids, with a maximum length of 11 amino acids, and places the phosphorylation site in the middle of the sequence. This feature enables precise searches within a defined sequence context, facilitating accurate exploration of phosphosites.
+                        Additionally, users can filter their search results based on the phosphorylated amino acid, using the dropdown menu. <br>
+                        </p>
+                        <p class="mb-1">
+                            <ul>
+                                <li><strong>Search:</strong> Select your search criteria, enter your query (UniProt code, gene, protein name, or sequence), and optionally filter by modification type.</li>
+                                <li><strong>Exploring Search Results:</strong> Navigate through the search results and click on the protein entry to see detailed information about a specific protein.</li>
+                                <li><strong>Pagination:</strong> If the search results span multiple pages, use the pagination controls at the bottom of the page to navigate through the pages.</li>
+                                <li><strong>Clear:</strong> Use the "Clear" button to reset the search form and view the full list of proteins.</li>
+                            </ul>
+                        </p>  
+                        <pre class="hide-on-sm">
+                                        ----------------------------------------------------------
+                                        |                    Protein Search Page                  |
+                                        ----------------------------------------------------------
+                                        |                       Search Form                       |
+                                        ----------------------------------------------------------
+                                        |  Search Criteria:   |  Modification Type:  |  Search    |
+                                        |---------------------|----------------------|  Button    |
+                                        |  - UniProt code     |  Phosphorylated      |            |
+                                        |  - Gene name        |  amino acid (p-site) |  Clear     |
+                                        |  - Protein name     |                      |  Button    |
+                                        |  - Peptide sequence |                      |            |
+                                        ----------------------------------------------------------
+                                        |                      Search Results                     |
+                                        |---------------------------------------------------------|
+                                        |  UniProt|  Gene | Protein | Strain  | pSite | Details   |
+                                        |---------------------------------------------------------|
+                                        |  P12345 |  ABC  | ProteinA| Strain1 | Y123  | View      |
+                                        |  P67890 |  XYZ  | ProteinB| Strain2 | S456  | View      |
+                                        |  ...    |  ...  | ...     | ...     | ...   | ...       |
+                                        ----------------------------------------------------------
+                                        |                     Pagination Controls                 |
+                                        ----------------------------------------------------------
+                            </pre>                  
                     <p class="mb-1">
-                        Users can use the "Clear" button provided in the form to return to the full list of proteins if they wish to start a new search or explore all proteins again.
-                    </p><br>
-                    <p class="mb-1">
-                        When viewing a protein entry in PEDB, users are presented with a comprehensive overview. The detailed view immediately displays the exact phosphosite clicked on, ensuring precision and clarity in exploration. A structured list then reveals all phosphosites associated with the protein, accompanied by a reference button to access studies referencing each phosphosite. If you encounter unpublished results, feel free to reach out to me, and I will provide you with the MS data and the rationale behind the analysis.
-                        Through the interactive chart, users can focus on specific regions of interest, facilitating a nuanced understanding of phosphosite distribution. Below this visualization, the protein sequence unfolds, with phosphosites prominently highlighted. This intuitive presentation enables users to pinpoint phosphosites within the broader protein sequence.
+                        When viewing a protein entry in PEDB, users are presented with a comprehensive overview (schematically represented below). The detailed view immediately displays the exact phosphosite clicked on, ensuring precision and clarity in exploration. A structured list then reveals all phosphosites associated with the protein, accompanied by a reference button to access studies referencing each phosphosite. If you encounter unpublished results, feel free to reach out to me, and I will provide you with the MS data and the rationale behind the analysis.
+                        Through the interactive chart, users can focus on specific regions of interest, facilitating a nuanced understanding of phosphosite distribution and the protein's disordered propensity. Below this visualization, the protein sequence unfolds, with phosphosites prominently highlighted. This intuitive presentation enables users to pinpoint phosphosites within the broader protein sequence while also gaining insights into its structural characteristics such as disordered regions.
                         Additionally, users have the option to download a PDF file containing the data related to this entry, enabling offline access and further analysis. 
                         Furthermore, users benefit from convenient access to valuable resources via curated links. While PEDB serves as an invaluable repository for phosphosite data in <em>E. coli</em>, it is essential to underscore that its purpose is complementary, not substitutive, to established databases such as UniProt, NCBI, and PDB.
+                    <pre class="hide-on-sm">
+                                
+                                -----------------------------------------------------------------------------
+                                | Phosphoprotein name and <em>E.coli stain</em>                           [Download] |
+                                -----------------------------------------------------------------------------
+                                | UniProt | Gene | Position | Window | Method | Reference/s |               |
+                                -------------------------------------------------------------               |
+                                |  P12345 | ABC  |  S123    | ...    | MS     |[PMID:123456]|  3D Structure |
+                                |         |      |  T456    | ...    | LTP    |             |(visualization)|
+                                |         |      |  Y789    | ...    | ...    |             |               |
+                                -----------------------------------------------------------------------------
+                                -----------------------------------------------------------------------------
+                                |         Chart with Phosphosites & Disorder Propensity (IUPred3)           |
+                                -----------------------------------------------------------------------------
+                                |                                                                           |
+                                |                             [Full chart view]                             |
+                                |                                                                           |
+                                ----------------------------------------------------------------------------- 
+
+                                -----------------------------------------------------------------------------
+                                |                             Protein Sequence                              |
+                                -----------------------------------------------------------------------------
+                                |                                                                           |
+                                |     (display of amino acid sequence with phosphosite/s highlighted)       |
+                                |                                                                           |
+                                |                          [UniProt] [PDB] [AlphaFold]                      |
+                                -----------------------------------------------------------------------------
+                                
+                                -----------------------------------------------------------------------------
+                                |                              Other Resources                              |
+                                -----------------------------------------------------------------------------
+                                |                                                                           |
+                                |             (links to additional analysis instruments or resources)       |
+                                |                                                                           |
+                                |                            [IUPred3] [PSIPRED]                            |
+                                -----------------------------------------------------------------------------                          
+                    </pre>
+                    
                     </p>                    
                 </a><br>                    
                 <a href="{% url 'login' %}" class="list-group-item list-group-item-action text-white">

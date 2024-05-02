@@ -31,6 +31,7 @@
 
 .custom-select {
     border-radius: 0 !important;
+    font-size: 14px;
 }
 
 .custom-select:hover {
@@ -154,6 +155,7 @@ span:hover {
                         <option value="uniprot">UniProt</option>
                         <option value="gene">Gene</option>
                         <option value="protein">Protein</option>
+                        <option value="peptide">Sequence</option>
                     </select>                                                                          
                     <div class="input-group-append">
                         <span class="input-group-text text-dark border-0" id="searchDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
@@ -265,6 +267,7 @@ span:hover {
         const searchCategoryDropdown = document.getElementById('search_category');
         const searchQueryInput = document.querySelector('.form-control-list');
         const modificationTypeDropdown = document.getElementById('modification_type');
+        const peptideSequenceInput = document.getElementById('peptide_sequence');
         const tableRows = document.querySelectorAll('.protein-list-container tbody tr');
     
         tableRows.forEach(row => {
@@ -325,6 +328,9 @@ span:hover {
             searchCategoryDropdown.value = 'uniprot';
             searchQueryInput.value = '';
             modificationTypeDropdown.value = '';
+            if (peptideSequenceInput) {
+                peptideSequenceInput.value = '';
+            }
             searchForm.submit();
         });
     
@@ -340,6 +346,9 @@ span:hover {
                     break;
                 case 'protein':
                     searchQueryInput.placeholder = 'e.g. Thiol peroxidase';
+                    break;
+                case 'peptide':
+                    searchQueryInput.placeholder = 'e.g. GQKDKHAVTEQ';
                     break;
                 default:
                     searchQueryInput.placeholder = 'e.g. P08200';
