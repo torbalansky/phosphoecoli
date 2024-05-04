@@ -4,7 +4,7 @@
 
 <style>
 .search-list {
-    margin-bottom: 1em;
+    margin: 1em;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -26,7 +26,7 @@
     border-left: none !important;
     border-radius: 0 !important;
     margin-left: 5px;
-    width: 200px;
+    width: 300px;
 }
 
 .custom-select {
@@ -60,10 +60,13 @@ span:hover {
     margin-left: 50px;
 }
 
+.form-control-md {
+    width: 430px;
+}
+
 @media (max-width: 576px) {
     .input-group {
-        margin-left: 20px;
-        width: 70%;
+        width: 60%;
     }
 
     .form-control-list {
@@ -82,7 +85,7 @@ span:hover {
         display: none;
     }
 
-  .col-md-4 {
+    .col-md-4 {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -92,13 +95,17 @@ span:hover {
     }
 
     .protein-list-help {
-    margin: 0;
-    text-align: center;
-    }
+        margin: 0;
+        text-align: center;
+        }
 
     .pagination .page-item {
-      margin: 5px 3px;
-  }
+        margin: 5px 3px;
+    }
+
+  .form-control-md {
+        width: 250px;
+        }
 }
 
 .input-group-append span {
@@ -115,11 +122,13 @@ span:hover {
     background-color: #cdff79;
     color: rgb(9, 43, 77);
     border: 0.5px solid white;
+    width: 150px;
 }
 
 .btn.btn-danger {
     border: 0.5px solid white;
     font-weight: 500 !important;
+    width: 150px !important;
 }
 
 .btn.btn-primary:hover {
@@ -128,6 +137,16 @@ span:hover {
 
 .btn.btn-danger:hover {
     background-color: rgba(255, 0, 0, 0.503);
+}
+
+@media (max-width: 576px) {
+    .btn.btn-primary {
+    width: 80px;
+}
+
+    .btn.btn-danger {
+    width: 80px !important;
+}
 }
 
 .custom-select:hover,
@@ -152,9 +171,9 @@ span:hover {
                 <div class="input-group">
                     <select class="custom-select form-control" id="search_category" name="search_category" title="Click to view all options">
                         <option value="" selected>Any Field</option>
-                        <option value="uniprot">UniProt</option>
-                        <option value="gene">Gene</option>
-                        <option value="protein">Protein</option>
+                        <option value="uniprot">UniProt Code</option>
+                        <option value="gene">Gene Name</option>
+                        <option value="protein">Protein Name</option>
                         <option value="peptide">Sequence</option>
                     </select>                                                                          
                     <div class="input-group-append">
@@ -180,11 +199,37 @@ span:hover {
                         <span class="input-group-text text-dark border-0" id="modificationDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
                     </div>
                 </div>
-            </div>            
-            <div class="col-md-2 mt-2">
-                <input class="form-control form-control-list" type="search" placeholder="Search" aria-label="Search" name="q" id="q" value="{{ request.GET.q }}">
             </div>
-            <div class="col-md-4 d-flex align-items-end justify-content-end mt-2">
+            <div class="col-md-3 mt-2">
+                <label for="coli_strain" class="visually-hidden"><em>E. coli</em> strain:</label>
+                <div class="input-group">
+                    <select class="custom-select form-control" id="coli_strain" name="coli_strain" title="Click to view all options">
+                        <option value="" {% if request.GET.coli_strain == '' %} selected {% endif %}><em>Escherichia coli</em> strain</option>
+                        <option value="Escherichia coli O157:H7" {% if request.GET.coli_strain == 'Escherichia coli O157:H7' %} selected {% endif %}>Escherichia coli O157:H7</option>
+                        <option value="Escherichia coli K12" {% if request.GET.coli_strain == 'Escherichia coli K12' %} selected {% endif %}>Escherichia coli K12</option>
+                        <option value="Escherichia coli (strain SMS-3-5 / SECEC)" {% if request.GET.coli_strain == 'Escherichia coli (strain SMS-3-5 / SECEC)' %} selected {% endif %}>Escherichia coli (strain SMS-3-5 / SECEC)</option>
+                        <option value="Escherichia coli" {% if request.GET.coli_strain == 'Escherichia coli' %} selected {% endif %}>Escherichia coli</option>
+                        <option value="Escherichia coli (strain UTI89 / UPEC)" {% if request.GET.coli_strain == 'Escherichia coli (strain UTI89 / UPEC)' %} selected {% endif %}>Escherichia coli (strain UTI89 / UPEC)</option>
+                        <option value="Escherichia coli BL21-DE3" {% if request.GET.coli_strain == 'Escherichia coli BL21-DE3' %} selected {% endif %}>Escherichia coli BL21-DE3</option>
+                        <option value="Escherichia coli BL21-DE3 (PKA)" {% if request.GET.coli_strain == 'Escherichia coli BL21-DE3 (PKA)' %} selected {% endif %}>Escherichia coli BL21-DE3 (PKA)</option>
+                        <option value="Escherichia coli K12 (CKII)" {% if request.GET.coli_strain == 'Escherichia coli K12 (CKII)' %} selected {% endif %}>Escherichia coli K12 (CKII)</option>
+                        <option value="Escherichia coli K12 (PKA)" {% if request.GET.coli_strain == 'Escherichia coli K12 (PKA)' %} selected {% endif %}>Escherichia coli K12 (PKA)</option>
+                        <option value="Escherichia coli O1:K1 / APEC" {% if request.GET.coli_strain == 'Escherichia coli O1:K1 / APEC' %} selected {% endif %}>Escherichia coli O1:K1 / APEC</option>
+                        <option value="Escherichia coli O127:H6 (strain E2348/69 / EPEC)" {% if request.GET.coli_strain == 'Escherichia coli O127:H6 (strain E2348/69 / EPEC)' %} selected {% endif %}>Escherichia coli O127:H6 (strain E2348/69 / EPEC)</option>
+                        <option value="Escherichia coli O139:H28" {% if request.GET.coli_strain == 'Escherichia coli O139:H28' %} selected {% endif %}>Escherichia coli O139:H28</option>
+                        <option value="Escherichia coli O45:K1" {% if request.GET.coli_strain == 'Escherichia coli O45:K1' %} selected {% endif %}>Escherichia coli O45:K1</option>
+                        <option value="Escherichia coli O6:H1" {% if request.GET.coli_strain == 'Escherichia coli O6:H1' %} selected {% endif %}>Escherichia coli O6:H1</option>
+                        <option value="Escherichia coli strain B REL606 " {% if request.GET.coli_strain == 'Escherichia coli strain B REL606 ' %} selected {% endif %}>Escherichia coli strain B REL606</option>
+                    </select>
+                    <div class="input-group-append">
+                        <span class="input-group-text text-dark border-0" id="coliStrainDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mt-2">
+                <input class="form-control form-control-md" type="search" placeholder="Search" aria-label="Search" name="q" id="q" value="{{ request.GET.q }}">
+            </div>
+            <div class="col-md-12 mt-3 d-flex justify-content-center justify-content-sm-end">
                 <button class="btn btn-primary" type="submit">Search</button>
                 <button type="button" id="clearButton" class="btn btn-danger" title="Click to clear the form">Clear</button>
             </div>
@@ -222,7 +267,7 @@ span:hover {
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5" class="text-center">No proteins found.</td>
+                        <td colspan="10" class="text-center" style="border: none; font-size: 20px; pointer-events: none;">No proteins found</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -265,9 +310,10 @@ span:hover {
     document.addEventListener('DOMContentLoaded', function() {
         const searchForm = document.querySelector('.form-inline');
         const searchCategoryDropdown = document.getElementById('search_category');
-        const searchQueryInput = document.querySelector('.form-control-list');
+        const searchQueryInput = document.getElementById('q');
         const modificationTypeDropdown = document.getElementById('modification_type');
         const peptideSequenceInput = document.getElementById('peptide_sequence');
+        const coliStrainDropdown = document.getElementById('coli_strain');
         const tableRows = document.querySelectorAll('.protein-list-container tbody tr');
     
         tableRows.forEach(row => {
@@ -290,18 +336,25 @@ span:hover {
             toggleDropdownSize(modificationTypeDropdown);
             event.stopPropagation();
         });
-    
+
+        document.getElementById('coliStrainDropdownIndicator').addEventListener('click', function(event) {
+            toggleDropdownSize(coliStrainDropdown);
+            event.stopPropagation();
+        });
+
         document.addEventListener('click', function() {
             searchCategoryDropdown.size = 1;
             modificationTypeDropdown.size = 1;
+            coliStrainDropdown.size = 1;
         });
     
         searchForm.addEventListener('submit', function(event) {
             const selectedCategory = searchCategoryDropdown.value;
             const searchQuery = searchQueryInput.value.trim();
             const selectedModificationType = modificationTypeDropdown.value;
+            const selectedColiStrain = coliStrainDropdown.value;
     
-            if (!searchQuery && !selectedModificationType) {
+            if (!searchQuery && !selectedModificationType && !selectedColiStrain) {
                 alert('Please enter a search term.');
                 event.preventDefault();
                 return;
@@ -317,6 +370,9 @@ span:hover {
             if (selectedModificationType) {
                 urlParams.push(`modification_type=${selectedModificationType}`);
             }
+            if (selectedColiStrain) {
+                urlParams.push(`coli_strain=${selectedColiStrain}`);
+            }
             const url = `?${urlParams.join('&')}`;
     
             window.location.href = url;
@@ -325,9 +381,10 @@ span:hover {
     
         const clearButton = document.getElementById('clearButton');
         clearButton.addEventListener('click', function() {
-            searchCategoryDropdown.value = 'uniprot';
+            searchCategoryDropdown.value = '';
             searchQueryInput.value = '';
             modificationTypeDropdown.value = '';
+            coliStrainDropdown.value = '';
             if (peptideSequenceInput) {
                 peptideSequenceInput.value = '';
             }

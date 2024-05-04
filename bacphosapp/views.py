@@ -120,6 +120,7 @@ class ProteinsListView(ListView):
         search_query = self.request.GET.get("q")
         modification_type = self.request.GET.get("modification_type")
         window_5_aa = self.request.GET.get("window_5_aa")
+        coli_strain = self.request.GET.get("coli_strain")
 
         # Apply search filters if provided
         if search_query:
@@ -143,6 +144,10 @@ class ProteinsListView(ListView):
         # Apply modification type filter if provided
         if modification_type:
             queryset = queryset.filter(modification_type=modification_type)
+        
+        # Apply coli strain filter if provided
+        if coli_strain:
+            queryset = queryset.filter(coli_strain=coli_strain)
 
         # Return distinct results
         return queryset.distinct()
@@ -155,6 +160,7 @@ class ProteinsListView(ListView):
         context['q'] = self.request.GET.get('q', '')
         context['modification_type'] = self.request.GET.get('modification_type', '')
         context['peptide_sequence'] = self.request.GET.get('peptide_sequence', '')
+        context['coli_strain'] = self.request.GET.get('coli_strain', '')
         return context
     
 @register.filter
