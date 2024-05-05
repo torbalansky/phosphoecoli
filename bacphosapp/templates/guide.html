@@ -17,7 +17,7 @@
                         The Search Page hosts the protein list containing all phosphoproteins and their respective phosphosites, along with a search engine (schematically represented below). 
                         Users can search for phosphoproteins by UniProt code, gene, protein name, or peptide sequence. 
                         The peptide sequence search functionality allows users to specify any sequence of amino acids, with a maximum length of 11 amino acids, and places the phosphorylation site in the middle of the sequence. This feature enables precise searches within a defined sequence context, facilitating accurate exploration of phosphosites.
-                        Additionally, users can filter their search results based on the phosphorylated amino acid, using the dropdown menu. <br>
+                        Additionally, users can filter their search results based on the phosphorylated amino acid and <em>E. coli</em> strain, using the dropdown menus. <br>
                         </p>
                         <p class="mb-1">
                             <ul>
@@ -33,12 +33,12 @@
                                         ----------------------------------------------------------
                                         |                       Search Form                       |
                                         ----------------------------------------------------------
-                                        |  Search Criteria:   |  Modification Type:  |  Search    |
-                                        |---------------------|----------------------|  Button    |
-                                        |  - UniProt code     |  Phosphorylated      |            |
-                                        |  - Gene name        |  amino acid (p-site) |  Clear     |
-                                        |  - Protein name     |                      |  Button    |
-                                        |  - Peptide sequence |                      |            |
+                                        |  Search Criteria:  | Modification Type: | E.coli strain |
+                                        |--------------------|--------------------|---------------|
+                                        |  - UniProt code    | Phosphorylated     |  - K12        |
+                                        |  - Gene name       | amino acid (p-site)|  - BL21       |
+                                        |  - Protein name    |                    |  ...          |
+                                        |  - Peptide sequence|                    |               |
                                         ----------------------------------------------------------
                                         |                      Search Results                     |
                                         |---------------------------------------------------------|
@@ -93,7 +93,7 @@
                                 |                            [IUPred3] [PSIPRED]                            |
                                 -----------------------------------------------------------------------------                          
                     </pre>
-                    
+                    <p>Users should note that p-sites labeled as strains "<em>Escherichia coli</em> BL21-DE3 (PKA)", "<em>Escherichia coli</em> K12 (CKII)", and "<em>Escherichia coli</em> K12 (PKA)" originate from <em>E. coli</em> expressing the respective kinases mentioned in parentheses. For further details, users are encouraged to refer to the respective study papers for comprehensive information.</p>
                     </p>                    
                 </a><br>                    
                 <a href="{% url 'login' %}" class="list-group-item list-group-item-action text-white">

@@ -24,7 +24,6 @@
     border: 1px solid #cdff79 !important;
     border-right: none !important;
     border-left: none !important;
-    border-radius: 0 !important;
     margin-left: 5px;
     width: 300px;
 }
@@ -46,7 +45,6 @@ span:hover {
     width: 80px; 
     padding: 8px; 
     font-weight: bold;
-    margin-left: 150px;
     border-radius: 0 !important;
 }
 .btn-danger {
@@ -123,12 +121,14 @@ span:hover {
     color: rgb(9, 43, 77);
     border: 0.5px solid white;
     width: 150px;
+    border-radius: 5px !important;
 }
 
 .btn.btn-danger {
     border: 0.5px solid white;
     font-weight: 500 !important;
     width: 150px !important;
+    border-radius: 5px !important;
 }
 
 .btn.btn-primary:hover {
@@ -160,8 +160,8 @@ span:hover {
 </style>
 
 <div class="protein-list-help mt-5">
-    <p>Use the search menu below to find proteins by UniProt code, Gene name, or Protein name. 
-        You can also filter by phosphorylated residue (p-site).</p>
+    <p>Use the search menu below to find proteins by UniProt code, Gene or Protein name. 
+        You can also filter by phosphorylated residue (p-site) and <em>E.coli</em> strain.</p>
 </div>
 <div class="search-list mt-4 mb-4">
     <form class="form-inline" method="get" action="{% url 'protein_list' %}">
@@ -204,7 +204,7 @@ span:hover {
                 <label for="coli_strain" class="visually-hidden"><em>E. coli</em> strain:</label>
                 <div class="input-group">
                     <select class="custom-select form-control" id="coli_strain" name="coli_strain" title="Click to view all options">
-                        <option value="" {% if request.GET.coli_strain == '' %} selected {% endif %}><em>Escherichia coli</em> strain</option>
+                        <option value="" {% if request.GET.coli_strain == '' %} selected {% endif %}><em>Strain</option>
                         <option value="Escherichia coli O157:H7" {% if request.GET.coli_strain == 'Escherichia coli O157:H7' %} selected {% endif %}>Escherichia coli O157:H7</option>
                         <option value="Escherichia coli K12" {% if request.GET.coli_strain == 'Escherichia coli K12' %} selected {% endif %}>Escherichia coli K12</option>
                         <option value="Escherichia coli (strain SMS-3-5 / SECEC)" {% if request.GET.coli_strain == 'Escherichia coli (strain SMS-3-5 / SECEC)' %} selected {% endif %}>Escherichia coli (strain SMS-3-5 / SECEC)</option>
@@ -396,13 +396,13 @@ span:hover {
       
             switch (selectedOption) {
                 case 'uniprot':
-                    searchQueryInput.placeholder = 'e.g. P0A862';
+                    searchQueryInput.placeholder = 'e.g. P08200';
                     break;
                 case 'gene':
-                    searchQueryInput.placeholder = 'e.g. tpx';
+                    searchQueryInput.placeholder = 'e.g. icd';
                     break;
                 case 'protein':
-                    searchQueryInput.placeholder = 'e.g. Thiol peroxidase';
+                    searchQueryInput.placeholder = 'e.g. Isocitrate dehydrogenase [NADP]';
                     break;
                 case 'peptide':
                     searchQueryInput.placeholder = 'e.g. GQKDKHAVTEQ';

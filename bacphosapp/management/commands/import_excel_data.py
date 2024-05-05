@@ -17,7 +17,8 @@ class Command(BaseCommand):
             gene_name = row['gene_name']
             protein_name = row['protein_name']
             position = row['position']
-            existing_record = existing_records.get((uniprot_code, gene_name, protein_name, position))
+            coli_strain = row['coli_strain']
+            existing_record = existing_records.get((uniprot_code, gene_name, protein_name, position, coli_strain))
 
             if existing_record:
                 existing_record.uniprot_url = row['uniprot_url']
