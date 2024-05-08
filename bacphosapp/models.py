@@ -19,7 +19,12 @@ class PhosphoProtein(models.Model):
     reference = models.TextField(null=True, blank=True)
     alphafold_url = models.URLField(null=True, blank=True)
     coli_strain = models.TextField(null=True, blank=True, default='')
-
+    function = models.TextField(null=True, blank=True, default='')
+    go_mf = models.TextField(null=True, blank=True, default='')
+    go_cc = models.TextField(null=True, blank=True, default='')
+    go_bp = models.TextField(null=True, blank=True, default='')
+    protein_f = models.TextField(null=True, blank=True, default='')
+    
     def __str__(self):
         return self.gene_name
 

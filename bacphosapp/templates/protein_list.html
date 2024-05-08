@@ -205,22 +205,22 @@ span:hover {
                 <div class="input-group">
                     <select class="custom-select form-control" id="coli_strain" name="coli_strain" title="Click to view all options">
                         <option value="" {% if request.GET.coli_strain == '' %} selected {% endif %}><em>Strain</option>
-                        <option value="Escherichia coli O157:H7" {% if request.GET.coli_strain == 'Escherichia coli O157:H7' %} selected {% endif %}>Escherichia coli O157:H7</option>
                         <option value="Escherichia coli K12" {% if request.GET.coli_strain == 'Escherichia coli K12' %} selected {% endif %}>Escherichia coli K12</option>
-                        <option value="Escherichia coli (strain SMS-3-5 / SECEC)" {% if request.GET.coli_strain == 'Escherichia coli (strain SMS-3-5 / SECEC)' %} selected {% endif %}>Escherichia coli (strain SMS-3-5 / SECEC)</option>
-                        <option value="Escherichia coli" {% if request.GET.coli_strain == 'Escherichia coli' %} selected {% endif %}>Escherichia coli</option>
-                        <option value="Escherichia coli (strain UTI89 / UPEC)" {% if request.GET.coli_strain == 'Escherichia coli (strain UTI89 / UPEC)' %} selected {% endif %}>Escherichia coli (strain UTI89 / UPEC)</option>
+                        <option value="Escherichia coli O157:H7" {% if request.GET.coli_strain == 'Escherichia coli O157:H7' %} selected {% endif %}>Escherichia coli O157:H7</option>
                         <option value="Escherichia coli BL21-DE3" {% if request.GET.coli_strain == 'Escherichia coli BL21-DE3' %} selected {% endif %}>Escherichia coli BL21-DE3</option>
-                        <option value="Escherichia coli BL21-DE3 (PKA)" {% if request.GET.coli_strain == 'Escherichia coli BL21-DE3 (PKA)' %} selected {% endif %}>Escherichia coli BL21-DE3 (PKA)</option>
-                        <option value="Escherichia coli BL21-DE3 (CKII)" {% if request.GET.coli_strain == 'Escherichia coli BL21-DE3 (CKII)' %} selected {% endif %}>Escherichia coli BL21-DE3 (CKII)</option>
-                        <option value="Escherichia coli K12 (CKII)" {% if request.GET.coli_strain == 'Escherichia coli K12 (CKII)' %} selected {% endif %}>Escherichia coli K12 (CKII)</option>
-                        <option value="Escherichia coli K12 (PKA)" {% if request.GET.coli_strain == 'Escherichia coli K12 (PKA)' %} selected {% endif %}>Escherichia coli K12 (PKA)</option>
+                        <option value="Escherichia coli" {% if request.GET.coli_strain == 'Escherichia coli' %} selected {% endif %}>Escherichia coli</option>
                         <option value="Escherichia coli O1:K1 / APEC" {% if request.GET.coli_strain == 'Escherichia coli O1:K1 / APEC' %} selected {% endif %}>Escherichia coli O1:K1 / APEC</option>
-                        <option value="Escherichia coli O127:H6 (strain E2348/69 / EPEC)" {% if request.GET.coli_strain == 'Escherichia coli O127:H6 (strain E2348/69 / EPEC)' %} selected {% endif %}>Escherichia coli O127:H6 (strain E2348/69 / EPEC)</option>
                         <option value="Escherichia coli O139:H28" {% if request.GET.coli_strain == 'Escherichia coli O139:H28' %} selected {% endif %}>Escherichia coli O139:H28</option>
                         <option value="Escherichia coli O45:K1" {% if request.GET.coli_strain == 'Escherichia coli O45:K1' %} selected {% endif %}>Escherichia coli O45:K1</option>
                         <option value="Escherichia coli O6:H1" {% if request.GET.coli_strain == 'Escherichia coli O6:H1' %} selected {% endif %}>Escherichia coli O6:H1</option>
-                        <option value="Escherichia coli strain B REL606" {% if request.GET.coli_strain == 'Escherichia coli strain B REL606' %} selected {% endif %}>Escherichia coli strain B REL606</option>
+                        <option value="Escherichia coli O127:H6 (strain E2348/69 / EPEC)" {% if request.GET.coli_strain == 'Escherichia coli O127:H6 (strain E2348/69 / EPEC)' %} selected {% endif %}>Escherichia coli O127:H6 (strain E2348/69 / EPEC)</option>
+                        <option value="Escherichia coli (strain SMS-3-5 / SECEC)" {% if request.GET.coli_strain == 'Escherichia coli (strain SMS-3-5 / SECEC)' %} selected {% endif %}>Escherichia coli (strain SMS-3-5 / SECEC)</option>
+                        <option value="Escherichia coli (strain UTI89 / UPEC)" {% if request.GET.coli_strain == 'Escherichia coli (strain UTI89 / UPEC)' %} selected {% endif %}>Escherichia coli (strain UTI89 / UPEC)</option>
+                        <option value="Escherichia coli REL606" {% if request.GET.coli_strain == 'Escherichia coli REL606' %} selected {% endif %}>Escherichia coli REL606</option>
+                        <option value="Escherichia coli BL21-DE3 (CKII)" {% if request.GET.coli_strain == 'Escherichia coli BL21-DE3 (CKII)' %} selected {% endif %}>Escherichia coli BL21-DE3 (CKII)</option>
+                        <option value="Escherichia coli BL21-DE3 (PKA)" {% if request.GET.coli_strain == 'Escherichia coli BL21-DE3 (PKA)' %} selected {% endif %}>Escherichia coli BL21-DE3 (PKA)</option>
+                        <option value="Escherichia coli K12 (CKII)" {% if request.GET.coli_strain == 'Escherichia coli K12 (CKII)' %} selected {% endif %}>Escherichia coli K12 (CKII)</option>
+                        <option value="Escherichia coli K12 (PKA)" {% if request.GET.coli_strain == 'Escherichia coli K12 (PKA)' %} selected {% endif %}>Escherichia coli K12 (PKA)</option>
                     </select>
                     <div class="input-group-append">
                         <span class="input-group-text text-dark border-0" id="coliStrainDropdownIndicator"><i class="fa-solid fa-chevron-down"></i></span>
