@@ -112,16 +112,6 @@
                     {% endif %}
                 </td>
             </tr>
-            <tr>
-                <th>Alphafold</th>
-                <td>
-                    {% if protein.alphafold_url %}
-                        <a href="{{ protein.alphafold_url }}" target="_blank">{{ protein.alphafold_url }}</a>
-                    {% else %}
-                        Not available
-                    {% endif %}
-                </td>
-            </tr>
             {% if protein.pdb_code and protein.pdb_code != 'nan' %}
                 <tr>
                     <th>PDB Link</th>
@@ -136,6 +126,28 @@
                     {% for chunk in protein.sequence_chunks %}
                         {{ chunk }}<br>
                     {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Gene Ontology</th>
+                <td>
+                    {% if protein.go_mf and protein.go_mf != 'nan' %}
+                    <p><strong>Molecular function:</strong> {{ protein.go_mf }}</p>
+                    {% endif %}
+                    {% if protein.go_cc and protein.go_cc != 'nan' %}
+                    <p><strong>Cellular component:</strong> {{ protein.go_cc }}</p>
+                    {% endif %}
+                    {% if protein.go_bp and protein.go_bp != 'nan' %}
+                    <p><strong>Biological Process:</strong> {{ protein.go_bp }}</p>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th> Protein Function</th>
+                <td>
+                    {% if protein.function and protein.function != 'nan' %}
+                    <p>{{ protein.function }}</p>
+                    {% endif %}
                 </td>
             </tr>
         </table>
