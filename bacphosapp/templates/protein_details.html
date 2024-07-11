@@ -105,7 +105,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-lg-5">
+                        <div class="col-lg-4" style="margin-left: 50px;">
                             {% if protein.pdb_code and protein.pdb_code != 'nan' %}
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -114,13 +114,8 @@
                                 {% endif %}
                                 </div>
                                 <div class="card-body protein">
-                                    <div class="protein-viewer" id="protein-viewer" style="height: 300px;"></div>
-                                </div>
-                                <div class="card-body protein">
-                                    <div class="d-flex justify-content-center">
-                                        <button class="btn btn-outline-dark mt-2" id="view-3d-structure" style="font-size: small;">Click here if you don't see the 3D Structure</button>
-                                    </div>
-                                </div>                                
+                                    <div class="protein-viewer" id="protein-viewer" style="height: 200px;"></div>
+                                </div>                               
                             </div>
                             {% else %}
                             <div class="card mt-4">
