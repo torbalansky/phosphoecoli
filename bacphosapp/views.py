@@ -29,6 +29,7 @@ matplotlib.use('Agg')
 import requests
 import io
 import numpy as np
+import json
 
 def home(request):
     return render(request, 'home.html', {})
@@ -167,35 +168,23 @@ class ProteinsListView(ListView):
 def add_position(sequence):
     return [(position + 1, aa) for position, aa in enumerate(sequence)]
 
-def parse_iupred_response(text):
-    # Split the response by lines
-    lines = text.split('\n')
+def parse_aiupred_response(text):
+    try:
+        data = json.loads(text)
+        
+        # Extract AIUPred and anchor2 data
+        aiupred_scores = data.get("AIUPred", [])
+        anchor2_scores = data.get("anchor2", [])
 
-    # Initialize a list to store disordered regions
-    disordered_regions = []
-
-    # Iterate over each line in the response
-    for line in lines:
-        # Skip empty lines and lines starting with #
-        if not line.strip() or line.startswith("#"):
-            continue
-
-        # Split the line by tabs
-        parts = line.split()
-
-        # Check if the line has enough parts and if the first part is a valid integer
-        if len(parts) >= 3 and parts[0].isdigit():
-            # Extract residue position, amino acid, and IUPred score
-            position = int(parts[0])
-            amino_acid = parts[1]
-            iupred_score = float(parts[2])
-
-            # Check if the residue is predicted to be disordered (IUPred score > 0.5)
-            if iupred_score > 0.001:
-                # Add the disordered region to the list
-                disordered_regions.append({'position': position, 'amino_acid': amino_acid, 'iupred_score': iupred_score})
-
-    return disordered_regions
+        if aiupred_scores:
+            return {
+                'aiupred_scores': aiupred_scores,
+                'anchor2_scores': anchor2_scores
+            }
+        else:
+            return None
+    except json.JSONDecodeError:
+        return None
 
 # Protein detail view function
 class ProteinDetailView(DetailView):
@@ -204,16 +193,20 @@ class ProteinDetailView(DetailView):
     context_object_name = "protein"
 
     def get_disordered_regions(self, uniprot_code):
-        # Make a request to the IUPred2A API
-        url = f"http://iupred3.elte.hu/iupred3/{uniprot_code}"
-        response = requests.get(url)
-
+        url = 'https://aiupred.elte.hu/rest_api'
+        params = {
+            'accession': uniprot_code,
+            'smoothing': 'default',
+            'analysis_type': 'binding'
+        }
+        response = requests.get(url, params=params)
+        
         if response.status_code == 200:
             # Parse the response to extract disordered regions
-            disordered_regions = parse_iupred_response(response.text)
-            return disordered_regions
-        else:
-            return None
+            parsed_data = parse_aiupred_response(response.text)
+            if parsed_data:
+                return parsed_data
+        return None
 
     def phospho_chart_image(self):
         protein = self.get_object()
@@ -223,34 +216,34 @@ class ProteinDetailView(DetailView):
         phosphosite_positions = sorted(str(protein.position).split(',')) if protein.position else []
 
         # Fetch disordered regions for the protein
-        disordered_regions = self.get_disordered_regions(protein.uniprot_code)
+        aiupred_data = self.get_disordered_regions(protein.uniprot_code)
 
-        # Get disorder propensity scores for all residues
+        if aiupred_data:
+            aiupred_scores = aiupred_data.get('aiupred_scores', [])
+            anchor2_scores = aiupred_data.get('anchor2_scores', [])
+        else:
+            aiupred_scores = []
+            anchor2_scores = []
+
+        # Initialize disorder scores
         disorder_scores = np.zeros(len(sequence))
-
-        if disordered_regions:
-            for region in disordered_regions:
-                start_pos = region['position']
-                end_pos = start_pos + len(region['amino_acid']) - 1
-                disorder_scores[start_pos - 1:end_pos] = region['iupred_score']
+        if aiupred_scores:
+            disorder_scores[:len(aiupred_scores)] = aiupred_scores
 
         # Create a scatter plot with disorder propensity overlay
         fig = go.Figure(layout=dict(height=400, width=1000))
         fig.add_trace(go.Scatter(x=list(range(1, len(sequence) + 1)), y=[0] * len(sequence),
                                 mode='text', text=list(sequence), textposition="top center", showlegend=False))
 
-        # Add disorder propensity curve
+        # Add AIUPred scores curve
         fig.add_trace(go.Scatter(x=list(range(1, len(sequence) + 1)), y=disorder_scores,
-                                mode='lines', line=dict(color='red', width=1), name='Disorder Propensity'))
-       
-        # Calculate the range around the leading phosphosite and update x-axis range for the disorder propensity curve
-        leading_position = int(phosphosite_positions[0])
-        start_range = max(leading_position - 50, 0)
-        end_range = min(leading_position + 50, len(sequence))
-        disorder_range_x = list(range(start_range, end_range + 1))
-        disorder_range_y = disorder_scores[start_range - 1:end_range]
+                                mode='lines', line=dict(color='red', width=1.5), name='AIUPred Disorder Propensity'))
 
-        # Add main phosphosite
+        # Add anchor2 scores curve
+        if anchor2_scores:
+            fig.add_trace(go.Scatter(x=list(range(1, len(anchor2_scores) + 1)), y=anchor2_scores,
+                                    mode='lines', line=dict(color='green', width=1.5), name='ANCHOR2 (binding)'))
+
         for position in phosphosite_positions:
             hover_text = f"Phosphosite - {protein.modification_type}{position}<br>Window -/+ 5aa: {protein.window_5_aa}"
             fig.add_trace(go.Scatter(x=[int(position)], y=[0.8], mode='markers',
@@ -258,6 +251,11 @@ class ProteinDetailView(DetailView):
                                     hoverinfo='text', text=hover_text))
             fig.add_trace(go.Scatter(x=[int(position), int(position)], y=[0.04, 0.8], mode='lines',
                                     line=dict(color='black', width=0.2), showlegend=False))
+
+        # Calculate the range around the leading phosphosite
+        leading_position = int(phosphosite_positions[0])
+        start_range = max(leading_position - 50, 0)
+        end_range = min(leading_position + 50, len(sequence))
 
         # Add related phosphosites
         related_phosphosites = PhosphoProtein.objects.filter(gene_name=protein.gene_name, coli_strain=protein.coli_strain, uniprot_code=protein.uniprot_code).exclude(pk=protein.pk)
@@ -273,11 +271,11 @@ class ProteinDetailView(DetailView):
 
         # Add threshold line at y = 0.5
         fig.add_shape(type="line", x0=1, x1=len(sequence), y0=0.5, y1=0.5,
-                line=dict(color="black", width=1, dash="dash"), name='Threshold')
+                    line=dict(color="black", width=1, dash="dash"), name='Threshold')
         
         # Update layout
         fig.update_layout(
-            title=f'Phosphosites & Disorder Propensity (IUPred3) - {protein.gene_name}',
+            title=f'Phosphosites & Disorder Propensity (AIUPred, ANCHOR2) - {protein.gene_name}',
             xaxis_title='Residue Number',
             yaxis_title='',
             yaxis=dict(
@@ -303,22 +301,23 @@ class ProteinDetailView(DetailView):
         uniprot_code = protein.uniprot_code
 
         # Fetch disordered regions for the protein
-        disordered_regions = self.get_disordered_regions(uniprot_code)
+        aiupred_data = self.get_disordered_regions(uniprot_code)
 
-        # Get disorder propensity scores for all residues
-        disorder_scores = np.zeros(len(protein.sequence))
+        if aiupred_data:
+            aiupred_scores = aiupred_data.get('aiupred_scores', [])
+            anchor2_scores = aiupred_data.get('anchor2_scores', [])
+        else:
+            aiupred_scores = []
+            anchor2_scores = []
 
-        if disordered_regions:
-            for region in disordered_regions:
-                start_pos = region['position']
-                end_pos = start_pos + len(region['amino_acid']) - 1
-                disorder_scores[start_pos - 1:end_pos] = region['iupred_score']
-
-        # Create a curve plot for disorder propensity
+        # Create a curve plot for AIUPred disorder propensity
         plt.figure(figsize=(10, 4))
-        plt.plot(range(1, len(protein.sequence) + 1), disorder_scores, color='red', label='Disorder Propensity')
+        if aiupred_scores:
+            plt.plot(range(1, len(aiupred_scores) + 1), aiupred_scores, color='red', label='AIUPred Disorder Propensity')
+        if anchor2_scores:
+            plt.plot(range(1, len(anchor2_scores) + 1), anchor2_scores, color='blue', linestyle='--', label='Anchor2 Scores')
         plt.xlabel('Residue Number')
-        plt.ylabel('Disorder Propensity')
+        plt.ylabel('Disorder Propensity / Anchor2 Scores')
         plt.title(f'Disorder Propensity Visualization ({protein.gene_name})')
         plt.xlim(1, len(protein.sequence))
         plt.ylim(0, 1)
