@@ -3,160 +3,166 @@
 {% block content %}
 
 <style>
-.search-list {
-    margin: 1em;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-}
-
-.form-control {
-    border: 1px solid #cdff79 !important;
-    border-right: none !important;
-    border-left: none !important;
-    margin-left: 5px;
-    width: 300px;
-}
-
-.custom-select {
-    border-radius: 0 !important;
-    font-size: 14px;
-}
-
-.custom-select:hover {
-    cursor: pointer;
-}
-
-span:hover {
-    cursor: pointer;
-}
-
-.btn.btn-primary {
-    width: 80px; 
-    padding: 8px; 
-    font-weight: bold;
-    border-radius: 0 !important;
-}
-.btn-danger {
-    width: 80px !important; 
-    margin-left: 10px;
-    border-radius: 0 !important;
-}
-
-.protein-list-help {
-    color: white;
-    margin-left: 50px;
-}
-
-.form-control-md {
-    width: 430px;
-}
-
-@media (max-width: 576px) {
-    .input-group {
-        width: 60%;
-    }
-
-    .form-control-list {
-        margin-left: 20px;
-        margin-bottom: 10px;
-        width: 80%;
-    }
-
     .search-list {
-        -webkit-box-align: start;
-            -ms-flex-align: start;
-                align-items: flex-start;
-    }
-
-    .hide-on-sm {
-        display: none;
-    }
-
-    .col-md-4 {
+        margin: 1em;
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-pack: start !important;
-            -ms-flex-pack: start !important;
-                justify-content: flex-start !important;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+    }
+
+    .form-control {
+        border: 1px solid #cdff79 !important;
+        border-right: none !important;
+        border-left: none !important;
+        margin-left: 5px;
+        width: 300px;
+    }
+
+    .custom-select {
+        border-radius: 0 !important;
+        font-size: 14px;
+    }
+
+    .custom-select:hover {
+        cursor: pointer;
+    }
+
+    span:hover {
+        cursor: pointer;
+    }
+
+    .btn.btn-primary {
+        width: 80px; 
+        padding: 8px; 
+        font-weight: bold;
+        border-radius: 0 !important;
+    }
+    .btn-danger {
+        width: 80px !important; 
+        margin-left: 10px;
+        border-radius: 0 !important;
     }
 
     .protein-list-help {
-        margin: 0;
-        text-align: center;
-        }
-
-    .pagination .page-item {
-        margin: 5px 3px;
+        color: white;
+        margin-left: 50px;
     }
 
-  .form-control-md {
-        width: 250px;
+    .form-control-md {
+        width: 430px;
+    }
+
+    @media (max-width: 576px) {
+        .input-group {
+            width: 75%;
         }
-}
 
-.input-group-append span {
-    border: 1px solid #cdff79 !important;
-    border-right: none !important;
-    border-left: none !important;
-    border-radius: 0 !important;
-    padding: 10px 2px;
-    margin: 0;
-    background-color: white;
-}
+        .form-control-list {
+            margin-left: 20px;
+            margin-bottom: 10px;
+            width: 80%;
+        }
 
-.btn.btn-primary {
-    background-color: #cdff79;
-    color: rgb(9, 43, 77);
-    border: 0.5px solid white;
-    width: 150px;
-    border-radius: 5px !important;
-}
+        .search-list {
+            -webkit-box-align: start;
+                -ms-flex-align: start;
+                    align-items: flex-start;
+        }
 
-.btn.btn-danger {
-    border: 0.5px solid white;
-    font-weight: 500 !important;
-    width: 150px !important;
-    border-radius: 5px !important;
-}
+        .hide-on-sm {
+            display: none;
+        }
 
-.btn.btn-primary:hover {
-    background-color:  #ceff79a0;
-}
+        .col-md-4 {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: start !important;
+                -ms-flex-pack: start !important;
+                    justify-content: flex-start !important;
+        }
 
-.btn.btn-danger:hover {
-    background-color: rgba(255, 0, 0, 0.503);
-}
+        .protein-list-help {
+            margin: 0;
+            text-align: center;
+            }
 
-@media (max-width: 576px) {
+        .pagination .page-item {
+            margin: 5px 3px;
+        }
+
+    .form-control-md {
+            width: 200px;
+            }
+    }
+
+    @media (max-width: 1200px) {
+        .form-control-md {
+            width: 250px;
+        }
+    }
+
+    .input-group-append span {
+        border: 1px solid #cdff79 !important;
+        border-right: none !important;
+        border-left: none !important;
+        border-radius: 0 !important;
+        padding: 10px 2px;
+        margin: 0;
+        background-color: white;
+    }
+
     .btn.btn-primary {
-    width: 80px;
-}
+        background-color: #cdff79;
+        color: rgb(9, 43, 77);
+        border: 0.5px solid white;
+        width: 150px;
+        border-radius: 5px !important;
+    }
 
     .btn.btn-danger {
-    width: 80px !important;
-}
-}
+        border: 0.5px solid white;
+        font-weight: 500 !important;
+        width: 150px !important;
+        border-radius: 5px !important;
+    }
 
-.custom-select:hover,
-.input-group-append span:hover, 
-.form-control-list:hover,
-.fa-solid.fa-chevron-down:hover,
-.form-control-list.Search:hover {
-    background-color: #63709ab7;
-    color: white;
-}
+    .btn.btn-primary:hover {
+        background-color:  #ceff79a0;
+    }
+
+    .btn.btn-danger:hover {
+        background-color: rgba(255, 0, 0, 0.503);
+    }
+
+    @media (max-width: 576px) {
+        .btn.btn-primary {
+        width: 80px;
+    }
+
+        .btn.btn-danger {
+        width: 80px !important;
+    }
+    }
+
+    .custom-select:hover,
+    .input-group-append span:hover, 
+    .form-control-list:hover,
+    .fa-solid.fa-chevron-down:hover,
+    .form-control-list.Search:hover {
+        background-color: #63709ab7;
+        color: white;
+    }
 </style>
 
 <div class="protein-list-help mt-5">
