@@ -58,13 +58,9 @@
         margin-left: 50px;
     }
 
-    .form-control-md {
-        width: 430px;
-    }
-
     @media (max-width: 576px) {
         .input-group {
-            width: 75%;
+            width: 100%;
         }
 
         .form-control-list {
@@ -101,14 +97,24 @@
             margin: 5px 3px;
         }
 
-    .form-control-md {
-            width: 200px;
-            }
+        .form-control-md {
+            width: 98% !important;
+        }
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1180px) {
         .form-control-md {
-            width: 250px;
+            width: 300px !important;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .form-control {
+            width: 100%;
+        }
+
+        .form-control-md {
+            width: 98% !important;
         }
     }
 
@@ -146,13 +152,40 @@
     }
 
     @media (max-width: 576px) {
+
+        .btn-container {
+            display: flex;
+            justify-content: space-evenly !important;
+    }
+
         .btn.btn-primary {
-        width: 80px;
+            width: 150px;
     }
 
         .btn.btn-danger {
-        width: 80px !important;
+            width: 150px !important;
     }
+    }
+
+    @media (max-width: 420px) {
+        .btn-container {
+            display: flex;
+            justify-content: space-evenly !important;
+        }
+
+        .btn.btn-primary {
+            width: 130px;
+        }
+
+        .btn.btn-danger {
+            width: 130px !important;
+        }
+    }
+
+    .btn-container {
+            display: flex;
+            justify-content: end;
+            width: 100%;
     }
 
     .custom-select:hover,
@@ -236,7 +269,7 @@
             <div class="col-md-2 mt-2">
                 <input class="form-control form-control-md" type="search" placeholder="Search" aria-label="Search" name="q" id="q" value="{{ request.GET.q }}">
             </div>
-            <div class="col-md-12 mt-3 d-flex justify-content-center justify-content-sm-end">
+            <div class="col-md-12 mt-3 d-flex justify-content-center justify-content-sm-end btn-container">
                 <button class="btn btn-primary" type="submit">Search</button>
                 <button type="button" id="clearButton" class="btn btn-danger" title="Click to clear the form">Clear</button>
             </div>

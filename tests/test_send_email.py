@@ -11,7 +11,7 @@ import time
 
 class TestSendEmail(unittest.TestCase):
     def setUp(self):
-        service = Service('')  # Set the browser type; you can change this to 'firefox', 'chrome', 'safari', or 'edge'
+        service = Service('') # Set the browser type; you can change this to 'firefox', 'chrome', 'safari', or 'edge'
         self.driver = webdriver.Firefox(service=service) # Change to 'chrome', 'safari', or 'edge' as needed
         self.driver.get("https://pedb.onrender.com/contact/")
 
