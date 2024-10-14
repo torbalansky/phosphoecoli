@@ -216,7 +216,7 @@
                                     <li>Click the button below.</li>
                                     <li>Once on the IUPred3 website, locate the field requiring the SWISS-PROT identifier or accession number.</li>
                                     <li>Paste the UniProt code that has been automatically copied from our application.</li>
-                                    <li>Select the type of analysis you wish to perform.</li>
+                                    <li>Select the type of analysis.</li>
                                 </ol>
                             </p>
                             <a href="#" onclick="copyUniProtCode('{{ protein.uniprot_code }}'); redirectToIUPred();" class="btn btn-primary">Explore IUPred3</a>
@@ -235,7 +235,7 @@
                                     <li>Click the button below.</li>
                                     <li>Once on the PSIPRED website, locate the field requiring the protein sequence in FASTA format.</li>
                                     <li>Paste the FASTA sequence that has been automatically copied from our application.</li>
-                                    <li>Select the desired prediction format and other options if needed.</li>
+                                    <li>Select the desired prediction.</li>
                                 </ol>
                             </p>
                             <button class="btn btn-primary" onclick="copyFastaSequence('{{ protein.uniprot_code }}', '{{ protein.sequence }}')">Explore PSIPRED</button>
